@@ -6,6 +6,27 @@ var _user$project$Main$view = function (model) {
 		_elm_lang$core$Native_List.fromArray(
 			[]));
 };
+var _user$project$Main$update = F2(
+	function (msg, model) {
+		var _p0 = msg;
+		var _p1 = _p0._0;
+		switch (_p1.ctor) {
+			case 'ChangeSkippedPrevious':
+				return model;
+			case 'ChangePoop':
+				return model;
+			case 'ChangePee':
+				return model;
+			case 'ChangeBreastFeed':
+				return model;
+			case 'ChangeBottleFeed':
+				return model;
+			case 'ChangeAttended':
+				return model;
+			default:
+				return model;
+		}
+	});
 var _user$project$Main$Model = F2(
 	function (a, b) {
 		return {newEvent: a, events: b};
@@ -14,7 +35,12 @@ var _user$project$Main$DiaperEvent = F9(
 	function (a, b, c, d, e, f, g, h, i) {
 		return {id: a, created_at: b, skipped_previous_feed: c, poop: d, pee: e, breast_feed: f, bottle_feed: g, attended_at: h, slept_at: i};
 	});
-var _user$project$Main$Change = {ctor: 'Change'};
+var _user$project$Main$ChangeSlept = function (a) {
+	return {ctor: 'ChangeSlept', _0: a};
+};
+var _user$project$Main$ChangeAttended = function (a) {
+	return {ctor: 'ChangeAttended', _0: a};
+};
 var _user$project$Main$ChangeBottleFeed = function (a) {
 	return {ctor: 'ChangeBottleFeed', _0: a};
 };
@@ -30,4 +56,6 @@ var _user$project$Main$ChangePoop = function (a) {
 var _user$project$Main$ChangeSkippedPrevious = function (a) {
 	return {ctor: 'ChangeSkippedPrevious', _0: a};
 };
-var _user$project$Main$FieldChange = {ctor: 'FieldChange'};
+var _user$project$Main$Entry = function (a) {
+	return {ctor: 'Entry', _0: a};
+};
