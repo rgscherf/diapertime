@@ -61,9 +61,9 @@ def dummy():
 @app.route("/")
 def hello():
     all_events = [e.to_dict() for e in DiaperTime.query.all()]
-    jsonified_events = [
-        json.dumps(e, sort_keys=True, default=json_time) for e in all_events]
-    return render_template("index.html", data=jsonified_events)
+    jsonified_events = json.dumps(all_events, sort_keys=True, default=json_time)
+    return jsonified_events
+    # return render_template("index.html", data=jsonified_events)
 
 if __name__ == "__main__":
     app.debug = True

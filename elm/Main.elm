@@ -2,11 +2,15 @@ module Main exposing (..)
 
 import Html.App exposing (programWithFlags)
 import Html exposing (..)
-import Html.Attributes exposing (..)
 import Date exposing (Date)
+import Date.Extra exposing (Interval(..))
+import Json.Decode as Decode exposing ((:=), int, string, bool)
+import Json.Decode.Extra as DecodeExtra exposing (date)
+import Task
+import Time
 
 
-main : Program Flag
+main : Program String
 main =
     programWithFlags
         { init = init
@@ -16,50 +20,58 @@ main =
         }
 
 
-type alias Flag =
-    { ev : List DiaperEvent }
+init : String -> ( Model, Cmd Msg )
+init diaperEventsJson =
+    let
+        getEventList s =
+            case Decode.decodeString eventDecoder s of
+                Ok res ->
+                    res
+
+                Err _ ->
+                    []
+    in
+        ( { newEvent = Nothing
+          , events = getEventList diaperEventsJson
+          , currentDate = Nothing
+          }
+        , Task.perform (\_ -> NoOp) InitializeDate Date.now
+        )
 
 
-importEvent :
-    List
-        { id : Int
-        , created_at : String
-        , skipped_previous_feed : Maybe Bool
-        , poop : Maybe Bool
-        , pee : Maybe Bool
-        , breast_feed : Maybe Int
-        , bottle_feed : Maybe Int
-        , attended_at : Maybe String
-        , slept_at : Maybe String
-        }
-
-
-init : Flag -> ( Model, Cmd Msg )
-init des =
-    ( { newEvent = Nothing
-      , events = List.map importEvent des.ev
-      }
-    , Cmd.none
-    )
+eventDecoder : Decode.Decoder (List DiaperEvent)
+eventDecoder =
+    Decode.list
+        (Decode.object8
+            DiaperEvent
+            ("id" := int)
+            ("created_at" := DecodeExtra.date)
+            ("skipped_previous_feed" := bool)
+            (Decode.maybe ("poop" := bool))
+            (Decode.maybe ("breast_feed" := int))
+            (Decode.maybe ("bottle_feed" := int))
+            (Decode.maybe ("attended_at" := DecodeExtra.date))
+            (Decode.maybe ("slept_at" := DecodeExtra.date))
+        )
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Sub.none
+    Sub.batch [ Time.every Time.minute (\_ -> IncrementDate) ]
 
 
 type alias Model =
     { newEvent : Maybe DiaperEvent
     , events : List DiaperEvent
+    , currentDate : Maybe Date
     }
 
 
 type alias DiaperEvent =
     { id : Int
     , created_at : Date
-    , skipped_previous_feed : Maybe Bool
+    , skipped_previous_feed : Bool
     , poop : Maybe Bool
-    , pee : Maybe Bool
     , breast_feed : Maybe Int
     , bottle_feed : Maybe Int
     , attended_at : Maybe Date
@@ -79,11 +91,28 @@ type FieldChange
 
 type Msg
     = Entry FieldChange
+    | InitializeDate Date
+    | IncrementDate
+    | NoOp
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        NoOp ->
+            model ! []
+
+        InitializeDate date ->
+            { model | currentDate = Just date } ! []
+
+        IncrementDate ->
+            case model.currentDate of
+                Nothing ->
+                    model ! []
+
+                Just d ->
+                    { model | currentDate = Just (Date.Extra.add Minute 1 d) } ! []
+
         Entry fc ->
             case fc of
                 ChangeSkippedPrevious sp ->
