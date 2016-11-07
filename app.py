@@ -3,13 +3,13 @@ from pymongo import MongoClient
 from bson.json_util import dumps
 import datetime
 import random
+import os
 
 app = Flask(__name__)
 
-
 client = MongoClient()
-client = MongoClient('localhost', 27017)
-
+connection_string = os.env["MONGODB_URI"]
+client = MongoClient(connection_string)
 db = client['test_database']
 collection = db['test_collection']
 
