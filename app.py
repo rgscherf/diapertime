@@ -47,12 +47,24 @@ def gen():
     return "operation successful"
 
 
+@app.route("/drop")
+def drop():
+    db.drop_collection("diapertime")
+    return "collection dropped!"
+
+
+@app.route("/raw")
+def raw():
+    all_events = [c for c in collection.find()]
+    jsonified_events = dumps(all_events)
+    return jsonified_events
+
+
 @app.route("/")
 def hello():
     all_events = [c for c in collection.find()]
     jsonified_events = dumps(all_events)
-    return jsonified_events
-    # return render_template("index.html", data=jsonified_events)
+    return render_template("index.html", data=jsonified_events)
 
 if __name__ == "__main__":
     app.debug = True

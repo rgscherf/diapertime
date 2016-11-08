@@ -1,3 +1,3 @@
 cd elm
-elm-make Main.elm --output ../templates/app.js
+elm-make Main.elm --output ../static/app.js
 cd ..
