@@ -8,7 +8,7 @@ import os
 app = Flask(__name__)
 
 client = MongoClient()
-connection_string = os.env["MONGODB_URI"]
+connection_string = os.environ["MONGODB_URI"]
 client = MongoClient(connection_string)
 db = client['test_database']
 collection = db['test_collection']
