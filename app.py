@@ -7,12 +7,9 @@ import os
 
 app = Flask(__name__)
 
-client = MongoClient()
-connection_string = os.environ["MONGODB_URI"]
-client = MongoClient(connection_string)
+client = MongoClient(os.environ["MONGODB_URI"])
 db = client.get_default_database()
-# db = client['test_database']
-collection = db['test_collection']
+collection = db['diapertime']
 
 
 class DiaperTime():
