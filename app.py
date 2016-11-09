@@ -1,6 +1,8 @@
 from flask import Flask, render_template
 from pymongo import MongoClient
-from bson.json_util import dumps
+from bson import json_util
+import json
+# from bson.json_util import dumps
 import datetime
 import random
 import os
@@ -56,14 +58,16 @@ def drop():
 @app.route("/raw")
 def raw():
     all_events = [c for c in collection.find()]
-    jsonified_events = dumps(all_events)
+    jsonified_events = json.dumps(all_events, default=json_util.default)
+    # jsonified_events = dumps(all_events)
     return jsonified_events
 
 
 @app.route("/")
 def hello():
     all_events = [c for c in collection.find()]
-    jsonified_events = dumps(all_events)
+    jsonified_events = json.dumps(all_events, default=json_util.default)
+    # jsonified_events = dumps(all_events)
     return render_template("index.html", data=jsonified_events)
 
 if __name__ == "__main__":

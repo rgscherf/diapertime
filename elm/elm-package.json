@@ -14,5 +14,8 @@
         "elm-lang/html": "1.1.0 <= v < 2.0.0",
         "justinmimbs/elm-date-extra": "2.0.0 <= v < 3.0.0"
     },
-    "elm-version": "0.17.1 <= v < 0.18.0"
+    "elm-version": "0.17.1 <= v < 0.18.0",
+    "sublime-build": {
+        "main": "Main.elm"
+    }
 }

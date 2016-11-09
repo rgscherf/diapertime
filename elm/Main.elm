@@ -3,11 +3,7 @@ module Main exposing (..)
 import Html.App exposing (programWithFlags)
 import Html exposing (..)
 import Date exposing (Date)
-import Date.Extra exposing (Interval(..))
-import Json.Decode as Decode exposing ((:=), int, string, bool)
-import Json.Decode.Extra as DecodeExtra exposing (date)
-import Task
-import Time
+import Json.Decode as Decode exposing ((:=), int, string, bool, at)
 
 
 main : Program String
@@ -21,10 +17,10 @@ main =
 
 
 init : String -> ( Model, Cmd Msg )
-init diaperEventsJson =
+init diaperEventsFromJSON =
     let
-        getEventList s =
-            case Decode.decodeString eventDecoder s of
+        decodedDiaperEvents =
+            case Decode.decodeString diaperEventsDecoder diaperEventsFromJSON of
                 Ok res ->
                     res
 
@@ -32,67 +28,72 @@ init diaperEventsJson =
                     []
     in
         ( { newEvent = Nothing
-          , events = getEventList diaperEventsJson
-          , currentDate = Nothing
+          , events = Debug.log "here" decodedDiaperEvents
           }
-        , Task.perform (\_ -> NoOp) InitializeDate Date.now
+        , Cmd.none
         )
 
 
-eventDecoder : Decode.Decoder (List DiaperEvent)
-eventDecoder =
+diaperEventsDecoder : Decode.Decoder (List DiaperEvent)
+diaperEventsDecoder =
     Decode.list
         (Decode.object8
             DiaperEvent
-            ("id" := int)
-            ("created_at" := DecodeExtra.date)
-            ("skipped_previous_feed" := bool)
-            (Decode.maybe ("poop" := bool))
-            (Decode.maybe ("breast_feed" := int))
-            (Decode.maybe ("bottle_feed" := int))
-            (Decode.maybe ("attended_at" := DecodeExtra.date))
-            (Decode.maybe ("slept_at" := DecodeExtra.date))
+            (at [ "_id", "$oid" ] string)
+            (at [ "attendedAt", "$date" ] fromUnix)
+            ("skippedPrevious" := bool)
+            ("poop" := int)
+            ("pee" := bool)
+            ("breastFeed" := int)
+            ("bottleFeed" := int)
+            (Decode.maybe (at [ "sleptAt", "$date" ] fromUnix))
         )
+
+
+fromUnix : Decode.Decoder Date.Date
+fromUnix =
+    let
+        resultTime a =
+            Ok <| Date.fromTime <| toFloat a
+    in
+        Decode.customDecoder int resultTime
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Sub.batch [ Time.every Time.minute (\_ -> IncrementDate) ]
+    Sub.batch []
 
 
 type alias Model =
     { newEvent : Maybe DiaperEvent
     , events : List DiaperEvent
-    , currentDate : Maybe Date
     }
 
 
 type alias DiaperEvent =
-    { id : Int
-    , created_at : Date
-    , skipped_previous_feed : Bool
-    , poop : Maybe Bool
-    , breast_feed : Maybe Int
-    , bottle_feed : Maybe Int
-    , attended_at : Maybe Date
+    { id : String
+    , attendedAt : Date
+    , skippedPrevious : Bool
+    , poop : Int
+    , pee : Bool
+    , breastFeed : Int
+    , bottleFeed : Int
     , slept_at : Maybe Date
     }
 
 
 type FieldChange
-    = ChangeSkippedPrevious Bool
+    = ChangeAttended Date
+    | ChangeSkippedPrevious Bool
     | ChangePoop Bool
     | ChangePee Bool
     | ChangeBreastFeed Int
     | ChangeBottleFeed Int
-    | ChangeAttended Date
     | ChangeSlept Date
 
 
 type Msg
     = Entry FieldChange
-    | InitializeDate Date
-    | IncrementDate
     | NoOp
 
 
@@ -102,19 +103,11 @@ update msg model =
         NoOp ->
             model ! []
 
-        InitializeDate date ->
-            { model | currentDate = Just date } ! []
-
-        IncrementDate ->
-            case model.currentDate of
-                Nothing ->
-                    model ! []
-
-                Just d ->
-                    { model | currentDate = Just (Date.Extra.add Minute 1 d) } ! []
-
         Entry fc ->
             case fc of
+                ChangeAttended sp ->
+                    model ! []
+
                 ChangeSkippedPrevious sp ->
                     model ! []
 
@@ -128,9 +121,6 @@ update msg model =
                     model ! []
 
                 ChangeBottleFeed sp ->
-                    model ! []
-
-                ChangeAttended sp ->
                     model ! []
 
                 ChangeSlept sp ->
