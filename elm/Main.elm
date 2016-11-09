@@ -1,9 +1,11 @@
 module Main exposing (..)
 
 import Html.App exposing (programWithFlags)
-import Html exposing (..)
 import Date exposing (Date)
 import Json.Decode as Decode exposing ((:=), int, string, bool, at)
+import Update exposing (update)
+import View exposing (view)
+import Types exposing (Model, Msg, DiaperEvent)
 
 
 main : Program String
@@ -62,71 +64,3 @@ fromUnix =
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch []
-
-
-type alias Model =
-    { newEvent : Maybe DiaperEvent
-    , events : List DiaperEvent
-    }
-
-
-type alias DiaperEvent =
-    { id : String
-    , attendedAt : Date
-    , skippedPrevious : Bool
-    , poop : Int
-    , pee : Bool
-    , breastFeed : Int
-    , bottleFeed : Int
-    , slept_at : Maybe Date
-    }
-
-
-type FieldChange
-    = ChangeAttended Date
-    | ChangeSkippedPrevious Bool
-    | ChangePoop Bool
-    | ChangePee Bool
-    | ChangeBreastFeed Int
-    | ChangeBottleFeed Int
-    | ChangeSlept Date
-
-
-type Msg
-    = Entry FieldChange
-    | NoOp
-
-
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    case msg of
-        NoOp ->
-            model ! []
-
-        Entry fc ->
-            case fc of
-                ChangeAttended sp ->
-                    model ! []
-
-                ChangeSkippedPrevious sp ->
-                    model ! []
-
-                ChangePoop sp ->
-                    model ! []
-
-                ChangePee sp ->
-                    model ! []
-
-                ChangeBreastFeed sp ->
-                    model ! []
-
-                ChangeBottleFeed sp ->
-                    model ! []
-
-                ChangeSlept sp ->
-                    model ! []
-
-
-view : Model -> Html Msg
-view model =
-    div [] [ text <| toString <| model ]

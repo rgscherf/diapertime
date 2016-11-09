@@ -6332,237 +6332,6 @@ var _elm_lang$core$Date$Mar = {ctor: 'Mar'};
 var _elm_lang$core$Date$Feb = {ctor: 'Feb'};
 var _elm_lang$core$Date$Jan = {ctor: 'Jan'};
 
-var _elm_lang$core$Set$foldr = F3(
-	function (f, b, _p0) {
-		var _p1 = _p0;
-		return A3(
-			_elm_lang$core$Dict$foldr,
-			F3(
-				function (k, _p2, b) {
-					return A2(f, k, b);
-				}),
-			b,
-			_p1._0);
-	});
-var _elm_lang$core$Set$foldl = F3(
-	function (f, b, _p3) {
-		var _p4 = _p3;
-		return A3(
-			_elm_lang$core$Dict$foldl,
-			F3(
-				function (k, _p5, b) {
-					return A2(f, k, b);
-				}),
-			b,
-			_p4._0);
-	});
-var _elm_lang$core$Set$toList = function (_p6) {
-	var _p7 = _p6;
-	return _elm_lang$core$Dict$keys(_p7._0);
-};
-var _elm_lang$core$Set$size = function (_p8) {
-	var _p9 = _p8;
-	return _elm_lang$core$Dict$size(_p9._0);
-};
-var _elm_lang$core$Set$member = F2(
-	function (k, _p10) {
-		var _p11 = _p10;
-		return A2(_elm_lang$core$Dict$member, k, _p11._0);
-	});
-var _elm_lang$core$Set$isEmpty = function (_p12) {
-	var _p13 = _p12;
-	return _elm_lang$core$Dict$isEmpty(_p13._0);
-};
-var _elm_lang$core$Set$Set_elm_builtin = function (a) {
-	return {ctor: 'Set_elm_builtin', _0: a};
-};
-var _elm_lang$core$Set$empty = _elm_lang$core$Set$Set_elm_builtin(_elm_lang$core$Dict$empty);
-var _elm_lang$core$Set$singleton = function (k) {
-	return _elm_lang$core$Set$Set_elm_builtin(
-		A2(
-			_elm_lang$core$Dict$singleton,
-			k,
-			{ctor: '_Tuple0'}));
-};
-var _elm_lang$core$Set$insert = F2(
-	function (k, _p14) {
-		var _p15 = _p14;
-		return _elm_lang$core$Set$Set_elm_builtin(
-			A3(
-				_elm_lang$core$Dict$insert,
-				k,
-				{ctor: '_Tuple0'},
-				_p15._0));
-	});
-var _elm_lang$core$Set$fromList = function (xs) {
-	return A3(_elm_lang$core$List$foldl, _elm_lang$core$Set$insert, _elm_lang$core$Set$empty, xs);
-};
-var _elm_lang$core$Set$map = F2(
-	function (f, s) {
-		return _elm_lang$core$Set$fromList(
-			A2(
-				_elm_lang$core$List$map,
-				f,
-				_elm_lang$core$Set$toList(s)));
-	});
-var _elm_lang$core$Set$remove = F2(
-	function (k, _p16) {
-		var _p17 = _p16;
-		return _elm_lang$core$Set$Set_elm_builtin(
-			A2(_elm_lang$core$Dict$remove, k, _p17._0));
-	});
-var _elm_lang$core$Set$union = F2(
-	function (_p19, _p18) {
-		var _p20 = _p19;
-		var _p21 = _p18;
-		return _elm_lang$core$Set$Set_elm_builtin(
-			A2(_elm_lang$core$Dict$union, _p20._0, _p21._0));
-	});
-var _elm_lang$core$Set$intersect = F2(
-	function (_p23, _p22) {
-		var _p24 = _p23;
-		var _p25 = _p22;
-		return _elm_lang$core$Set$Set_elm_builtin(
-			A2(_elm_lang$core$Dict$intersect, _p24._0, _p25._0));
-	});
-var _elm_lang$core$Set$diff = F2(
-	function (_p27, _p26) {
-		var _p28 = _p27;
-		var _p29 = _p26;
-		return _elm_lang$core$Set$Set_elm_builtin(
-			A2(_elm_lang$core$Dict$diff, _p28._0, _p29._0));
-	});
-var _elm_lang$core$Set$filter = F2(
-	function (p, _p30) {
-		var _p31 = _p30;
-		return _elm_lang$core$Set$Set_elm_builtin(
-			A2(
-				_elm_lang$core$Dict$filter,
-				F2(
-					function (k, _p32) {
-						return p(k);
-					}),
-				_p31._0));
-	});
-var _elm_lang$core$Set$partition = F2(
-	function (p, _p33) {
-		var _p34 = _p33;
-		var _p35 = A2(
-			_elm_lang$core$Dict$partition,
-			F2(
-				function (k, _p36) {
-					return p(k);
-				}),
-			_p34._0);
-		var p1 = _p35._0;
-		var p2 = _p35._1;
-		return {
-			ctor: '_Tuple2',
-			_0: _elm_lang$core$Set$Set_elm_builtin(p1),
-			_1: _elm_lang$core$Set$Set_elm_builtin(p2)
-		};
-	});
-
-var _elm_community$json_extra$Json_Decode_Extra$sequence = function (decoders) {
-	return A2(
-		_elm_lang$core$Json_Decode$customDecoder,
-		_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$value),
-		function (jsonValues) {
-			return (!_elm_lang$core$Native_Utils.eq(
-				_elm_lang$core$List$length(jsonValues),
-				_elm_lang$core$List$length(decoders))) ? _elm_lang$core$Result$Err('Number of decoders does not match number of values') : A3(
-				_elm_lang$core$List$foldr,
-				_elm_lang$core$Result$map2(
-					F2(
-						function (x, y) {
-							return A2(_elm_lang$core$List_ops['::'], x, y);
-						})),
-				_elm_lang$core$Result$Ok(
-					_elm_lang$core$Native_List.fromArray(
-						[])),
-				A3(_elm_lang$core$List$map2, _elm_lang$core$Json_Decode$decodeValue, decoders, jsonValues));
-		});
-};
-var _elm_community$json_extra$Json_Decode_Extra$lazy = function (getDecoder) {
-	return A2(
-		_elm_lang$core$Json_Decode$customDecoder,
-		_elm_lang$core$Json_Decode$value,
-		function (rawValue) {
-			return A2(
-				_elm_lang$core$Json_Decode$decodeValue,
-				getDecoder(
-					{ctor: '_Tuple0'}),
-				rawValue);
-		});
-};
-var _elm_community$json_extra$Json_Decode_Extra$maybeNull = function (decoder) {
-	return _elm_lang$core$Json_Decode$oneOf(
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_elm_lang$core$Json_Decode$null(_elm_lang$core$Maybe$Nothing),
-				A2(_elm_lang$core$Json_Decode$map, _elm_lang$core$Maybe$Just, decoder)
-			]));
-};
-var _elm_community$json_extra$Json_Decode_Extra$withDefault = F2(
-	function (fallback, decoder) {
-		return A2(
-			_elm_lang$core$Json_Decode$andThen,
-			_elm_lang$core$Json_Decode$maybe(decoder),
-			function (_p0) {
-				return _elm_lang$core$Json_Decode$succeed(
-					A2(_elm_lang$core$Maybe$withDefault, fallback, _p0));
-			});
-	});
-var _elm_community$json_extra$Json_Decode_Extra$decodeDictFromTuples = F2(
-	function (keyDecoder, tuples) {
-		var _p1 = tuples;
-		if (_p1.ctor === '[]') {
-			return _elm_lang$core$Json_Decode$succeed(_elm_lang$core$Dict$empty);
-		} else {
-			var _p2 = A2(_elm_lang$core$Json_Decode$decodeString, keyDecoder, _p1._0._0);
-			if (_p2.ctor === 'Ok') {
-				return A2(
-					_elm_lang$core$Json_Decode$andThen,
-					A2(_elm_community$json_extra$Json_Decode_Extra$decodeDictFromTuples, keyDecoder, _p1._1),
-					function (_p3) {
-						return _elm_lang$core$Json_Decode$succeed(
-							A3(_elm_lang$core$Dict$insert, _p2._0, _p1._0._1, _p3));
-					});
-			} else {
-				return _elm_lang$core$Json_Decode$fail(_p2._0);
-			}
-		}
-	});
-var _elm_community$json_extra$Json_Decode_Extra$dict2 = F2(
-	function (keyDecoder, valueDecoder) {
-		return A2(
-			_elm_lang$core$Json_Decode$andThen,
-			_elm_lang$core$Json_Decode$dict(valueDecoder),
-			function (_p4) {
-				return A2(
-					_elm_community$json_extra$Json_Decode_Extra$decodeDictFromTuples,
-					keyDecoder,
-					_elm_lang$core$Dict$toList(_p4));
-			});
-	});
-var _elm_community$json_extra$Json_Decode_Extra$set = function (decoder) {
-	return A2(
-		_elm_lang$core$Json_Decode$andThen,
-		_elm_lang$core$Json_Decode$list(decoder),
-		function (_p5) {
-			return _elm_lang$core$Json_Decode$succeed(
-				_elm_lang$core$Set$fromList(_p5));
-		});
-};
-var _elm_community$json_extra$Json_Decode_Extra$date = A2(_elm_lang$core$Json_Decode$customDecoder, _elm_lang$core$Json_Decode$string, _elm_lang$core$Date$fromString);
-var _elm_community$json_extra$Json_Decode_Extra$apply = _elm_lang$core$Json_Decode$object2(
-	F2(
-		function (x, y) {
-			return x(y);
-		}));
-var _elm_community$json_extra$Json_Decode_Extra_ops = _elm_community$json_extra$Json_Decode_Extra_ops || {};
-_elm_community$json_extra$Json_Decode_Extra_ops['|:'] = _elm_community$json_extra$Json_Decode_Extra$apply;
-
 //import Native.Json //
 
 var _elm_lang$virtual_dom$Native_VirtualDom = function() {
@@ -8190,18 +7959,41 @@ var _elm_lang$html$Html_App$beginnerProgram = function (_p1) {
 };
 var _elm_lang$html$Html_App$map = _elm_lang$virtual_dom$VirtualDom$map;
 
-var _user$project$Main$view = function (model) {
-	return A2(
-		_elm_lang$html$Html$div,
-		_elm_lang$core$Native_List.fromArray(
-			[]),
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_elm_lang$html$Html$text(
-				_elm_lang$core$Basics$toString(model))
-			]));
+var _user$project$Types$Model = F2(
+	function (a, b) {
+		return {newEvent: a, events: b};
+	});
+var _user$project$Types$DiaperEvent = F8(
+	function (a, b, c, d, e, f, g, h) {
+		return {id: a, attendedAt: b, skippedPrevious: c, poop: d, pee: e, breastFeed: f, bottleFeed: g, slept_at: h};
+	});
+var _user$project$Types$ChangeSlept = function (a) {
+	return {ctor: 'ChangeSlept', _0: a};
 };
-var _user$project$Main$update = F2(
+var _user$project$Types$ChangeBottleFeed = function (a) {
+	return {ctor: 'ChangeBottleFeed', _0: a};
+};
+var _user$project$Types$ChangeBreastFeed = function (a) {
+	return {ctor: 'ChangeBreastFeed', _0: a};
+};
+var _user$project$Types$ChangePee = function (a) {
+	return {ctor: 'ChangePee', _0: a};
+};
+var _user$project$Types$ChangePoop = function (a) {
+	return {ctor: 'ChangePoop', _0: a};
+};
+var _user$project$Types$ChangeSkippedPrevious = function (a) {
+	return {ctor: 'ChangeSkippedPrevious', _0: a};
+};
+var _user$project$Types$ChangeAttended = function (a) {
+	return {ctor: 'ChangeAttended', _0: a};
+};
+var _user$project$Types$NoOp = {ctor: 'NoOp'};
+var _user$project$Types$Entry = function (a) {
+	return {ctor: 'Entry', _0: a};
+};
+
+var _user$project$Update$update = F2(
 	function (msg, model) {
 		var _p0 = msg;
 		if (_p0.ctor === 'NoOp') {
@@ -8258,6 +8050,19 @@ var _user$project$Main$update = F2(
 			}
 		}
 	});
+
+var _user$project$View$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html$text(
+				_elm_lang$core$Basics$toString(model))
+			]));
+};
+
 var _user$project$Main$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$batch(
 		_elm_lang$core$Native_List.fromArray(
@@ -8271,18 +8076,10 @@ var _user$project$Main$fromUnix = function () {
 	};
 	return A2(_elm_lang$core$Json_Decode$customDecoder, _elm_lang$core$Json_Decode$int, resultTime);
 }();
-var _user$project$Main$Model = F2(
-	function (a, b) {
-		return {newEvent: a, events: b};
-	});
-var _user$project$Main$DiaperEvent = F8(
-	function (a, b, c, d, e, f, g, h) {
-		return {id: a, attendedAt: b, skippedPrevious: c, poop: d, pee: e, breastFeed: f, bottleFeed: g, slept_at: h};
-	});
 var _user$project$Main$diaperEventsDecoder = _elm_lang$core$Json_Decode$list(
 	A9(
 		_elm_lang$core$Json_Decode$object8,
-		_user$project$Main$DiaperEvent,
+		_user$project$Types$DiaperEvent,
 		A2(
 			_elm_lang$core$Json_Decode$at,
 			_elm_lang$core$Native_List.fromArray(
@@ -8306,9 +8103,9 @@ var _user$project$Main$diaperEventsDecoder = _elm_lang$core$Json_Decode$list(
 				_user$project$Main$fromUnix))));
 var _user$project$Main$init = function (diaperEventsFromJSON) {
 	var decodedDiaperEvents = function () {
-		var _p2 = A2(_elm_lang$core$Json_Decode$decodeString, _user$project$Main$diaperEventsDecoder, diaperEventsFromJSON);
-		if (_p2.ctor === 'Ok') {
-			return _p2._0;
+		var _p0 = A2(_elm_lang$core$Json_Decode$decodeString, _user$project$Main$diaperEventsDecoder, diaperEventsFromJSON);
+		if (_p0.ctor === 'Ok') {
+			return _p0._0;
 		} else {
 			return _elm_lang$core$Native_List.fromArray(
 				[]);
@@ -8325,33 +8122,8 @@ var _user$project$Main$init = function (diaperEventsFromJSON) {
 };
 var _user$project$Main$main = {
 	main: _elm_lang$html$Html_App$programWithFlags(
-		{init: _user$project$Main$init, subscriptions: _user$project$Main$subscriptions, update: _user$project$Main$update, view: _user$project$Main$view}),
+		{init: _user$project$Main$init, subscriptions: _user$project$Main$subscriptions, update: _user$project$Update$update, view: _user$project$View$view}),
 	flags: _elm_lang$core$Json_Decode$string
-};
-var _user$project$Main$ChangeSlept = function (a) {
-	return {ctor: 'ChangeSlept', _0: a};
-};
-var _user$project$Main$ChangeBottleFeed = function (a) {
-	return {ctor: 'ChangeBottleFeed', _0: a};
-};
-var _user$project$Main$ChangeBreastFeed = function (a) {
-	return {ctor: 'ChangeBreastFeed', _0: a};
-};
-var _user$project$Main$ChangePee = function (a) {
-	return {ctor: 'ChangePee', _0: a};
-};
-var _user$project$Main$ChangePoop = function (a) {
-	return {ctor: 'ChangePoop', _0: a};
-};
-var _user$project$Main$ChangeSkippedPrevious = function (a) {
-	return {ctor: 'ChangeSkippedPrevious', _0: a};
-};
-var _user$project$Main$ChangeAttended = function (a) {
-	return {ctor: 'ChangeAttended', _0: a};
-};
-var _user$project$Main$NoOp = {ctor: 'NoOp'};
-var _user$project$Main$Entry = function (a) {
-	return {ctor: 'Entry', _0: a};
 };
 
 var Elm = {};
