@@ -7965,7 +7965,7 @@ var _user$project$Types$Model = F2(
 	});
 var _user$project$Types$DiaperEvent = F8(
 	function (a, b, c, d, e, f, g, h) {
-		return {id: a, attendedAt: b, skippedPrevious: c, poop: d, pee: e, breastFeed: f, bottleFeed: g, slept_at: h};
+		return {id: a, attendedAt: b, skippedPrevious: c, poop: d, pee: e, breastFeed: f, bottleFeed: g, sleptAt: h};
 	});
 var _user$project$Types$ChangeSlept = function (a) {
 	return {ctor: 'ChangeSlept', _0: a};
@@ -8051,6 +8051,79 @@ var _user$project$Update$update = F2(
 		}
 	});
 
+var _user$project$View$renderSingleRow = function (event) {
+	var makeText = function (_p0) {
+		return _elm_lang$html$Html$text(
+			_elm_lang$core$Basics$toString(_p0));
+	};
+	return A2(
+		_elm_lang$html$Html$tr,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html$td,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						makeText(event.attendedAt)
+					])),
+				A2(
+				_elm_lang$html$Html$td,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						makeText(event.skippedPrevious)
+					])),
+				A2(
+				_elm_lang$html$Html$td,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						makeText(event.poop)
+					])),
+				A2(
+				_elm_lang$html$Html$td,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						makeText(event.pee)
+					])),
+				A2(
+				_elm_lang$html$Html$td,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						makeText(event.breastFeed)
+					])),
+				A2(
+				_elm_lang$html$Html$td,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						makeText(event.bottleFeed)
+					])),
+				A2(
+				_elm_lang$html$Html$td,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						makeText(
+						A2(
+							_elm_lang$core$Maybe$withDefault,
+							'',
+							A2(_elm_lang$core$Maybe$map, _elm_lang$core$Basics$toString, event.sleptAt)))
+					]))
+			]));
+};
 var _user$project$View$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -8058,8 +8131,81 @@ var _user$project$View$view = function (model) {
 			[]),
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_elm_lang$html$Html$text(
-				_elm_lang$core$Basics$toString(model))
+				A2(
+				_elm_lang$html$Html$table,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(
+						_elm_lang$html$Html$tr,
+						_elm_lang$core$Native_List.fromArray(
+							[]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								A2(
+								_elm_lang$html$Html$th,
+								_elm_lang$core$Native_List.fromArray(
+									[]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html$text('Attended')
+									])),
+								A2(
+								_elm_lang$html$Html$th,
+								_elm_lang$core$Native_List.fromArray(
+									[]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html$text('Skipped?')
+									])),
+								A2(
+								_elm_lang$html$Html$th,
+								_elm_lang$core$Native_List.fromArray(
+									[]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html$text('Poop')
+									])),
+								A2(
+								_elm_lang$html$Html$th,
+								_elm_lang$core$Native_List.fromArray(
+									[]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html$text('Pee')
+									])),
+								A2(
+								_elm_lang$html$Html$th,
+								_elm_lang$core$Native_List.fromArray(
+									[]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html$text('Breast')
+									])),
+								A2(
+								_elm_lang$html$Html$th,
+								_elm_lang$core$Native_List.fromArray(
+									[]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html$text('Bottle')
+									])),
+								A2(
+								_elm_lang$html$Html$th,
+								_elm_lang$core$Native_List.fromArray(
+									[]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html$text('Slept')
+									]))
+							])),
+						A2(
+						_elm_lang$html$Html$tbody,
+						_elm_lang$core$Native_List.fromArray(
+							[]),
+						A2(_elm_lang$core$List$map, _user$project$View$renderSingleRow, model.events))
+					]))
 			]));
 };
 

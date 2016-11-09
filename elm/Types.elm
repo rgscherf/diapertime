@@ -17,7 +17,7 @@ type alias DiaperEvent =
     , pee : Bool
     , breastFeed : Int
     , bottleFeed : Int
-    , slept_at : Maybe Date
+    , sleptAt : Maybe Date
     }
 
 
