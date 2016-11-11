@@ -9,6 +9,18 @@ import Material.Layout as Layout
 import Material.Table as Table
 import Material.Icon as Icon
 import Material.Options exposing (css, cs)
+import Date.Format exposing (format)
+import Date exposing (Date)
+
+
+opFaded : String
+opFaded =
+    "0.38"
+
+
+opFull : String
+opFull =
+    "1"
 
 
 view : Model -> Html Msg
@@ -49,8 +61,8 @@ renderDiaperTimeTable model =
                 [ Table.th [] [ text "Attended" ]
                 , Table.th [] [ text "Pee" ]
                 , Table.th [] [ text "Poop" ]
-                , Table.th [] [ text "Breast min" ]
-                , Table.th [] [ text "Bottle mL" ]
+                , Table.th [] [ text "Breast" ]
+                , Table.th [] [ text "Bottle" ]
                 , Table.th [] [ text "Slept" ]
                 ]
             ]
@@ -65,46 +77,88 @@ renderSingleRow event =
             text << toString
     in
         Table.tr []
-            [ Table.td [] [ makeText event.attendedAt ]
+            [ Table.td [] [ text <| renderDateText event.attendedAt ]
             , renderCheckCell event.pee
             , renderPoopCell event.poop
-            , Table.td [] [ makeText event.breastFeed ]
-            , Table.td [] [ makeText event.bottleFeed ]
+            , renderFeedCell event.breastFeed "min"
+            , renderFeedCell event.bottleFeed "mL"
             , Table.td []
-                [ makeText <|
+                [ text <|
                     Maybe.withDefault "" <|
-                        Maybe.map toString event.sleptAt
+                        Maybe.map renderDateText event.sleptAt
                 ]
             ]
 
 
+renderFeedCell : Int -> String -> Html Msg
+renderFeedCell n app =
+    let
+        op =
+            case n of
+                0 ->
+                    opFaded
+
+                _ ->
+                    opFull
+    in
+        Table.td
+            [ css "opacity" op, css "text-align" "right" ]
+            [ text << (\m -> m ++ " " ++ app) << toString <| n ]
+
+
+renderDateText : Date -> String
+renderDateText d =
+    format "%k:%M%P %m/%d" d
+
+
 renderPoopCell : Int -> Html Msg
 renderPoopCell level =
-    Table.td
-        [ cs "poopCell"
-        ]
-        (case level of
-            0 ->
-                [ renderSingleXCell ]
+    let
+        -- strategy is to have [fullicons] ++ [fadedicons]
+        makePoopIcons iconIsEmpty n =
+            List.map
+                (\_ ->
+                    Icon.view
+                        (if iconIsEmpty then
+                            "ic_radio_button_unchecked"
+                         else
+                            "ic_lens"
+                        )
+                        [ Icon.size18
+                        , css "opacity"
+                            (if iconIsEmpty then
+                                opFaded
+                             else
+                                opFull
+                            )
+                        , css "margin-left" "-50px"
+                        ]
+                )
+                [0..n]
 
-            l ->
-                List.map
-                    (\_ ->
-                        Icon.view "ic_thumb_up"
-                            [ Icon.size18
-                            , css "opacity" "1"
-                            , css "margin-left" "-50px"
-                            ]
-                    )
-                    [0..l]
-        )
+        fullIcons =
+            -- [range] is inclusive of 0 on lower bound
+            -- so if n == 0 we have to actually map
+            -- [0..(-1)] for an empty mapped list
+            makePoopIcons False (level - 1)
+
+        emptyIcons =
+            -- see note above!
+            makePoopIcons True (2 - level)
+    in
+        Table.td
+            []
+        <|
+            List.append
+                fullIcons
+                emptyIcons
 
 
 renderSingleXCell : Html Msg
 renderSingleXCell =
     Icon.view "ic_clear"
         [ Icon.size18
-        , css "opacity" ".38"
+        , css "opacity" opFaded
         , css "margin-left" "-50px"
         ]
 
@@ -112,12 +166,11 @@ renderSingleXCell =
 renderCheckCell : Bool -> Html Msg
 renderCheckCell b =
     Table.td
-        [ cs "check_cell"
-        , css "opacity" <|
+        [ css "opacity" <|
             (if b then
-                "1"
+                opFull
              else
-                ".38"
+                opFaded
             )
         ]
         [ Icon.view
