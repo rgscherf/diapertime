@@ -1,11 +1,13 @@
 module Types exposing (..)
 
 import Date exposing (Date)
+import Material
 
 
 type alias Model =
     { newEvent : Maybe DiaperEvent
     , events : List DiaperEvent
+    , mdl : Material.Model
     }
 
 
@@ -34,3 +36,4 @@ type FieldChange
 type Msg
     = Entry FieldChange
     | NoOp
+    | Mdl (Material.Msg Msg)

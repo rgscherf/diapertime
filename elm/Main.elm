@@ -6,6 +6,7 @@ import Json.Decode as Decode exposing ((:=), int, string, bool, at)
 import Update exposing (update)
 import View exposing (view)
 import Types exposing (Model, Msg, DiaperEvent)
+import Material
 
 
 main : Program String
@@ -31,6 +32,7 @@ init diaperEventsFromJSON =
     in
         ( { newEvent = Nothing
           , events = Debug.log "here" decodedDiaperEvents
+          , mdl = Material.model
           }
         , Cmd.none
         )

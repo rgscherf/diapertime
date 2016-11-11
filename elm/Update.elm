@@ -1,11 +1,15 @@
 module Update exposing (..)
 
 import Types exposing (Model, Msg(..), FieldChange(..))
+import Material
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        Mdl m ->
+            Material.update m model
+
         NoOp ->
             model ! []
 
