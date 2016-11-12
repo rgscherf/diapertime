@@ -1,7 +1,10 @@
 module View exposing (..)
 
 import Html exposing (..)
+import Html.Attributes exposing (style)
 import Types exposing (Model, Msg(..), DiaperEvent)
+import Material.Elevation as Elevation
+import Material.Button as Button
 import Material.Table as Table
 import Material.Color as Color
 import Material.Scheme as Scheme
@@ -30,7 +33,18 @@ view model =
             Mdl
             model.mdl
             [ Layout.fixedHeader ]
-            { header = [ h1 [] [ text "DTime" ] ]
+            { header =
+                [ h1 [ style [ "font-family" => "'Lily Script One', cursive" ] ]
+                    [ Icon.view "ic_alarm"
+                        [ Icon.size48
+                        , css "margin-left" "-50px"
+                        , css "vertical-align" "middle"
+                        , css "padding-bottom" "10px"
+                        , css "margin-right" "20px"
+                        ]
+                    , text "Diaper Time"
+                    ]
+                ]
             , drawer = []
             , tabs = ( [], [] )
             , main = [ viewBody model ]
@@ -45,16 +59,39 @@ view model =
 viewBody : Model -> Html Msg
 viewBody model =
     div
-        []
-        [ renderDiaperTimeTable model ]
+        [ style
+            [ "margin-left" => "auto"
+            , "margin-right" => "auto"
+            , "width" => "85%"
+            , "max-width" => "800px"
+            ]
+        ]
+        [ renderNewEvent model
+        , renderDiaperTimeTable model
+        ]
+
+
+renderNewEvent : Model -> Html Msg
+renderNewEvent model =
+    Button.render Mdl
+        [ 0 ]
+        model.mdl
+        [ Button.fab
+        , Button.accent
+        , Elevation.e8
+        , css "margin-top" "30px"
+        , css "margin-bottom" "-20px"
+        , css "left" "77%"
+        , css "z-index" "10"
+        ]
+        [ Icon.i "add" ]
 
 
 renderDiaperTimeTable : Model -> Html Msg
 renderDiaperTimeTable model =
     Table.table
-        [ css "margin-left" "auto"
-        , css "margin-right" "auto"
-        , css "margin-top" "30px"
+        [ css "margin-right" "auto"
+        , css "margin-left" "auto"
         ]
         [ Table.thead []
             [ Table.tr []
@@ -72,29 +109,25 @@ renderDiaperTimeTable model =
 
 renderSingleRow : DiaperEvent -> Html Msg
 renderSingleRow event =
-    let
-        makeText =
-            text << toString
-    in
-        Table.tr []
-            [ Table.td [] [ text <| renderDateText event.attendedAt ]
-            , renderCheckCell event.pee
-            , renderPoopCell event.poop
-            , renderFeedCell event.breastFeed "min"
-            , renderFeedCell event.bottleFeed "mL"
-            , Table.td []
-                [ text <|
-                    Maybe.withDefault "" <|
-                        Maybe.map renderDateText event.sleptAt
-                ]
+    Table.tr []
+        [ Table.td [] [ text <| renderDateText event.attendedAt ]
+        , renderCheckCell event.pee
+        , renderPoopCell event.poop
+        , renderFeedCell event.breastFeed "min"
+        , renderFeedCell event.bottleFeed "mL"
+        , Table.td []
+            [ text <|
+                Maybe.withDefault "" <|
+                    Maybe.map renderDateText event.sleptAt
             ]
+        ]
 
 
 renderFeedCell : Int -> String -> Html Msg
-renderFeedCell n app =
+renderFeedCell numberToDisplay unitStringToAppend =
     let
         op =
-            case n of
+            case numberToDisplay of
                 0 ->
                     opFaded
 
@@ -103,7 +136,10 @@ renderFeedCell n app =
     in
         Table.td
             [ css "opacity" op, css "text-align" "right" ]
-            [ text << (\m -> m ++ " " ++ app) << toString <| n ]
+            [ toString numberToDisplay
+                |> (\m -> m ++ " " ++ unitStringToAppend)
+                |> text
+            ]
 
 
 renderDateText : Date -> String
@@ -164,17 +200,17 @@ renderSingleXCell =
 
 
 renderCheckCell : Bool -> Html Msg
-renderCheckCell b =
+renderCheckCell isChecked =
     Table.td
         [ css "opacity" <|
-            (if b then
+            (if isChecked then
                 opFull
              else
                 opFaded
             )
         ]
         [ Icon.view
-            (if b then
+            (if isChecked then
                 "ic_done"
              else
                 "ic_clear"
