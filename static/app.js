@@ -14271,14 +14271,36 @@ var _mgold$elm_date_format$Date_Format$format = F2(
 	});
 var _mgold$elm_date_format$Date_Format$formatISO8601 = _mgold$elm_date_format$Date_Format$format('%Y-%m-%dT%H:%M:%SZ');
 
-var _user$project$Types$Model = F3(
-	function (a, b, c) {
-		return {newEvent: a, events: b, mdl: c};
+var _user$project$Types$freshDiaperEvent = {
+	id: 'lol',
+	attendedAt: _elm_lang$core$Date$fromTime(1),
+	skippedPrevious: true,
+	poop: 0,
+	pee: true,
+	breastFeed: 0,
+	bottleFeed: 0,
+	sleptAt: _elm_lang$core$Maybe$Just(
+		_elm_lang$core$Date$fromTime(1))
+};
+var _user$project$Types$Model = F5(
+	function (a, b, c, d, e) {
+		return {newEvent: a, events: b, showNewEvent: c, neweventDeltas: d, mdl: e};
 	});
 var _user$project$Types$DiaperEvent = F8(
 	function (a, b, c, d, e, f, g, h) {
 		return {id: a, attendedAt: b, skippedPrevious: c, poop: d, pee: e, breastFeed: f, bottleFeed: g, sleptAt: h};
 	});
+var _user$project$Types$NewEventDeltas = F2(
+	function (a, b) {
+		return {attended: a, slept: b};
+	});
+var _user$project$Types$Minus120 = {ctor: 'Minus120'};
+var _user$project$Types$Minus90 = {ctor: 'Minus90'};
+var _user$project$Types$Minus60 = {ctor: 'Minus60'};
+var _user$project$Types$Minus45 = {ctor: 'Minus45'};
+var _user$project$Types$Minus30 = {ctor: 'Minus30'};
+var _user$project$Types$Minus15 = {ctor: 'Minus15'};
+var _user$project$Types$Now = {ctor: 'Now'};
 var _user$project$Types$ChangeSlept = function (a) {
 	return {ctor: 'ChangeSlept', _0: a};
 };
@@ -14304,29 +14326,60 @@ var _user$project$Types$Mdl = function (a) {
 	return {ctor: 'Mdl', _0: a};
 };
 var _user$project$Types$NoOp = {ctor: 'NoOp'};
+var _user$project$Types$CancelEvent = {ctor: 'CancelEvent'};
+var _user$project$Types$ResetNewEvent = {ctor: 'ResetNewEvent'};
 var _user$project$Types$Entry = function (a) {
 	return {ctor: 'Entry', _0: a};
 };
 
+var _user$project$Update$intWithDefault = F2(
+	function (defaultInt, stringToConvert) {
+		var _p0 = _elm_lang$core$String$toInt(stringToConvert);
+		if (_p0.ctor === 'Ok') {
+			return _p0._0;
+		} else {
+			return defaultInt;
+		}
+	});
 var _user$project$Update$update = F2(
 	function (msg, model) {
-		var _p0 = msg;
-		switch (_p0.ctor) {
+		var _p1 = msg;
+		switch (_p1.ctor) {
 			case 'Mdl':
-				return A2(_debois$elm_mdl$Material$update, _p0._0, model);
+				return A2(_debois$elm_mdl$Material$update, _p1._0, model);
+			case 'ResetNewEvent':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{newEvent: _user$project$Types$freshDiaperEvent, showNewEvent: true}),
+					_elm_lang$core$Native_List.fromArray(
+						[]));
 			case 'NoOp':
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					model,
 					_elm_lang$core$Native_List.fromArray(
 						[]));
+			case 'CancelEvent':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{newEvent: _user$project$Types$freshDiaperEvent, showNewEvent: false}),
+					_elm_lang$core$Native_List.fromArray(
+						[]));
 			default:
-				var _p1 = _p0._0;
-				switch (_p1.ctor) {
+				var _p2 = _p1._0;
+				switch (_p2.ctor) {
 					case 'ChangeAttended':
 						return A2(
 							_elm_lang$core$Platform_Cmd_ops['!'],
-							model,
+							_elm_lang$core$Native_Utils.update(
+								model,
+								{
+									neweventDeltas: {attended: _p2._0, slept: model.neweventDeltas.slept}
+								}),
 							_elm_lang$core$Native_List.fromArray(
 								[]));
 					case 'ChangeSkippedPrevious':
@@ -14336,9 +14389,17 @@ var _user$project$Update$update = F2(
 							_elm_lang$core$Native_List.fromArray(
 								[]));
 					case 'ChangePoop':
+						var ev = model.newEvent;
+						var newPoop = A2(_user$project$Update$intWithDefault, model.newEvent.poop, _p2._0);
 						return A2(
 							_elm_lang$core$Platform_Cmd_ops['!'],
-							model,
+							_elm_lang$core$Native_Utils.update(
+								model,
+								{
+									newEvent: _elm_lang$core$Native_Utils.update(
+										ev,
+										{poop: newPoop})
+								}),
 							_elm_lang$core$Native_List.fromArray(
 								[]));
 					case 'ChangePee':
@@ -14348,21 +14409,41 @@ var _user$project$Update$update = F2(
 							_elm_lang$core$Native_List.fromArray(
 								[]));
 					case 'ChangeBreastFeed':
+						var ev = model.newEvent;
+						var newBreast = A2(_user$project$Update$intWithDefault, model.newEvent.breastFeed, _p2._0);
 						return A2(
 							_elm_lang$core$Platform_Cmd_ops['!'],
-							model,
+							_elm_lang$core$Native_Utils.update(
+								model,
+								{
+									newEvent: _elm_lang$core$Native_Utils.update(
+										ev,
+										{breastFeed: newBreast})
+								}),
 							_elm_lang$core$Native_List.fromArray(
 								[]));
 					case 'ChangeBottleFeed':
+						var ev = model.newEvent;
+						var newBottle = A2(_user$project$Update$intWithDefault, model.newEvent.breastFeed, _p2._0);
 						return A2(
 							_elm_lang$core$Platform_Cmd_ops['!'],
-							model,
+							_elm_lang$core$Native_Utils.update(
+								model,
+								{
+									newEvent: _elm_lang$core$Native_Utils.update(
+										ev,
+										{bottleFeed: newBottle})
+								}),
 							_elm_lang$core$Native_List.fromArray(
 								[]));
 					default:
 						return A2(
 							_elm_lang$core$Platform_Cmd_ops['!'],
-							model,
+							_elm_lang$core$Native_Utils.update(
+								model,
+								{
+									neweventDeltas: {attended: model.neweventDeltas.attended, slept: _p2._0}
+								}),
 							_elm_lang$core$Native_List.fromArray(
 								[]));
 				}
@@ -14372,7 +14453,227 @@ var _user$project$Update$update = F2(
 var _user$project$View$renderDateText = function (d) {
 	return A2(_mgold$elm_date_format$Date_Format$format, '%k:%M%P %m/%d', d);
 };
-var _user$project$View$renderNewEvent = function (model) {
+var _user$project$View$inputTableRow = function (model) {
+	var fieldAccessor = function (f) {
+		var _p0 = f;
+		switch (_p0.ctor) {
+			case 'ChangeAttended':
+				return model.neweventDeltas.attended;
+			case 'ChangeSlept':
+				return model.neweventDeltas.slept;
+			default:
+				return _elm_lang$core$Native_Utils.crashCase(
+					'View',
+					{
+						start: {line: 195, column: 13},
+						end: {line: 203, column: 44}
+					},
+					_p0)('should\'t ');
+		}
+	};
+	var inputButtonTemplate = F4(
+		function (renderNum, deltaField, deltaValue, deltaString) {
+			return A5(
+				_debois$elm_mdl$Material_Button$render,
+				_user$project$Types$Mdl,
+				_elm_lang$core$Native_List.fromArray(
+					[renderNum]),
+				model.mdl,
+				A2(
+					_elm_lang$core$List$append,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_debois$elm_mdl$Material_Button$onClick(
+							_user$project$Types$Entry(
+								deltaField(deltaValue))),
+							A2(_debois$elm_mdl$Material_Options$css, 'width', '100px'),
+							A2(_debois$elm_mdl$Material_Options$css, 'padding-left', '0px')
+						]),
+					_elm_lang$core$Native_Utils.eq(
+						fieldAccessor(
+							deltaField(_user$project$Types$Now)),
+						deltaValue) ? _elm_lang$core$Native_List.fromArray(
+						[_debois$elm_mdl$Material_Button$colored]) : _elm_lang$core$Native_List.fromArray(
+						[])),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text(deltaString)
+					]));
+		});
+	return model.showNewEvent ? A2(
+		_debois$elm_mdl$Material_Table$tr,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_debois$elm_mdl$Material_Table$td,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(_debois$elm_mdl$Material_Options$css, 'padding-left', 'auto'),
+						A2(_debois$elm_mdl$Material_Options$css, 'padding-right', 'auto')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A4(inputButtonTemplate, 5, _user$project$Types$ChangeAttended, _user$project$Types$Now, '0m ago'),
+						A2(
+						_elm_lang$html$Html$br,
+						_elm_lang$core$Native_List.fromArray(
+							[]),
+						_elm_lang$core$Native_List.fromArray(
+							[])),
+						A4(inputButtonTemplate, 6, _user$project$Types$ChangeAttended, _user$project$Types$Minus15, '15m ago'),
+						A2(
+						_elm_lang$html$Html$br,
+						_elm_lang$core$Native_List.fromArray(
+							[]),
+						_elm_lang$core$Native_List.fromArray(
+							[])),
+						A4(inputButtonTemplate, 7, _user$project$Types$ChangeAttended, _user$project$Types$Minus30, '30m ago'),
+						A2(
+						_elm_lang$html$Html$br,
+						_elm_lang$core$Native_List.fromArray(
+							[]),
+						_elm_lang$core$Native_List.fromArray(
+							[])),
+						A4(inputButtonTemplate, 8, _user$project$Types$ChangeAttended, _user$project$Types$Minus45, '45m ago'),
+						A2(
+						_elm_lang$html$Html$br,
+						_elm_lang$core$Native_List.fromArray(
+							[]),
+						_elm_lang$core$Native_List.fromArray(
+							[])),
+						A4(inputButtonTemplate, 9, _user$project$Types$ChangeAttended, _user$project$Types$Minus60, '60m ago'),
+						A2(
+						_elm_lang$html$Html$br,
+						_elm_lang$core$Native_List.fromArray(
+							[]),
+						_elm_lang$core$Native_List.fromArray(
+							[])),
+						A4(inputButtonTemplate, 10, _user$project$Types$ChangeAttended, _user$project$Types$Minus90, '90m ago'),
+						A2(
+						_elm_lang$html$Html$br,
+						_elm_lang$core$Native_List.fromArray(
+							[]),
+						_elm_lang$core$Native_List.fromArray(
+							[])),
+						A4(inputButtonTemplate, 11, _user$project$Types$ChangeAttended, _user$project$Types$Minus120, '120m ago')
+					])),
+				A2(
+				_debois$elm_mdl$Material_Table$td,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[])),
+				A2(
+				_debois$elm_mdl$Material_Table$td,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[])),
+				A2(
+				_debois$elm_mdl$Material_Table$td,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[])),
+				A2(
+				_debois$elm_mdl$Material_Table$td,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[])),
+				A2(
+				_debois$elm_mdl$Material_Table$td,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A4(inputButtonTemplate, 12, _user$project$Types$ChangeSlept, _user$project$Types$Now, '0m ago'),
+						A2(
+						_elm_lang$html$Html$br,
+						_elm_lang$core$Native_List.fromArray(
+							[]),
+						_elm_lang$core$Native_List.fromArray(
+							[])),
+						A4(inputButtonTemplate, 13, _user$project$Types$ChangeSlept, _user$project$Types$Minus15, '15m ago'),
+						A2(
+						_elm_lang$html$Html$br,
+						_elm_lang$core$Native_List.fromArray(
+							[]),
+						_elm_lang$core$Native_List.fromArray(
+							[])),
+						A4(inputButtonTemplate, 14, _user$project$Types$ChangeSlept, _user$project$Types$Minus30, '30m ago'),
+						A2(
+						_elm_lang$html$Html$br,
+						_elm_lang$core$Native_List.fromArray(
+							[]),
+						_elm_lang$core$Native_List.fromArray(
+							[])),
+						A4(inputButtonTemplate, 15, _user$project$Types$ChangeSlept, _user$project$Types$Minus45, '45m ago'),
+						A2(
+						_elm_lang$html$Html$br,
+						_elm_lang$core$Native_List.fromArray(
+							[]),
+						_elm_lang$core$Native_List.fromArray(
+							[])),
+						A4(inputButtonTemplate, 16, _user$project$Types$ChangeSlept, _user$project$Types$Minus60, '60m ago'),
+						A2(
+						_elm_lang$html$Html$br,
+						_elm_lang$core$Native_List.fromArray(
+							[]),
+						_elm_lang$core$Native_List.fromArray(
+							[])),
+						A4(inputButtonTemplate, 17, _user$project$Types$ChangeSlept, _user$project$Types$Minus90, '90m ago'),
+						A2(
+						_elm_lang$html$Html$br,
+						_elm_lang$core$Native_List.fromArray(
+							[]),
+						_elm_lang$core$Native_List.fromArray(
+							[])),
+						A4(inputButtonTemplate, 18, _user$project$Types$ChangeSlept, _user$project$Types$Minus120, '120m ago')
+					]))
+			])) : A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		_elm_lang$core$Native_List.fromArray(
+			[]));
+};
+var _user$project$View$cancelEventButton = function (model) {
+	var _p2 = model.showNewEvent;
+	if (_p2 === false) {
+		return A2(
+			_elm_lang$html$Html$span,
+			_elm_lang$core$Native_List.fromArray(
+				[]),
+			_elm_lang$core$Native_List.fromArray(
+				[]));
+	} else {
+		return A5(
+			_debois$elm_mdl$Material_Button$render,
+			_user$project$Types$Mdl,
+			_elm_lang$core$Native_List.fromArray(
+				[4]),
+			model.mdl,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_debois$elm_mdl$Material_Button$icon,
+					_debois$elm_mdl$Material_Elevation$e8,
+					_debois$elm_mdl$Material_Button$onClick(_user$project$Types$CancelEvent),
+					A2(_debois$elm_mdl$Material_Options$css, 'margin-top', '30px'),
+					A2(_debois$elm_mdl$Material_Options$css, 'margin-bottom', '-20px'),
+					A2(_debois$elm_mdl$Material_Options$css, 'left', '57%'),
+					A2(_debois$elm_mdl$Material_Options$css, 'z-index', '10')
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_debois$elm_mdl$Material_Icon$i('remove')
+				]));
+	}
+};
+var _user$project$View$newEventButton = function (model) {
+	var newEventIsActive = model.showNewEvent;
 	return A5(
 		_debois$elm_mdl$Material_Button$render,
 		_user$project$Types$Mdl,
@@ -14384,6 +14685,8 @@ var _user$project$View$renderNewEvent = function (model) {
 				_debois$elm_mdl$Material_Button$fab,
 				_debois$elm_mdl$Material_Button$accent,
 				_debois$elm_mdl$Material_Elevation$e8,
+				_debois$elm_mdl$Material_Button$onClick(
+				newEventIsActive ? _user$project$Types$CancelEvent : _user$project$Types$ResetNewEvent),
 				A2(_debois$elm_mdl$Material_Options$css, 'margin-top', '30px'),
 				A2(_debois$elm_mdl$Material_Options$css, 'margin-bottom', '-20px'),
 				A2(_debois$elm_mdl$Material_Options$css, 'left', '77%'),
@@ -14391,7 +14694,8 @@ var _user$project$View$renderNewEvent = function (model) {
 			]),
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_debois$elm_mdl$Material_Icon$i('add')
+				_debois$elm_mdl$Material_Icon$i(
+				newEventIsActive ? 'send' : 'add')
 			]));
 };
 var _user$project$View_ops = _user$project$View_ops || {};
@@ -14399,13 +14703,170 @@ _user$project$View_ops['=>'] = F2(
 	function (v0, v1) {
 		return {ctor: '_Tuple2', _0: v0, _1: v1};
 	});
+var _user$project$View$renderNewEvent = function (model) {
+	var blockInputStyle = function (act) {
+		return _elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$style(
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(_user$project$View_ops['=>'], 'width', '100px'),
+						A2(_user$project$View_ops['=>'], 'height', '30px'),
+						A2(_user$project$View_ops['=>'], 'line-height', '30px'),
+						A2(_user$project$View_ops['=>'], 'border', '1px solid black'),
+						A2(_user$project$View_ops['=>'], 'border-radius', '5px'),
+						A2(_user$project$View_ops['=>'], 'display', 'inline-block'),
+						A2(_user$project$View_ops['=>'], 'background-color', 'pink'),
+						A2(_user$project$View_ops['=>'], 'text-align', 'center'),
+						A2(_user$project$View_ops['=>'], 'margin', '2px')
+					])),
+				_elm_lang$html$Html_Events$onClick(act)
+			]);
+	};
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$style(
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(_user$project$View_ops['=>'], 'border', '1px solid black'),
+						A2(_user$project$View_ops['=>'], 'width', '559px'),
+						A2(_user$project$View_ops['=>'], 'margin-left', 'auto'),
+						A2(_user$project$View_ops['=>'], 'margin-right', 'auto'),
+						A2(_user$project$View_ops['=>'], 'margin-bottom', '30px')
+					]))
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html$div,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(
+						_elm_lang$html$Html$span,
+						_elm_lang$core$Native_List.fromArray(
+							[]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html$text('Poop')
+							])),
+						A2(
+						_elm_lang$html$Html$div,
+						blockInputStyle(_user$project$Types$NoOp),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html$text('1')
+							])),
+						A2(
+						_elm_lang$html$Html$div,
+						blockInputStyle(_user$project$Types$NoOp),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html$text('1')
+							]))
+					])),
+				A2(
+				_elm_lang$html$Html$div,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(
+						_elm_lang$html$Html$input,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Attributes$placeholder('Poop'),
+								_elm_lang$html$Html_Events$onInput(
+								function (a) {
+									return _user$project$Types$Entry(
+										_user$project$Types$ChangePoop(a));
+								})
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								function (_p3) {
+								return _elm_lang$html$Html$text(
+									_elm_lang$core$Basics$toString(_p3));
+							}(model.newEvent.poop)
+							]))
+					])),
+				A2(
+				_elm_lang$html$Html$div,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(
+						_elm_lang$html$Html$input,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Attributes$placeholder('Breast'),
+								_elm_lang$html$Html_Events$onInput(
+								function (a) {
+									return _user$project$Types$Entry(
+										_user$project$Types$ChangeBreastFeed(a));
+								})
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								function (_p4) {
+								return _elm_lang$html$Html$text(
+									_elm_lang$core$Basics$toString(_p4));
+							}(model.newEvent.poop)
+							]))
+					])),
+				A2(
+				_elm_lang$html$Html$div,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(
+						_elm_lang$html$Html$input,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Attributes$placeholder('Bottle'),
+								_elm_lang$html$Html_Events$onInput(
+								function (a) {
+									return _user$project$Types$Entry(
+										_user$project$Types$ChangeBottleFeed(a));
+								})
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								function (_p5) {
+								return _elm_lang$html$Html$text(
+									_elm_lang$core$Basics$toString(_p5));
+							}(model.newEvent.poop)
+							]))
+					])),
+				A5(
+				_debois$elm_mdl$Material_Button$render,
+				_user$project$Types$Mdl,
+				_elm_lang$core$Native_List.fromArray(
+					[2]),
+				model.mdl,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_debois$elm_mdl$Material_Button$accent,
+						_debois$elm_mdl$Material_Button$onClick(_user$project$Types$CancelEvent)
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_debois$elm_mdl$Material_Icon$i('add')
+					]))
+			]));
+};
 var _user$project$View$opFull = '1';
 var _user$project$View$opFaded = '0.38';
 var _user$project$View$renderFeedCell = F2(
 	function (numberToDisplay, unitStringToAppend) {
 		var op = function () {
-			var _p0 = numberToDisplay;
-			if (_p0 === 0) {
+			var _p6 = numberToDisplay;
+			if (_p6 === 0) {
 				return _user$project$View$opFaded;
 			} else {
 				return _user$project$View$opFull;
@@ -14435,7 +14896,7 @@ var _user$project$View$renderPoopCell = function (level) {
 		function (iconIsEmpty, n) {
 			return A2(
 				_elm_lang$core$List$map,
-				function (_p1) {
+				function (_p7) {
 					return A2(
 						_debois$elm_mdl$Material_Icon$view,
 						iconIsEmpty ? 'ic_radio_button_unchecked' : 'ic_lens',
@@ -14600,7 +15061,13 @@ var _user$project$View$renderDiaperTimeTable = function (model) {
 				_debois$elm_mdl$Material_Table$tbody,
 				_elm_lang$core$Native_List.fromArray(
 					[]),
-				A2(_elm_lang$core$List$map, _user$project$View$renderSingleRow, model.events))
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_user$project$View$inputTableRow(model)
+						]),
+					A2(_elm_lang$core$List$map, _user$project$View$renderSingleRow, model.events)))
 			]));
 };
 var _user$project$View$viewBody = function (model) {
@@ -14619,7 +15086,8 @@ var _user$project$View$viewBody = function (model) {
 			]),
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_user$project$View$renderNewEvent(model),
+				_user$project$View$newEventButton(model),
+				_user$project$View$cancelEventButton(model),
 				_user$project$View$renderDiaperTimeTable(model)
 			]));
 };
@@ -14627,7 +15095,7 @@ var _user$project$View$view = function (model) {
 	return A3(
 		_debois$elm_mdl$Material_Scheme$topWithScheme,
 		_debois$elm_mdl$Material_Color$Teal,
-		_debois$elm_mdl$Material_Color$Indigo,
+		_debois$elm_mdl$Material_Color$Purple,
 		A4(
 			_debois$elm_mdl$Material_Layout$render,
 			_user$project$Types$Mdl,
@@ -14655,7 +15123,7 @@ var _user$project$View$view = function (model) {
 								_elm_lang$core$Native_List.fromArray(
 									[
 										_debois$elm_mdl$Material_Icon$size48,
-										A2(_debois$elm_mdl$Material_Options$css, 'margin-left', '-50px'),
+										A2(_debois$elm_mdl$Material_Options$css, 'margin-left', '-100px'),
 										A2(_debois$elm_mdl$Material_Options$css, 'vertical-align', 'middle'),
 										A2(_debois$elm_mdl$Material_Options$css, 'padding-bottom', '10px'),
 										A2(_debois$elm_mdl$Material_Options$css, 'margin-right', '20px')
@@ -14730,9 +15198,11 @@ var _user$project$Main$init = function (diaperEventsFromJSON) {
 	return {
 		ctor: '_Tuple2',
 		_0: {
-			newEvent: _elm_lang$core$Maybe$Nothing,
-			events: A2(_elm_lang$core$Debug$log, 'here', decodedDiaperEvents),
-			mdl: _debois$elm_mdl$Material$model
+			newEvent: _user$project$Types$freshDiaperEvent,
+			events: decodedDiaperEvents,
+			mdl: _debois$elm_mdl$Material$model,
+			showNewEvent: false,
+			neweventDeltas: A2(_user$project$Types$NewEventDeltas, _user$project$Types$Now, _user$project$Types$Now)
 		},
 		_1: _elm_lang$core$Platform_Cmd$none
 	};

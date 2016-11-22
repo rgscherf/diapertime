@@ -68,7 +68,7 @@ def hello():
     all_events = [c for c in collection.find()]
     jsonified_events = json.dumps(all_events, default=json_util.default)
     # jsonified_events = dumps(all_events)
-    return render_template("index.html", data=jsonified_events)
+    return render_template("index2.html", data=jsonified_events)
 
 if __name__ == "__main__":
     app.debug = True

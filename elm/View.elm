@@ -1,8 +1,9 @@
 module View exposing (..)
 
 import Html exposing (..)
-import Html.Attributes exposing (style)
-import Types exposing (Model, Msg(..), DiaperEvent)
+import Html.Attributes as Attributes exposing (style)
+import Html.Events exposing (onInput, onClick)
+import Types exposing (Model, Msg(..), DiaperEvent, FieldChange(..), TimeDelta(..))
 import Material.Elevation as Elevation
 import Material.Button as Button
 import Material.Table as Table
@@ -28,7 +29,7 @@ opFull =
 
 view : Model -> Html Msg
 view model =
-    Scheme.topWithScheme Color.Teal Color.Indigo <|
+    Scheme.topWithScheme Color.Teal Color.Purple <|
         Layout.render
             Mdl
             model.mdl
@@ -37,7 +38,7 @@ view model =
                 [ h1 [ style [ "font-family" => "'Lily Script One', cursive" ] ]
                     [ Icon.view "ic_alarm"
                         [ Icon.size48
-                        , css "margin-left" "-50px"
+                        , css "margin-left" "-100px"
                         , css "vertical-align" "middle"
                         , css "padding-bottom" "10px"
                         , css "margin-right" "20px"
@@ -66,25 +67,201 @@ viewBody model =
             , "max-width" => "800px"
             ]
         ]
-        [ renderNewEvent model
+        [ newEventButton model
+        , cancelEventButton model
         , renderDiaperTimeTable model
         ]
 
 
 renderNewEvent : Model -> Html Msg
 renderNewEvent model =
-    Button.render Mdl
-        [ 0 ]
-        model.mdl
-        [ Button.fab
-        , Button.accent
-        , Elevation.e8
-        , css "margin-top" "30px"
-        , css "margin-bottom" "-20px"
-        , css "left" "77%"
-        , css "z-index" "10"
-        ]
-        [ Icon.i "add" ]
+    let
+        blockInputStyle act =
+            [ style
+                [ "width" => "100px"
+                , "height" => "30px"
+                , "line-height" => "30px"
+                , "border" => "1px solid black"
+                , "border-radius" => "5px"
+                , "display" => "inline-block"
+                , "background-color" => "pink"
+                , "text-align" => "center"
+                , "margin" => "2px"
+                ]
+            , onClick act
+            ]
+    in
+        div
+            [ style
+                [ "border" => "1px solid black"
+                , "width" => "559px"
+                , "margin-left" => "auto"
+                , "margin-right" => "auto"
+                , "margin-bottom" => "30px"
+                ]
+            ]
+            [ div []
+                -- poop entry
+                [ span [] [ text "Poop" ]
+                , div
+                    (blockInputStyle NoOp)
+                    [ text "1" ]
+                , div
+                    (blockInputStyle NoOp)
+                    [ text "1" ]
+                ]
+            , div []
+                [ input
+                    [ Attributes.placeholder "Poop", onInput (\a -> Entry (ChangePoop a)) ]
+                    [ text << toString <| model.newEvent.poop ]
+                ]
+            , div []
+                [ input
+                    [ Attributes.placeholder "Breast", onInput (\a -> Entry (ChangeBreastFeed a)) ]
+                    [ text << toString <| model.newEvent.poop ]
+                ]
+            , div []
+                [ input
+                    [ Attributes.placeholder "Bottle", onInput (\a -> Entry (ChangeBottleFeed a)) ]
+                    [ text << toString <| model.newEvent.poop ]
+                ]
+            , Button.render Mdl
+                [ 2 ]
+                model.mdl
+                [ Button.accent
+                , Button.onClick CancelEvent
+                ]
+                [ Icon.i "add" ]
+            ]
+
+
+newEventButton : Model -> Html Msg
+newEventButton model =
+    let
+        newEventIsActive =
+            model.showNewEvent
+    in
+        Button.render Mdl
+            [ 0 ]
+            model.mdl
+            [ Button.fab
+            , Button.accent
+            , Elevation.e8
+            , Button.onClick
+                (if newEventIsActive then
+                    CancelEvent
+                 else
+                    ResetNewEvent
+                )
+            , css "margin-top" "30px"
+            , css "margin-bottom" "-20px"
+            , css "left" "77%"
+            , css "z-index" "10"
+            ]
+            [ Icon.i
+                (if newEventIsActive then
+                    "send"
+                 else
+                    "add"
+                )
+            ]
+
+
+cancelEventButton : Model -> Html Msg
+cancelEventButton model =
+    case model.showNewEvent of
+        False ->
+            span [] []
+
+        True ->
+            Button.render Mdl
+                [ 4 ]
+                model.mdl
+                [ Button.icon
+                , Elevation.e8
+                , Button.onClick CancelEvent
+                , css "margin-top" "30px"
+                , css "margin-bottom" "-20px"
+                , css "left" "57%"
+                , css "z-index" "10"
+                ]
+                [ Icon.i "remove" ]
+
+
+inputTableRow : Model -> Html Msg
+inputTableRow model =
+    let
+        fieldAccessor f =
+            case f of
+                ChangeAttended _ ->
+                    model.neweventDeltas.attended
+
+                ChangeSlept _ ->
+                    model.neweventDeltas.slept
+
+                _ ->
+                    Debug.crash "should't happen"
+
+        inputButtonTemplate renderNum deltaField deltaValue deltaString =
+            Button.render
+                Mdl
+                [ renderNum ]
+                model.mdl
+                (List.append
+                    [ Button.onClick (Entry (deltaField deltaValue))
+                    , css "width" "100px"
+                    , css "padding-left" "0px"
+                    ]
+                    (if (fieldAccessor <| deltaField Now) == deltaValue then
+                        [ Button.colored ]
+                     else
+                        []
+                    )
+                )
+                [ text deltaString ]
+    in
+        if model.showNewEvent then
+            Table.tr []
+                [ Table.td
+                    [ css "padding-left" "auto"
+                    , css "padding-right" "auto"
+                    ]
+                    [ inputButtonTemplate 5 ChangeAttended Now "0m ago"
+                    , br [] []
+                    , inputButtonTemplate 6 ChangeAttended Minus15 "15m ago"
+                    , br [] []
+                    , inputButtonTemplate 7 ChangeAttended Minus30 "30m ago"
+                    , br [] []
+                    , inputButtonTemplate 8 ChangeAttended Minus45 "45m ago"
+                    , br [] []
+                    , inputButtonTemplate 9 ChangeAttended Minus60 "60m ago"
+                    , br [] []
+                    , inputButtonTemplate 10 ChangeAttended Minus90 "90m ago"
+                    , br [] []
+                    , inputButtonTemplate 11 ChangeAttended Minus120 "120m ago"
+                    ]
+                , Table.td [] []
+                , Table.td [] []
+                , Table.td [] []
+                , Table.td [] []
+                , Table.td []
+                    [ inputButtonTemplate 12 ChangeSlept Now "0m ago"
+                    , br [] []
+                    , inputButtonTemplate 13 ChangeSlept Minus15 "15m ago"
+                    , br [] []
+                    , inputButtonTemplate 14 ChangeSlept Minus30 "30m ago"
+                    , br [] []
+                    , inputButtonTemplate 15 ChangeSlept Minus45 "45m ago"
+                    , br [] []
+                    , inputButtonTemplate 16 ChangeSlept Minus60 "60m ago"
+                    , br [] []
+                    , inputButtonTemplate 17 ChangeSlept Minus90 "90m ago"
+                    , br [] []
+                    , inputButtonTemplate 18 ChangeSlept Minus120 "120m ago"
+                    ]
+                ]
+        else
+            div [] []
 
 
 renderDiaperTimeTable : Model -> Html Msg
@@ -103,7 +280,7 @@ renderDiaperTimeTable model =
                 , Table.th [] [ text "Slept" ]
                 ]
             ]
-        , Table.tbody [] (List.map renderSingleRow model.events)
+        , Table.tbody [] ([ inputTableRow model ] ++ List.map renderSingleRow model.events)
         ]
 
 

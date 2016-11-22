@@ -5,7 +5,7 @@ import Date exposing (Date)
 import Json.Decode as Decode exposing ((:=), int, string, bool, at)
 import Update exposing (update)
 import View exposing (view)
-import Types exposing (Model, Msg, DiaperEvent)
+import Types exposing (..)
 import Material
 
 
@@ -30,9 +30,11 @@ init diaperEventsFromJSON =
                 Err _ ->
                     []
     in
-        ( { newEvent = Nothing
-          , events = Debug.log "here" decodedDiaperEvents
+        ( { newEvent = freshDiaperEvent
+          , events = decodedDiaperEvents
           , mdl = Material.model
+          , showNewEvent = False
+          , neweventDeltas = NewEventDeltas Now Now
           }
         , Cmd.none
         )
