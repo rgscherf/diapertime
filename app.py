@@ -2,7 +2,6 @@ from flask import Flask, render_template
 from pymongo import MongoClient
 from bson import json_util
 import json
-# from bson.json_util import dumps
 import datetime
 import random
 import os
@@ -35,9 +34,10 @@ class DiaperTime():
                 "sleptAt": self.slept_at}
 
 
-@app.route("/genrandom")
+@app.route("/debug-generate")
 def gen():
-    for i in range(10):
+    entries_to_generate = 10
+    for i in range(entries_to_generate):
         a = DiaperTime(datetime.datetime.now(),
                        random.random() > 0.5,
                        random.randrange(0, 3),
@@ -46,20 +46,19 @@ def gen():
                        random.randrange(60, 120),
                        datetime.datetime.now())
         collection.insert_one(a.to_dict())
-    return "operation successful"
+    return "successfully generated {} new Diapertime events.".format(entries_to_generate)
 
 
-@app.route("/drop")
+@app.route("/debug-drop")
 def drop():
     db.drop_collection("diapertime")
-    return "collection dropped!"
+    return "successfully dropped entire Diapertime collection."
 
 
-@app.route("/raw")
+@app.route("/debug-raw")
 def raw():
     all_events = [c for c in collection.find()]
     jsonified_events = json.dumps(all_events, default=json_util.default)
-    # jsonified_events = dumps(all_events)
     return jsonified_events
 
 
@@ -67,7 +66,6 @@ def raw():
 def hello():
     all_events = [c for c in collection.find()]
     jsonified_events = json.dumps(all_events, default=json_util.default)
-    # jsonified_events = dumps(all_events)
     return render_template("index2.html", data=jsonified_events)
 
 if __name__ == "__main__":
