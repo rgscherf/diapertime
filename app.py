@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 client = MongoClient(os.environ["MONGODB_URI"])
 db = client.get_default_database()
-collection = db['diapertime']
+mongo_collection = db['diapertime']
 
 
 class DiaperTime():
@@ -45,7 +45,7 @@ def gen():
                        random.randrange(20),
                        random.randrange(60, 120),
                        datetime.datetime.now())
-        collection.insert_one(a.to_dict())
+        mongo_collection.insert_one(a.to_dict())
     return "successfully generated {} new Diapertime events.".format(entries_to_generate)
 
 
@@ -57,14 +57,14 @@ def drop():
 
 @app.route("/debug-raw")
 def raw():
-    all_events = [c for c in collection.find()]
+    all_events = [c for c in mongo_collection.find()]
     jsonified_events = json.dumps(all_events, default=json_util.default)
     return jsonified_events
 
 
 @app.route("/")
 def hello():
-    all_events = [c for c in collection.find()]
+    all_events = [c for c in mongo_collection.find()]
     jsonified_events = json.dumps(all_events, default=json_util.default)
     return render_template("index2.html", data=jsonified_events)
 
