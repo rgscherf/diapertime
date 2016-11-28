@@ -64,16 +64,24 @@ function stringifyBool(b) {
 }
 
 function stringifyPoop(i) {
-  var MAX_POOP_NUMBER = 3;
-  var ret = "";
-  for (var j = 0; j<i; j++) {
-    // filled icon
-    ret += '<i class="fa fa-leaf" aria-hidden="true"></i>';
+}
+
+function stringifyGroupOfIcons(fontAwesomeClass, fieldMax, cellInput) {
+  // return an HTML string consisting of:
+  // given font awesome icon * given level for row
+  // concatted with greyed-out icons up to max level for field
+
+  // if cellInput === fieldMax: will display max num of icons, all opacity 1
+  // if cellInput === 0: will display max num of icons, all greyed out
+
+  var returnString = "";
+  for (var filledIconCount = 0; filledIconCount<cellInput; filledIconCount++) {
+    returnString += '<i class="' + fontAwesomeClass + '" aria-hidden="true"></i>';
   }
-  for (var k = i; k<MAX_POOP_NUMBER; k++) {
-    ret += '<i class="fa fa-leaf" style="opacity:' + FALSE_VAL_OPACITY + ';" aria-hidden="true"></i>';
+  for (var emptyIconCount = cellInput; emptyIconCount<fieldMax; emptyIconCount++) {
+    returnString += '<i class="' + fontAwesomeClass + '" style="opacity:' + FALSE_VAL_OPACITY + ';" aria-hidden="true"></i>';
   }
-  return ret;
+  return returnString;
 }
 
 function roundToTen(i) {
@@ -91,8 +99,8 @@ function makeRow(tableElement, event) {
   var newRow = $('<tr>'); // $('<>') will add matching close tag after appended tags
   newRow.append(wraptd("Attended", stringifyTime(event.attendedAt)));
   newRow.append(wraptd("Pee", stringifyBool(event.pee)));
-  newRow.append(wraptd("Poop", stringifyPoop(event.poop)));
-  newRow.append(wraptd("Bottle", roundToTen(event.bottleFeed)));
+  newRow.append(wraptd("Poop", stringifyGroupOfIcons("fa fa-leaf", 3, event.poop)));
+  newRow.append(wraptd("Bottle", stringifyGroupOfIcons("fa fa-coffee", 5, event.poop)));
   newRow.append(wraptd("Slept", stringifyTime(event.sleptAt)));
   tableElement.append(newRow);
 }
