@@ -3,7 +3,7 @@
 ////////
 
 var showingNewEvent = false; // see click handler for #addEvent
-var FALSE_VAL_OPACITY = 0.68; // based on google mdl guidelines for null value opacity
+var FALSE_VAL_OPACITY = 0.38; // based on google mdl guidelines for null value opacity
 
 // state container for the new diaper event element
 // this object will be modified in event handlers
@@ -64,15 +64,14 @@ function stringifyBool(b) {
 }
 
 function stringifyPoop(i) {
-  // render `i` icons to signify amount of poop
-  // note opacity change for `i` values of 0
+  var MAX_POOP_NUMBER = 3;
   var ret = "";
-  if (i === 0) {
-    ret = '<i class="fa fa-times" style="opacity:' + FALSE_VAL_OPACITY + ';" aria-hidden="true"></i>';
-  } else {
-    for (var n = 0; n < i; n++) {
-      ret += '<i class="fa fa-leaf" aria-hidden="true"></i>';
-    }
+  for (var j = 0; j<i; j++) {
+    // filled icon
+    ret += '<i class="fa fa-leaf" aria-hidden="true"></i>';
+  }
+  for (var k = i; k<MAX_POOP_NUMBER; k++) {
+    ret += '<i class="fa fa-leaf" style="opacity:' + FALSE_VAL_OPACITY + ';" aria-hidden="true"></i>';
   }
   return ret;
 }
@@ -102,18 +101,32 @@ function makeRow(tableElement, event) {
 // NEW EVENT INPUT ELEMENTS
 ///////////////////////////
 
-function makeTouchBox(boxId, boxText) {
-  return ('<div> <button class="smallInput" id=' + boxId + '>' + boxText + '</button></div>');
+function makeTouchBox(boxId, buttonWidth, boxText) {
+  return ('<div> <button class="smallInput" style="width:' + buttonWidth + 'px" id=' + boxId + '>' + boxText + '</button></div>');
 }
 
 function setupNewEntryInput() {
-  $('#newEntryAttended').append(makeTouchBox("a1", "15 min ago"));
-  $('#newEntryAttended').append(makeTouchBox("a1", "30 min ago"));
-  $('#newEntryAttended').append(makeTouchBox("a1", "45 min ago"));
-  $('#newEntryAttended').append(makeTouchBox("a1", "60 min ago"));
-  $('#newEntryAttended').append(makeTouchBox("a1", "120 min ago"));
-  $('#newEntryPee').append(makeTouchBox("peeTouchBox", "Peed"));
-  $('#newEntryPee').append(makeTouchBox("p2", "Peed"));
-  $('#newEntryPee').append(makeTouchBox("p3", "Peed"));
+  $('#newEntryAttended').append(makeTouchBox("a1", 80, ":15 ago"));
+  $('#newEntryAttended').append(makeTouchBox("a1", 80, ":30 ago"));
+  $('#newEntryAttended').append(makeTouchBox("a1", 80, ":45 ago"));
+  $('#newEntryAttended').append(makeTouchBox("a1", 80, ":60 ago"));
+  $('#newEntryAttended').append(makeTouchBox("a1", 80, ":120 ago"));
+  $('#newEntryPee').append(makeTouchBox("peeTouchBox", 60, "Peed"));
+  $('#newEntryPee').append(makeTouchBox("peeTouchBox", 60, "Nope"));
+  $('#newEntryPoop').append(makeTouchBox("poopinput", 60, "Scant"));
+  $('#newEntryPoop').append(makeTouchBox("poopinput", 60, "Usual"));
+  $('#newEntryPoop').append(makeTouchBox("poopinput", 60, "Lots"));
+  $('#newEntryPoop').append(makeTouchBox("poopinput", 60, "Nope"));
+  $('#newEntryBottle').append(makeTouchBox("a1", 80, "V. Light"));
+  $('#newEntryBottle').append(makeTouchBox("a1", 80, "Light"));
+  $('#newEntryBottle').append(makeTouchBox("a1", 80, "Normal"));
+  $('#newEntryBottle').append(makeTouchBox("a1", 80, "Lots"));
+  $('#newEntryBottle').append(makeTouchBox("a1", 80, "Huge"));
+  $('#newEntryBottle').append(makeTouchBox("a1", 80, "Nope"));
+  $('#newEntrySlept').append(makeTouchBox("a1", 80, ":15 ago"));
+  $('#newEntrySlept').append(makeTouchBox("a1", 80, ":30 ago"));
+  $('#newEntrySlept').append(makeTouchBox("a1", 80, ":45 ago"));
+  $('#newEntrySlept').append(makeTouchBox("a1", 80, ":60 ago"));
+  $('#newEntrySlept').append(makeTouchBox("a1", 80, ":120 ago"));
 }
 

@@ -74,7 +74,8 @@ button {
 }
 
 .smallInput {
-  font-size: 1em;
+  display: inline-block;
+  font-size: 0.9em;
   padding: 5px 10px; 
 }
 
