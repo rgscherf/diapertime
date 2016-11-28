@@ -1,5 +1,29 @@
+////////
+// STATE
+////////
+
 var showingNewEvent = false; // see click handler for #addEvent
 var FALSE_VAL_OPACITY = 0.68; // based on google mdl guidelines for null value opacity
+
+// state container for the new diaper event element
+// this object will be modified in event handlers
+// on the `new diaper event` component,
+// then POSTed to the server
+var newEventState = {
+  attended: 0,
+  pee: false,
+  poop: 0,
+  bottle: 0,
+  slept: 0
+};
+
+// yes, this is the best way to copy a JS object
+var defaultEventState = JSON.parse(JSON.stringify(newEventState));
+
+
+//////////////////////////
+// JQUERY DOM MANIPULATION
+//////////////////////////
 
 $().ready(function() {
   // click handler for 'add new event' button.
@@ -17,7 +41,14 @@ $().ready(function() {
   diaperEvents.forEach(function(elem) {
     makeRow($("#mainTable"), elem);
   });
+
+  setupNewEntryInput();
 });
+
+
+///////////////////////////
+// RENDERING TABLE ELEMENTS
+///////////////////////////
 
 function stringifyTime(timeObj) {
   var date = moment.unix(timeObj.$date);
@@ -65,5 +96,24 @@ function makeRow(tableElement, event) {
   newRow.append(wraptd("Bottle", roundToTen(event.bottleFeed)));
   newRow.append(wraptd("Slept", stringifyTime(event.sleptAt)));
   tableElement.append(newRow);
+}
+
+///////////////////////////
+// NEW EVENT INPUT ELEMENTS
+///////////////////////////
+
+function makeTouchBox(boxId, boxText) {
+  return ('<div> <button class="smallInput" id=' + boxId + '>' + boxText + '</button></div>');
+}
+
+function setupNewEntryInput() {
+  $('#newEntryAttended').append(makeTouchBox("a1", "15 min ago"));
+  $('#newEntryAttended').append(makeTouchBox("a1", "30 min ago"));
+  $('#newEntryAttended').append(makeTouchBox("a1", "45 min ago"));
+  $('#newEntryAttended').append(makeTouchBox("a1", "60 min ago"));
+  $('#newEntryAttended').append(makeTouchBox("a1", "120 min ago"));
+  $('#newEntryPee').append(makeTouchBox("peeTouchBox", "Peed"));
+  $('#newEntryPee').append(makeTouchBox("p2", "Peed"));
+  $('#newEntryPee').append(makeTouchBox("p3", "Peed"));
 }
 
