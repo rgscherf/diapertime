@@ -3,7 +3,6 @@
             [compojure.route :refer [not-found resources]]
             [compojure.handler :refer [site]]
             [hiccup.page :refer [include-js include-css html5]]
-            [clj-diaper.middleware :refer [wrap-middleware]]
             [config.core :refer [env]]))
 
 (def mount-target
