@@ -114,27 +114,30 @@ function makeTouchBox(boxId, buttonWidth, boxText) {
 }
 
 function setupNewEntryInput() {
-  $('#newEntryAttended').append(makeTouchBox("a1", 80, ":15 ago"));
-  $('#newEntryAttended').append(makeTouchBox("a1", 80, ":30 ago"));
-  $('#newEntryAttended').append(makeTouchBox("a1", 80, ":45 ago"));
-  $('#newEntryAttended').append(makeTouchBox("a1", 80, ":60 ago"));
-  $('#newEntryAttended').append(makeTouchBox("a1", 80, ":120 ago"));
-  $('#newEntryPee').append(makeTouchBox("peeTouchBox", 60, "Peed"));
-  $('#newEntryPee').append(makeTouchBox("peeTouchBox", 60, "Nope"));
-  $('#newEntryPoop').append(makeTouchBox("poopinput", 60, "Scant"));
-  $('#newEntryPoop').append(makeTouchBox("poopinput", 60, "Usual"));
-  $('#newEntryPoop').append(makeTouchBox("poopinput", 60, "Lots"));
-  $('#newEntryPoop').append(makeTouchBox("poopinput", 60, "Nope"));
-  $('#newEntryBottle').append(makeTouchBox("a1", 80, "V. Light"));
-  $('#newEntryBottle').append(makeTouchBox("a1", 80, "Light"));
-  $('#newEntryBottle').append(makeTouchBox("a1", 80, "Normal"));
-  $('#newEntryBottle').append(makeTouchBox("a1", 80, "Lots"));
-  $('#newEntryBottle').append(makeTouchBox("a1", 80, "Huge"));
-  $('#newEntryBottle').append(makeTouchBox("a1", 80, "Nope"));
-  $('#newEntrySlept').append(makeTouchBox("a1", 80, ":15 ago"));
-  $('#newEntrySlept').append(makeTouchBox("a1", 80, ":30 ago"));
-  $('#newEntrySlept').append(makeTouchBox("a1", 80, ":45 ago"));
-  $('#newEntrySlept').append(makeTouchBox("a1", 80, ":60 ago"));
-  $('#newEntrySlept').append(makeTouchBox("a1", 80, ":120 ago"));
+  var newAttended = $('<div class="newInputFlex">');
+  newAttended.append(makeTouchBox("a1", 80, "Earlier"))
+    .append('<div>:30 ago</div>')
+    .append(makeTouchBox("a2", 80, "Later"));
+  $('#newEntryAttended').append(newAttended);
+
+  var newPeed = $('<div class="newInputFlex">');
+  newPeed.append(makeTouchBox("peeTouchBox", 80, "Peed?"))
+         .append('<div>Yes</div>');
+  $('#newEntryPee').append(newPeed);
+
+  var newPoop = $('<div class="newInputFlex">');
+  newPoop.append(makeTouchBox("poopinput", 80, "Less"))
+          .append('<div>Scant</div>')
+          .append(makeTouchBox("poopinput", 80, "More"));
+  $('#newEntryPoop').append(newPoop);
+
+  var newBottle = $('<div class="newInputFlex">');
+  newBottle.append(makeTouchBox("a1", 80, "Less"))
+           .append('<div>100 mL</div>')
+           .append(makeTouchBox("a1", 80, "More"));
+  $('#newEntryBottle').append(newBottle);
+  $('#newEntrySlept').append(makeTouchBox("a1", 80, "Earlier"));
+  $('#newEntrySlept').append('<div>:30 ago</div>');
+  $('#newEntrySlept').append(makeTouchBox("a2", 80, "Later"));
 }
 

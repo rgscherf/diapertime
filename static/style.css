@@ -56,7 +56,16 @@
 }
 
 #newEntry {
-  display: none;
+  display: flex;
+}
+
+.newInputFlex {
+  
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
 }
 
 button:focus {
@@ -115,6 +124,10 @@ table th {
 }
 
 @media screen and (max-width: 600px) {
+
+  .newInputFlex {
+    display: inline-block;
+  }
 
   table {
     border: 0;
