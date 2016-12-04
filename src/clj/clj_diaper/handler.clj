@@ -1,6 +1,7 @@
 (ns clj-diaper.handler
   (:require [compojure.core :refer [GET defroutes]]
             [compojure.route :refer [not-found resources]]
+            [compojure.handler :refer [site]]
             [hiccup.page :refer [include-js include-css html5]]
             [clj-diaper.middleware :refer [wrap-middleware]]
             [config.core :refer [env]]))
@@ -37,4 +38,4 @@
   (resources "/")
   (not-found "Not Found"))
 
-(def app (wrap-middleware #'routes))
+(def app (site #'routes))
