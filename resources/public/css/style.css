@@ -38,10 +38,8 @@
   margin-bottom: 20px;
 }
 #graphing {
-  width: 20vw;
-  min-width: 90px;
+  min-width: 180px;
   padding: 0px 10px;
-  height: 1000px;
   flex: 0 0 auto;
   display:flex;
   flex-direction: column;
@@ -55,12 +53,23 @@
   flex: 1 1 auto;
 }
 
-#newEntry {
+.newEntryTd {
   display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-content: stretch;
+}
+
+.newEntryTd > * {
+  margin-bottom: 10px;
+}
+
+.newEntrySpanStyle {
+  text-align: center;
+  font-size: 1.1em;
 }
 
 .newInputFlex {
-  
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -85,7 +94,13 @@ button {
 .smallInput {
   display: inline-block;
   font-size: 0.9em;
-  padding: 5px 10px; 
+  padding: 5px 10px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.largeInput {
+  width: 160px;
 }
 
 body {
@@ -100,7 +115,7 @@ body {
 
 table {
   border: 1px solid #ccc;
-  width: 70%;
+  width: 80%;
   margin:0;
   padding:0;
   border-collapse: collapse;
@@ -146,7 +161,7 @@ table th {
   table:first-child tr {
     margin-top: 10px;
   }
-  
+
   table td {
     display: block;
     text-align: right;
