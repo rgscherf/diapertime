@@ -4,8 +4,7 @@
             [monger.collection :as mcoll]))
   ; (:import [com.mongodb MongoOptions ServerAddress]))
 
-(defn db-connect
-  []
+(defonce db-connect
   (let [conn (mcore/connect)
         db (mcore/get-db conn "diapertime")]
     {:conn conn :db db}))
@@ -13,7 +12,7 @@
 (defn db-disconnect
   [connection]
   (mcore/disconnect connection))
-  
+
 (let [{:keys [conn db]} (db-connect)]
   (def connection conn)
   (def database db))
