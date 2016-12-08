@@ -3,7 +3,11 @@
             [compojure.route :refer [not-found resources]]
             [compojure.handler :refer [site]]
             [hiccup.page :refer [include-js include-css html5]]
-            [config.core :refer [env]]))
+            [config.core :refer [env]]
+            [cheshire.core :as cheshire]
+            [clj-diaper.db :as db]))
+
+;; PAGE RENDER
 
 (def mount-target
   [:div#app
@@ -30,9 +34,18 @@
      (include-js "https://use.fontawesome.com/ade5f0bcef.js")]))
 
 
+;; FROM DB
+
+(defn baby-events
+  []
+  (cheshire/generate-string (db/find-all-events)))
+
+;; ROUTER
+
 (defroutes routes
   (GET "/" [] (loading-page))
   (GET "/about" [] (loading-page))
+  (GET "/api/1/data" [] (baby-events))
 
   (resources "/")
   (not-found "Not Found"))
