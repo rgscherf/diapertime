@@ -3,7 +3,8 @@
             [templates.input-row :refer [render-input-row]]
             [reagent.core :refer [atom]]
             [ajax.core :refer [GET]]
-            [cljs.reader :refer [read-string]])
+            [cljs-time.format :as format :refer [formatters]]
+            [cljs-time.core :as time])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
 (defn get-diaper-events
@@ -13,16 +14,29 @@
      :response-format :json
      :keywords? true}))
 
+(defn format-date-from-db
+  [date-string]
+  (let [parsed-dt
+          (format/parse (formatters :date-time-no-ms)
+                        date-string)
+        formatted-date
+          (format/unparse (formatters :year-month-day) parsed-dt)
+        formatted-time
+          (format/unparse (formatters :hour-minute) parsed-dt)]
+    [:div
+      [:span (str formatted-time " ")]
+      [:span {:class "faded"} formatted-date]]))
+
 (defn render-row
   [row-map]
   (let [{:keys [_id attended pee poop feed slept]} row-map]
     ^{:key _id}
     [:tr
-      [:td attended]
+      [:td (format-date-from-db attended)]
       [:td (str pee)]
       [:td poop]
       [:td feed]
-      [:td slept]]))
+      [:td (format-date-from-db slept)]]))
 
 (defn render-center-table
   [new-state new-event]

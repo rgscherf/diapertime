@@ -10,6 +10,13 @@
   flex-wrap: wrap;
 }
 
+.faded {
+  opacity: 0.38;
+}
+.notFaded {
+  opacity: 1;
+}
+
 .headfont {
   color: #FFA8DF;
 }
