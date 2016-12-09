@@ -22,8 +22,8 @@
                  [com.novemberain/monger "3.1.0"]
                  [clj-time "0.12.2"]
                  [cheshire "5.1.1"]
-                 [cljs-http "0.1.42"]]
-                 
+                 [cljs-ajax "0.5.8"]]
+
   :plugins [[lein-environ "1.0.2"]
             [lein-cljsbuild "1.1.1"]
             [lein-asset-minifier "0.2.7"

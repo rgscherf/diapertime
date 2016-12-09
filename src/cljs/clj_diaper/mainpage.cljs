@@ -18,3 +18,4 @@
         [:div {:id "outerContainer"}
           [render-sidebar page-state]
           [render-center-table (:new @page-state) new-event]]])))
+          
