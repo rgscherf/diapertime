@@ -4,7 +4,8 @@
             [reagent.core :refer [atom]]
             [ajax.core :refer [GET]]
             [cljs-time.format :as format :refer [formatters]]
-            [cljs-time.core :as time])
+            [cljs-time.core :as time]
+            [clj-diaper.utils :as utils])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
 (defn get-diaper-events
@@ -27,16 +28,50 @@
       [:span (str formatted-time " ")]
       [:span {:class "faded"} formatted-date]]))
 
+(defn render-date-time
+  [label date-time-string]
+  [:td
+    {:data-label label}
+    (format-date-from-db date-time-string)])
+
+(defn render-feed
+  [feed-amount]
+  [:td
+    {:data-label "Fed"
+     :style {:text-align "right"}}
+    (str (utils/round-to-ten-mls feed-amount) " mL")])
+
+(defn render-poop
+  [poop-amount]
+  (let [not-pooped (- 3 poop-amount)
+        poop-icon "fa fa-spacing fa-circle 3x "]
+    [:td
+      {:data-label "Poop"}
+      [:div {:class "tdFlexDiv"}
+        (concat
+          (repeat poop-amount [:i {:class poop-icon}])
+          (repeat not-pooped  [:i {:class (str poop-icon "faded")}]))]]))
+
+(defn render-pee
+  [peed?]
+  [:td
+    {:data-label "Peed?"}
+    [:div {:class "tdFlexDiv"}
+      [:i {:style {:text-align "center"}
+           :class (if peed?
+                        "fa fa-check 2x notFaded"
+                        "fa fa-times 2x faded")}]]])
+
 (defn render-row
   [row-map]
   (let [{:keys [_id attended pee poop feed slept]} row-map]
     ^{:key _id}
     [:tr
-      [:td (format-date-from-db attended)]
-      [:td (str pee)]
-      [:td poop]
-      [:td feed]
-      [:td (format-date-from-db slept)]]))
+      (render-date-time "Attended" attended)
+      (render-pee pee)
+      (render-poop poop)
+      (render-feed feed)
+      (render-date-time "Slept" slept)]))
 
 (defn render-center-table
   [new-state new-event]

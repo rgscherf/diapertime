@@ -1,5 +1,6 @@
 (ns templates.input-row
-  (:require [cljs.core.match :refer-macros [match]]))
+  (:require [clj-diaper.utils :as utils]
+            [cljs.core.match :refer-macros [match]]))
 
 
 (defn input-sandwich-helper
@@ -31,19 +32,9 @@
     [2] "Normal"
     [3] "Heavy"))
 
-(defn stringify-feed-unit
-  [feed-unit]
-  (match [feed-unit]
-    [:ml] "mL"))
-
-(defn round-to-ten-mls
-  [num]
-  (* 10 (quot num 10)))
-
 (defn render-input-row
   [new-event]
   [:tr
-
     ;; attended
     [input-sandwich-helper
       #(swap! new-event assoc :attend-delta
@@ -82,11 +73,11 @@
     ;; feed
     [input-sandwich-helper
       #(swap! new-event assoc :feed
-        (round-to-ten-mls (+ 10 (:feed @new-event))))
+        (utils/round-to-ten-mls (+ 10 (:feed @new-event))))
       "+10"
-      (str (:feed @new-event) " " (stringify-feed-unit (:feed-unit @new-event)))
+      (str (:feed @new-event) " " (utils/stringify-feed-unit (:feed-unit @new-event)))
       #(swap! new-event assoc :feed
-        (round-to-ten-mls (max 0 (- (:feed @new-event) 10))))
+        (utils/round-to-ten-mls (max 0 (- (:feed @new-event) 10))))
       "-10"]
 
     ;; slept

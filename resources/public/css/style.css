@@ -17,6 +17,16 @@
   opacity: 1;
 }
 
+.fa-spacing {
+  margin-left: 3px;
+  margin-right: 3px;
+}
+
+.tdFlexDiv {
+  display: flex;
+  justify-content: center;
+}
+
 .headfont {
   color: #FFA8DF;
 }
@@ -146,6 +156,10 @@ table th {
 }
 
 @media screen and (max-width: 600px) {
+
+  .tdFlexDiv {
+    justify-content: flex-end;
+  }
 
   .newInputFlex {
     display: inline-block;
