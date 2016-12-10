@@ -10,18 +10,14 @@
     bottom-button-fn
     bottom-button-text]
   [:td
-    [:div
-      {:class "newEntryTd"}
-      [:button
-        {:class "smallInput"
-         :on-click top-button-fn}
+    [:div.newEntryTd
+      [:button.smallInput
+        {:on-click top-button-fn}
         top-button-text]
-      [:div
-        {:class "newEntrySpanStyle"}
+      [:div.newEntrySpanStyle
         button-text]
-      [:button
-        {:class "smallInput"
-         :on-click bottom-button-fn}
+      [:button.smallInput
+        {:on-click bottom-button-fn}
         bottom-button-text]]])
 
 (defn poop-map
@@ -48,11 +44,9 @@
     ;; pee
     [:td
       {:style {:display "flex" :align-items "stretch" :flex-direction "column"}}
-      [:div
-        {:class "newEntryTd"}
-        [:button
-          {:class "smallInput"
-           :on-click #(swap! new-event assoc :pee (not (:pee @new-event)))}
+      [:div.newEntryTd
+        [:button.smallInput
+          {:on-click #(swap! new-event assoc :pee (not (:pee @new-event)))}
           "Peed"]
         [:div
           {:style {:text-align "center"}}

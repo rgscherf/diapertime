@@ -25,8 +25,8 @@
         formatted-time
           (format/unparse (formatters :hour-minute) parsed-dt)]
     [:div
-      [:span (str formatted-time " ")]
-      [:span {:class "faded"} formatted-date]]))
+      [:span.notFaded (str formatted-time " ")]
+      [:span.faded formatted-date]]))
 
 (defn render-date-time
   [label date-time-string]
@@ -47,7 +47,7 @@
         poop-icon "fa fa-spacing fa-circle 3x "]
     [:td
       {:data-label "Poop"}
-      [:div {:class "tdFlexDiv"}
+      [:div.tdFlexDiv
         (concat
           (repeat poop-amount [:i {:class poop-icon}])
           (repeat not-pooped  [:i {:class (str poop-icon "faded")}]))]]))
@@ -56,7 +56,7 @@
   [peed?]
   [:td
     {:data-label "Peed?"}
-    [:div {:class "tdFlexDiv"}
+    [:div.tdFlexDiv
       [:i {:style {:text-align "center"}
            :class (if peed?
                         "fa fa-check 2x notFaded"
@@ -78,8 +78,8 @@
   (let [events (atom [])
         events-retrieve (get-diaper-events events)]
     (fn [new-state]
-      [:div {:id "innerContainer"}
-        [:table {:id "mainTable" :class "table table-hover"}
+      [:div#innerContainer
+        [:table#mainTable.table.table-hover
           [render-header-row]
           [:tbody
             ;; input row

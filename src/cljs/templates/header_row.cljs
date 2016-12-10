@@ -19,4 +19,3 @@
       [:th
         {:style {:min-width "155px"}}
         "Slept At"]]])
-        
