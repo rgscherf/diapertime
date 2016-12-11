@@ -47,7 +47,7 @@
     [3] "Heavy"
     :else "ERROR"))
 
-(def no-op-handler
+(def noop-handler
   #((constantly false) %))
 
 (defn input-button
@@ -86,7 +86,7 @@
         (btn
           #(swap! new-event assoc :attend-delta
             (+ 15 (:attend-delta @new-event)))
-          no-op-handler
+          noop-handler
           "+ 15 min")
         (new-entry-span
           (str (:attend-delta @new-event) " min ago"))
@@ -97,20 +97,23 @@
           "- 15 min"))
 
       ;; pee
-      (let [ add-style (fn [[head tail]]
-                        (vector
-                          head
-                          {:style {:display "flex" :align-items "stretch" :flex-direction "column"}}
-                          tail))]
-       (add-style (input-td
-                    (btn
-                      #(swap! new-event assoc :pee (not (:pee @new-event)))
-                      no-op-handler
-                      "Peed")
-                    (new-entry-span
-                      (if (:pee @new-event)
-                        "Peed!"
-                        "No Pee")))))
+      (let
+        [ add-style
+          (fn [[head tail]]
+            (vector
+              head
+              {:style {:display "flex" :align-items "stretch" :flex-direction "column"}}
+              tail))]
+       (add-style
+        (input-td
+          (btn
+            #(swap! new-event assoc :pee (not (:pee @new-event)))
+            noop-handler
+            "Peed")
+          (new-entry-span
+            (if (:pee @new-event)
+              "Peed!"
+              "No Pee")))))
 
       ;; poop
       (input-td
@@ -132,7 +135,7 @@
         (btn
           #(swap! new-event assoc :feed
             (utils/round-to-ten-mls (+ 10 (:feed @new-event))))
-          no-op-handler
+          noop-handler
           "+ 10mL")
         (new-entry-span
           (str (:feed @new-event) " " (utils/stringify-feed-unit (:feed-unit @new-event))))
