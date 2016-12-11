@@ -2,42 +2,6 @@
   (:require [clj-diaper.utils :as utils]
             [cljs.core.match :refer-macros [match]]))
 
-(defn input-sandwich-helper
-  "Returns a table cell of
-
-  Button
-  Text
-  Button
-
-  The caller of this function provides click handlers for both buttons.
-  The buttons can also be disabled/enabled by providing predicates that
-  will take an atom as the argument.
-
-  Hint: don't need to disable the button?
-  Provide #((constantly false) %) as your predicate.
-  "
-  [ on-click-top
-    disable-top?
-    top-button-text
-    button-text
-    on-click-bottom
-    disable-bottom?
-    bottom-button-text
-    event-atom]
-  [:td
-    [:div.newEntryTd
-      [:button.smallInput
-        {:on-click on-click-top
-         :class (if (disable-top? @event-atom) "ghostButton" "")}
-        top-button-text]
-      [:div.newEntrySpanStyle
-        button-text]
-      [:button.smallInput
-        {:on-click on-click-bottom
-         :class (if (disable-bottom? @event-atom) "ghostButton" "")}
-        bottom-button-text]]])
-
-
 (defn poop-map
   [poop-map-input]
   (match [poop-map-input]
