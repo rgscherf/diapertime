@@ -108,6 +108,11 @@ button {
   box-shadow: 1px 2px #FFA8DF;
 }
 
+.ghostButton {
+  background-color: #321F47;
+  border: 1px solid #FD5C55;
+}
+
 .smallInput {
   display: inline-block;
   font-size: 0.9em;
@@ -172,7 +177,7 @@ table th {
   table thead {
     display: none;
   }
-  
+
   table tr {
     margin-bottom: 10px;
     display: block;

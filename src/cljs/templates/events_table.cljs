@@ -1,4 +1,4 @@
-(ns templates.center-table
+(ns templates.events-table
   (:require [templates.header-row :refer [render-header-row]]
             [templates.input-row :refer [render-input-row]]
             [reagent.core :refer [atom]]
@@ -8,12 +8,19 @@
             [clj-diaper.utils :as utils])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
+;;;;;;;;;;;;
+;; STATE
+(defonce diaper-events
+  (atom []))
+;;;;;;;;;;;;
+
 (defn get-diaper-events
   [responding-atom]
   (GET "http://0.0.0.0:3449/api/1/data"
     {:handler #(reset! responding-atom (reverse (sort-by :attended %)))
      :response-format :json
      :keywords? true}))
+(get-diaper-events diaper-events)
 
 (defn format-date-from-db
   [date-string]
@@ -73,17 +80,15 @@
       (render-feed feed)
       (render-date-time "Slept" slept)]))
 
-(defn render-center-table
+(defn render-events-table
   [new-state new-event]
-  (let [events (atom [])
-        events-retrieve (get-diaper-events events)]
-    (fn [new-state]
-      [:div#innerContainer
-        [:table#mainTable.table.table-hover
-          [render-header-row]
-          [:tbody
-            ;; input row
-            (if new-state
-              [render-input-row new-event])
-            ;; past events
-            (map render-row @events)]]])))
+  (fn [new-state]
+    [:div#innerContainer
+      [:table#mainTable.table.table-hover
+        [render-header-row]
+        [:tbody
+          ;; input row
+          (if new-state
+            [render-input-row new-event])
+          ;; past events
+          (map render-row @diaper-events)]]]))
