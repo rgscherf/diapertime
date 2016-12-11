@@ -49,10 +49,13 @@
 #outerContainer {
   display:flex;
   overflow-wrap: break-word;
+  flex-direction: row;
 }
 
 #graphing > div {
   margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
 }
 #graphing {
   min-width: 180px;
@@ -73,8 +76,8 @@
 .newEntryTd {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  align-content: stretch;
+  justify-content: space-between;;
+  height: 150px;
 }
 
 .newEntryTd > * {
@@ -109,11 +112,12 @@ button {
 }
 
 .ghostButton {
-  background-color: #321F47;
-  /*border: 1px solid #FD5C55;*/
+  background: #e7706a;
+  color: #666;
 }
 
 .smallInput {
+  box-shadow: none;
   display: inline-block;
   font-size: 0.9em;
   padding: 5px 10px;
@@ -160,7 +164,25 @@ table th {
   letter-spacing: 1px;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 900px) {
+  #outerContainer {
+    flex-direction: column;
+  }
+  #graphing {
+    flex-direction: row;
+    margin-left: 10px
+  }
+
+  #graphing > div {
+    margin-bottom: 20px;
+    flex-direction: row;
+  }
+  #graphing > div > button {
+    margin-right: 20px;
+  }
+}
+
+@media screen and (max-width: 690px) {
 
   .tdFlexDiv {
     justify-content: flex-end;
@@ -168,6 +190,10 @@ table th {
 
   .newInputFlex {
     display: inline-block;
+  }
+
+  .newEntryTd {
+    height: auto;
   }
 
   table {

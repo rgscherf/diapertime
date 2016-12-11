@@ -5,7 +5,7 @@
             [ajax.core :refer [GET]]
             [cljs-time.format :as format :refer [formatters]]
             [cljs-time.core :as time]
-            [clj-diaper.utils :as utils])
+            [clj-diaper.utils :as utils :refer [small-font-size large-font-size]])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
 ;;;;;;;;;;;;
@@ -28,57 +28,62 @@
           (format/parse (formatters :date-time-no-ms)
                         date-string)
         formatted-date
-          (format/unparse (formatters :year-month-day) parsed-dt)
+          (format/unparse (format/formatter "MM/dd") parsed-dt)
         formatted-time
-          (format/unparse (formatters :hour-minute) parsed-dt)]
+          (format/unparse (format/formatter "h:mm a") parsed-dt)]
     [:div
-      [:span.notFaded (str formatted-time " ")]
-      [:span.faded formatted-date]]))
-
-(defn render-date-time
-  [label date-time-string]
-  [:td
-    {:data-label label}
-    (format-date-from-db date-time-string)])
+      [:span.notFaded
+        {:style large-font-size}
+        (str formatted-time " ")]
+      [:span.faded
+        {:style small-font-size}
+        formatted-date]]))
 
 (defn render-feed
   [feed-amount]
   [:td
-    {:data-label "Fed"
-     :style {:text-align "right"}}
-    (str (utils/round-to-ten-mls feed-amount) " mL")])
-
-(defn render-poop
-  [poop-amount]
-  (let [not-pooped (- 3 poop-amount)
-        poop-icon "fa fa-spacing fa-circle 3x "]
-    [:td
-      {:data-label "Poop"}
-      [:div.tdFlexDiv
-        (concat
-          (repeat poop-amount [:i {:class poop-icon}])
-          (repeat not-pooped  [:i {:class (str poop-icon "faded")}]))]]))
+    {:style {:text-align "right"}}
+    [:div
+      {:data-label "Fed"}
+      (str (utils/round-to-ten-mls feed-amount) " mL")]
+    [:div
+      {:style small-font-size}
+      [:div "45th percentile"]]])
 
 (defn render-pee
   [peed?]
   [:td
     {:data-label "Peed?"}
-    [:div.tdFlexDiv
-      [:i {:style {:text-align "center"}
-           :class (if peed?
-                        "fa fa-check 2x notFaded"
-                        "fa fa-times 2x faded")}]]])
+    (utils/render-pee-icon peed?)])
+
+(defn render-poop
+  [poop]
+  [:td
+    {:data-label "Poop"}
+    (utils/render-poop-icons poop)])
+
+(defn render-attended
+  [label attended-time]
+  [:td
+    {:data-label label}
+    (format-date-from-db attended-time)
+    [:div
+      {:style small-font-size}
+      [:div
+        "Slept 2.3 hours"]
+      [:div
+        "45th percentile"]]])
 
 (defn render-row
   [row-map]
   (let [{:keys [_id attended pee poop feed slept]} row-map]
     ^{:key _id}
     [:tr
-      (render-date-time "Attended" attended)
+      (render-attended "Attended" attended)
       (render-pee pee)
       (render-poop poop)
       (render-feed feed)
-      (render-date-time "Slept" slept)]))
+      (render-attended "Slept" slept)]))
 
 (defn render-events-table
   [new-state new-event]

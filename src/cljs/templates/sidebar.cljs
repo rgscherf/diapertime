@@ -5,11 +5,13 @@
     [:div#graphing
       [:div#newEvent
         [:button#addEvent.largeInput
-          {:on-click #(swap!
-                        state-atom
-                        assoc
-                        :new
-                        (not adding-new-event))}
+          {:on-click #((let [change-state
+                              (swap!
+                                state-atom
+                                assoc
+                                :new
+                                (not adding-new-event))]
+                        (change-state)))}
           (if adding-new-event
             "Cancel"
             "New Event")]
