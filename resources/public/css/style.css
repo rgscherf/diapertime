@@ -110,7 +110,7 @@ button {
 
 .ghostButton {
   background-color: #321F47;
-  border: 1px solid #FD5C55;
+  /*border: 1px solid #FD5C55;*/
 }
 
 .smallInput {
