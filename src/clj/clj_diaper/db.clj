@@ -2,7 +2,8 @@
   (:require [monger.core :as mcore]
             [monger.db :as mdb]
             [monger.collection :as mcoll]
-            [monger.json]))
+            [monger.json]
+            [clj-diaper.utils :as utils]))
   ; (:import [com.mongodb MongoOptions ServerAddress]))
 
 (defonce db-connect
@@ -24,4 +25,11 @@
 
 (defn find-all-events
   []
-  (mcoll/find-maps database event-collection))
+  (let [ all-events
+          (sort-by
+            :attended
+            (mcoll/find-maps database event-collection))
+         metrics
+            (utils/events-for-percentiles all-events)]
+    (->> all-events
+         (pmap (partial utils/percentile metrics :feed :feed-percentile)))))
