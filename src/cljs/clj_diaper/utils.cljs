@@ -4,6 +4,11 @@
 (def small-font-size {:font-size "0.7em"})
 (def large-font-size {:font-size "1.4em"})
 
+(defn minutes-to-hours
+  [n]
+  [(quot n 60)
+   (mod n 60)])
+
 (defn stringify-feed-unit
   [feed-unit]
   (match [feed-unit]

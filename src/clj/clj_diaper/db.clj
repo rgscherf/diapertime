@@ -3,8 +3,7 @@
             [monger.db :as mdb]
             [monger.collection :as mcoll]
             [monger.json]
-            [clj-diaper.utils :as utils]))
-  ; (:import [com.mongodb MongoOptions ServerAddress]))
+            [clj-diaper.metrics :as metrics]))
 
 (defonce db-connect
   (let [conn (mcore/connect)
@@ -23,13 +22,17 @@
 (def baby-collection "baby-collection")
 (def event-collection "event-collection")
 
-(defn find-all-events
+(defn all-events-from-db
   []
-  (let [ all-events
-          (sort-by
-            :attended
-            (mcoll/find-maps database event-collection))
-         metrics
-            (utils/events-for-percentiles all-events)]
-    (->> all-events
-         (pmap (partial utils/percentile metrics :feed :feed-percentile)))))
+  (reverse
+    (sort-by
+      :attended
+      (mcoll/find-maps database event-collection))))
+
+(defn find-all-events
+  "this is where we add all post-db processing
+  and this will be called by hadler"
+  []
+  (metrics/add-metrics (all-events-from-db)))
+
+(find-all-events)
