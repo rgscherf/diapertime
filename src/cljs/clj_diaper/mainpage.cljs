@@ -7,13 +7,14 @@
 
 ;;;;;;;;;;;;;;;
 ;; STATE
+(def event-template {:attend-delta 0
+                     :pee false
+                     :poop 0
+                     :feed 0
+                     :feed-unit :ml
+                     :sleep-delta 0})
 (defonce page-state (atom {:new false}))
-(defonce new-event  (atom {:attend-delta 0
-                            :pee false
-                            :poop 0
-                            :feed 0
-                            :feed-unit :ml
-                            :sleep-delta 0}))
+(defonce new-event  (atom event-template))
 ;;;;;;;;;;;;;;;
 
 (defn main-page-container []
@@ -21,5 +22,5 @@
     [:div
       [render-page-header]
       [:div#outerContainer
-        [render-sidebar page-state]
+        [render-sidebar page-state new-event event-template]
         [render-events-table (:new @page-state) new-event]]]))

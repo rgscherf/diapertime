@@ -4,6 +4,8 @@
 (def small-font-size {:font-size "0.7em"})
 (def large-font-size {:font-size "1.4em"})
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; NUMBERS, TIME AND PERCENTILES
 (defn minutes-to-hours
   [n]
   [(quot n 60)
@@ -25,6 +27,8 @@
     [2] "nd"
     :else "th"))
 
+;;;;;;;;;;;;;;;;;;;;;;
+;; RENDER FEEDING TEXT
 (defn stringify-feed-unit
   [feed-unit]
   (match [feed-unit]
@@ -33,6 +37,13 @@
 (defn round-to-ten-mls
   [num]
   (* 10 (quot num 10)))
+
+;;;;;;;;;;;;;;;;;;;;;
+;; RENDER TABLE ICONS
+(defn- poop-render
+  [icon isFilled id]
+  ^{:key (str (if isFilled "poopIcon" "notPoopIcon") id)}
+  [:i {:class (str icon (if isFilled "" " faded"))}])
 
 (defn render-poop-icons
   ([poop-amount]
@@ -43,8 +54,8 @@
     [:div.tdFlexDiv
       {:style small-font-size}
       (concat
-        (repeat poop-amount [:i {:class poop-icon}])
-        (repeat not-pooped  [:i {:class (str poop-icon " faded")}]))])))
+        (map (partial poop-render poop-icon true) (range poop-amount))
+        (map (partial poop-render poop-icon false) (range not-pooped)))])))
 
 (defn render-pee-icon
   ([peed?]
