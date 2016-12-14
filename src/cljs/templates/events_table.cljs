@@ -4,7 +4,7 @@
             [reagent.core :refer [atom]]
             [ajax.core :refer [GET]]
             [cljs-time.format :as format :refer [formatters]]
-            [cljs-time.core :as time]
+            [cljs-time.local :as local]
             [clj-diaper.utils :as utils :refer [small-font-size large-font-size]])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
@@ -17,20 +17,16 @@
 (defn get-diaper-events
   [responding-atom]
   (GET "http://0.0.0.0:3449/api/1/data"
-    {:handler #(reset! responding-atom (reverse (sort-by :attended %)))
+    {:handler #(reset! responding-atom (sort-by :attended %))
      :response-format :json
      :keywords? true}))
 (get-diaper-events diaper-events)
 
 (defn format-date-from-db
   [date-string]
-  (let [parsed-dt
-          (format/parse (formatters :date-time-no-ms)
-                        date-string)
-        formatted-date
-          (format/unparse (format/formatter "MM/dd") parsed-dt)
-        formatted-time
-          (format/unparse (format/formatter "h:mm a") parsed-dt)]
+  (let [ parsed-dt (local/from-local-string date-string)
+         formatted-date (format/unparse (format/formatter "MM/dd") parsed-dt)
+         formatted-time (format/unparse (format/formatter "h:mm a") parsed-dt)]
     [:div
       [:span.notFaded
         {:style large-font-size}
@@ -40,15 +36,18 @@
         formatted-date]]))
 
 (defn render-feed
-  [feed-amount]
+  [feed-amount feed-percentile]
   [:td
     {:style {:text-align "right"}}
     [:div
       {:data-label "Fed"}
       (str (utils/round-to-ten-mls feed-amount) " mL")]
     [:div
-      {:style small-font-size}
-      [:div "45th percentile"]]])
+      {:class "faded" :style small-font-size}
+      [:div
+        (str feed-percentile
+             (utils/percentile-suffix feed-percentile)
+             " percentile")]]])
 
 (defn render-pee
   [peed?]
@@ -62,28 +61,39 @@
     {:data-label "Poop"}
     (utils/render-poop-icons poop)])
 
-(defn render-attended
-  [label attended-time]
+(defn render-time
+  [label attended-time time-for time-percentile]
   [:td
     {:data-label label}
     (format-date-from-db attended-time)
     [:div
-      {:style small-font-size}
+      {:class "faded" :style small-font-size}
       [:div
-        "Slept 2.3 hours"]
+        (if (= label "Attended")
+          (str "Slept for " (utils/str-min-hours time-for))
+          (str "Awake for " (utils/str-min-hours time-for)))]
       [:div
-        "45th percentile"]]])
+        (str time-percentile
+             (utils/percentile-suffix time-percentile)
+             " percentile")]]])
 
+; keys for metrics:
+; feed-percentile
+; awake-percentile
+; awake-for
+; slept-for
+; slept-percentile
 (defn render-row
   [row-map]
-  (let [{:keys [_id attended pee poop feed slept]} row-map]
+  (let [{:keys [_id attended pee poop feed slept metrics]} row-map
+        {:keys [feed-percentile awake-percentile awake-for slept-for slept-percentile]} metrics]
     ^{:key _id}
     [:tr
-      (render-attended "Attended" attended)
+      (render-time "Attended" attended slept-for slept-percentile)
       (render-pee pee)
       (render-poop poop)
-      (render-feed feed)
-      (render-attended "Slept" slept)]))
+      (render-feed feed feed-percentile)
+      (render-time "Slept" slept awake-for awake-percentile)]))
 
 (defn render-events-table
   [new-state new-event]

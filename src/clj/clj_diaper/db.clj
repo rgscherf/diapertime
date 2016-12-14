@@ -3,6 +3,7 @@
             [monger.db :as mdb]
             [monger.collection :as mcoll]
             [monger.json]
+            [monger.joda-time]
             [clj-diaper.metrics :as metrics]))
 
 (defonce db-connect
@@ -29,10 +30,9 @@
       :attended
       (mcoll/find-maps database event-collection))))
 
-(defn find-all-events
+(defn events-with-metrics
   "this is where we add all post-db processing
   and this will be called by hadler"
   []
   (metrics/add-metrics (all-events-from-db)))
-
-(find-all-events)
+  

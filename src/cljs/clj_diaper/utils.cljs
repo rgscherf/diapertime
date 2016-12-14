@@ -9,6 +9,22 @@
   [(quot n 60)
    (mod n 60)])
 
+(defn str-min-hours
+  [n]
+  (let [ min-hr (minutes-to-hours n)
+         minute-string (let [minutes (second min-hr)]
+                          (if (< minutes 10)
+                              (str minutes "0")
+                              minutes))]
+    (str (first min-hr) ":" minute-string)))
+
+(defn percentile-suffix
+  [pct]
+  (match [(mod pct 10)]
+    [1] "st"
+    [2] "nd"
+    :else "th"))
+
 (defn stringify-feed-unit
   [feed-unit]
   (match [feed-unit]

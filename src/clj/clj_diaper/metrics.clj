@@ -26,8 +26,9 @@
 ;; CALCULATING INTERVALS
 (defn- minutes-interval
   [earlier later]
-  (time/in-minutes
-    (time/interval earlier later)))
+  (let [t (time/in-minutes
+            (time/interval earlier later))]
+    t))
 
 (defn- awake-minutes
   [event-map]
@@ -46,7 +47,7 @@
       (minutes-interval
         (:prev-slept (last acc))
         (:attended new))
-     :prev-slept (:slept new)}))
+      :prev-slept (:slept new)}))
 
 (defn- gather-sleep-interval
   "reducer to gather sleep lengths"
@@ -85,9 +86,9 @@
   (let [observations (make-observations all-events)]
     (->>
       all-events
-      (pmap #((partial percentile observations
+      (map #((partial percentile observations
                 :feed (:feed %) :feed-percentile) %))
-      (pmap #((partial percentile observations
+      (map #((partial percentile observations
                :awake (awake-minutes %) :awake-percentile) %))
-      (pmap #(assoc-in % [:metrics :awake-for] (awake-minutes %)))
-      (reduce (partial sleep-interval-fold observations) []))))
+      (map #(assoc-in % [:metrics :awake-for] (awake-minutes %)))
+      (reduce (partial sleep-interval-fold observations) '()))))

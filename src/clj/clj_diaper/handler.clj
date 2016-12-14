@@ -38,7 +38,8 @@
 
 (defn baby-events
   []
-  (cheshire/generate-string (db/find-all-events)))
+  (cheshire/generate-string
+    (apply vector (db/events-with-metrics))))
 
 ;; ROUTER
 
