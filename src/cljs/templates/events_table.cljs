@@ -17,7 +17,7 @@
 (defn get-diaper-events
   [responding-atom]
   (GET "http://0.0.0.0:3449/api/1/data"
-    {:handler #(reset! responding-atom (sort-by :attended %))
+    {:handler #(reset! responding-atom (reverse (sort-by :attended %)))
      :response-format :json
      :keywords? true}))
 (get-diaper-events diaper-events)
