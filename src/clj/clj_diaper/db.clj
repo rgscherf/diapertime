@@ -32,7 +32,6 @@
 
 (defn events-with-metrics
   "this is where we add all post-db processing
-  and this will be called by hadler"
+  and this will be called by handler"
   []
   (metrics/add-metrics (all-events-from-db)))
-  
