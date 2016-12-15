@@ -64,7 +64,7 @@
     (cons new acc)
     (let [prev-slept (:slept (first acc))
           new-att (:attended new)
-          diff (minutes-interval new-att prev-slept)
+          diff (minutes-interval prev-slept new-att)
           ev-with-pct (percentile observations :sleep-interval diff :slept-percentile new)
           ev-with-diff (assoc-in ev-with-pct [:metrics :slept-for] diff)]
       (cons ev-with-diff acc))))
@@ -91,4 +91,5 @@
       (map #((partial percentile observations
                :awake (awake-minutes %) :awake-percentile) %))
       (map #(assoc-in % [:metrics :awake-for] (awake-minutes %)))
+      reverse
       (reduce (partial sleep-interval-fold observations) '()))))

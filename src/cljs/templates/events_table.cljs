@@ -66,16 +66,18 @@
   [:td
     {:data-label label}
     (format-date-from-db attended-time)
-    [:div
-      {:class "faded" :style small-font-size}
+    (if (nil? time-for)
+      [:div] ;; to cover first event, with no sleep comparator
       [:div
-        (if (= label "Attended")
-          (str "Slept for " (utils/str-min-hours time-for))
-          (str "Awake for " (utils/str-min-hours time-for)))]
-      [:div
-        (str time-percentile
-             (utils/percentile-suffix time-percentile)
-             " percentile")]]])
+        {:class "faded" :style small-font-size}
+        [:div
+          (if (= label "Attended")
+            (str "Slept for " (utils/str-min-hours time-for))
+            (str "Awake for " (utils/str-min-hours time-for)))]
+        [:div
+          (str time-percentile
+               (utils/percentile-suffix time-percentile)
+               " percentile")]])])
 
 ; keys for metrics:
 ; feed-percentile
