@@ -23,8 +23,6 @@
            :content "width=device-width, initial-scale=1"}]
    (include-css "/css/font-awesome.min.css")
    (include-css "/css/style.css")])
-  ;  (include-css "https://fonts.googleapis.com/css?family=Vampiro+One")
-  ;  (include-css "https://fonts.googleapis.com/css?family=Open+Sans")])
 
 (defn loading-page []
   (html5
@@ -32,7 +30,6 @@
     [:body {:class "body-container"}
      mount-target
      (include-js "/js/app.js")]))
-    ;  (include-js "https://use.fontawesome.com/ade5f0bcef.js")]))
 
 
 ;; FROM DB
