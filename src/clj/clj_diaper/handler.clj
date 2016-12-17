@@ -5,31 +5,11 @@
             [hiccup.page :refer [include-js include-css html5]]
             [config.core :refer [env]]
             [cheshire.core :as cheshire]
-            [clj-diaper.db :as db]))
+            [clj-diaper.db :as db]
+            [clj-diaper.models.random :as random]
+            [clj-diaper.templates.base-page :as base-page]))
 
 ;; PAGE RENDER
-
-(def mount-target
-  [:div#app
-      [:h3 "ClojureScript has not been compiled!"]
-      [:p "please run "
-       [:b "lein figwheel"]
-       " in order to start the compiler"]])
-
-(def page-head
-  [:head
-   [:meta {:charset "utf-8"}]
-   [:meta {:name "viewport"
-           :content "width=device-width, initial-scale=1"}]
-   (include-css "/css/font-awesome.min.css")
-   (include-css "/css/style.css")])
-
-(defn loading-page []
-  (html5
-    page-head
-    [:body {:class "body-container"}
-     mount-target
-     (include-js "/js/app.js")]))
 
 
 ;; FROM DB
@@ -39,12 +19,18 @@
   (cheshire/generate-string
     (apply vector (db/events-with-metrics))))
 
+(defn demo-events
+  []
+  (cheshire/generate-string
+    (random/random-events-history)))
+
 ;; ROUTER
 
 (defroutes routes
-  (GET "/" [] (loading-page))
-  (GET "/about" [] (loading-page))
+  (GET "/" [] (base-page/loading-page false))
+  (GET "/random" [] (base-page/loading-page true))
   (GET "/api/1/data" [] (baby-events))
+  (GET "/api/1/random" [] (demo-events))
 
   (resources "/")
   (not-found "Not Found"))

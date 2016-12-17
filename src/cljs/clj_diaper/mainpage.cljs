@@ -17,10 +17,11 @@
 (defonce new-event  (atom event-template))
 ;;;;;;;;;;;;;;;
 
-(defn main-page-container []
+(defn main-page-container
+  []
   (fn []
     [:div
       [render-page-header]
       [:div#outerContainer
         [render-sidebar page-state new-event event-template]
-        [render-events-table (:new @page-state) new-event]]]))
+        [render-events-table (assoc @page-state :is-test (.-isTestPage js/window)) new-event]]]))

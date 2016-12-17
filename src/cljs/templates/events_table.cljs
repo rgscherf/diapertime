@@ -15,12 +15,12 @@
 ;;;;;;;;;;;;
 
 (defn get-diaper-events
-  [responding-atom]
-  (GET "http://0.0.0.0:3449/api/1/data"
+  [url responding-atom]
+  (GET url
     {:handler #(reset! responding-atom (reverse (sort-by :attended %)))
      :response-format :json
      :keywords? true}))
-(get-diaper-events diaper-events)
+(get-diaper-events "http://0.0.0.0:3449/api/1/data" diaper-events)
 
 (defn format-date-from-db
   [date-string]
@@ -96,16 +96,20 @@
       (render-poop poop)
       (render-feed feed feed-percentile)
       (render-time "Slept" slept awake-for awake-percentile)]))
-
+      
 (defn render-events-table
-  [new-state new-event]
-  (fn [new-state]
+  [page-state new-event]
+  (fn [{:keys [new is-test]} page-state]
     [:div#innerContainer
+      [:div
+        (if is-test
+          "TESTIMG"
+          "NOT TESTING")]
       [:table#mainTable.table.table-hover
         [render-header-row]
         [:tbody
           ;; input row
-          (if new-state
+          (if new
             [render-input-row new-event])
           ;; past events
           (map render-row @diaper-events)]]]))
