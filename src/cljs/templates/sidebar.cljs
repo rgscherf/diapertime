@@ -15,5 +15,7 @@
         (if adding-new-event
           [:div
             [:button.largeInput
+              ; {:on-click
+              ;   (println @new-event-atom)}
               "Ok, post!"]]
           [:div])]]))
