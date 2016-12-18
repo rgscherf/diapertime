@@ -7,7 +7,8 @@
             [cheshire.core :as cheshire]
             [clj-diaper.db :as db]
             [clj-diaper.models.random :as random]
-            [clj-diaper.templates.base-page :as base-page]))
+            [clj-diaper.templates.base-page :as base-page]
+            [clj-diaper.metrics :as metrics]))
 
 ;; PAGE RENDER
 
@@ -17,18 +18,18 @@
 (defn baby-events
   []
   (cheshire/generate-string
-    (apply vector (db/events-with-metrics))))
+    (apply vector
+      (metrics/add-metrics (db/events-with-metrics)))))
 
 (defn demo-events
   []
   (cheshire/generate-string
-    (random/random-events-history)))
+    (metrics/add-metrics (reverse (random/random-events-history)))))
 
 ;; ROUTER
 
 (defroutes routes
-  (GET "/" [] (base-page/loading-page false))
-  (GET "/random" [] (base-page/loading-page true))
+  (GET "/" [] (base-page/loading-page))
   (GET "/api/1/data" [] (baby-events))
   (GET "/api/1/random" [] (demo-events))
 
