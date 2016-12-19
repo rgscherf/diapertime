@@ -87,6 +87,7 @@
     (->>
       all-events
       (sort-by :attended)
+      (reverse)
       (map #((partial percentile observations
                 :feed (:feed %) :feed-percentile) %))
       (map #((partial percentile observations

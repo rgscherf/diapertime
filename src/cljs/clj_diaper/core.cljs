@@ -3,7 +3,8 @@
               [reagent.session :as session]
               [secretary.core :as secretary :include-macros true]
               [accountant.core :as accountant]
-              [clj-diaper.mainpage :as content]))
+              [clj-diaper.mainpage :as content]
+              [templates.landing-page :refer [render-landing-page]]))
 
 ;; -------------------------
 ;; Views
@@ -18,7 +19,7 @@
 ;    [:div [:a {:href "/"} "go to the home page"]]])
 
 (defn view-landing-page []
-  (content/landing-page))
+  (render-landing-page))
 
 (defn view-diaper-events []
   (content/main-page-container false))

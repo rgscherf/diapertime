@@ -26,17 +26,6 @@
      :response-format :json
      :keywords? true}))
 
-(defn landing-page
-  []
-  [:div
-    [render-page-header]
-    [:h1 "Welcome to diaper time"]
-    [:div
-      [:div
-        [:a {:href "/random"} "Go to random!"]]
-      [:div
-        [:a {:href "/events"} "Go to events!"]]]])
-
 (defn waiting-for-table
   []
   [:div
