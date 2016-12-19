@@ -24,7 +24,7 @@
 (defn demo-events
   []
   (cheshire/generate-string
-    (metrics/add-metrics (reverse (random/random-events-history)))))
+    (metrics/add-metrics (random/random-events-history))))
 
 ;; ROUTER
 

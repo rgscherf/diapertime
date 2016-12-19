@@ -86,6 +86,7 @@
   (let [observations (make-observations all-events)]
     (->>
       all-events
+      (sort-by :attended)
       (map #((partial percentile observations
                 :feed (:feed %) :feed-percentile) %))
       (map #((partial percentile observations

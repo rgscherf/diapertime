@@ -22,11 +22,19 @@
 
 (defn percentile-suffix
   [pct]
-  (match [(mod pct 10)]
-    [1] "st"
-    [2] "nd"
-    [3] "rd"
-    :else "th"))
+  (cond
+    (= pct 12)
+    "th"
+    (= pct 11)
+    "th"
+    (= pct 13)
+    "th"
+    :else
+    (match [(mod pct 10)]
+      [1] "st"
+      [2] "nd"
+      [3] "rd"
+      :else "th")))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; RENDER FEEDING TEXT
