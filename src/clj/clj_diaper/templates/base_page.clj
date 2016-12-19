@@ -18,11 +18,9 @@
    (include-css "/css/style.css")])
 
 (defn loading-page
-  [is-random]
+  []
   (html5
     page-head
     [:body {:class "body-container"}
-      [:script
-        (str "var isTestPage = " is-random ";")]
       mount-target
       (include-js "/js/app.js")]))

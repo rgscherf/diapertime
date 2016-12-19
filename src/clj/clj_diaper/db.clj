@@ -3,8 +3,7 @@
             [monger.db :as mdb]
             [monger.collection :as mcoll]
             [monger.json]
-            [monger.joda-time]
-            [clj-diaper.metrics :as metrics]))
+            [monger.joda-time]))
 
 (defonce db-connect
   (let [conn (mcore/connect)
@@ -34,4 +33,4 @@
   "this is where we add all post-db processing
   and this will be called by handler"
   []
-  (metrics/add-metrics (all-events-from-db)))
+  (all-events-from-db))

@@ -2,7 +2,8 @@
   (:require [reagent.core :refer [atom]]
             [templates.page-header :refer [render-page-header]]
             [templates.sidebar :refer [render-sidebar]]
-            [templates.events-table :refer [render-events-table]]))
+            [templates.events-table :refer [render-events-table]]
+            [ajax.core :refer [GET]]))
 
 
 ;;;;;;;;;;;;;;;
@@ -15,13 +16,58 @@
                      :sleep-delta 0})
 (defonce page-state (atom {:new false}))
 (defonce new-event  (atom event-template))
+(defonce diaper-events (atom []))
 ;;;;;;;;;;;;;;;
 
-(defn main-page-container
+(defn get-events
+  [url responding-atom]
+  (GET url
+    {:handler #(reset! responding-atom (reverse (sort-by :attended %)))
+     :response-format :json
+     :keywords? true}))
+
+(defn landing-page
   []
+  [:div
+    [render-page-header]
+    [:h1 "Welcome to diaper time"]
+    [:div
+      [:div
+        [:a {:href "/random"} "Go to random!"]]
+      [:div
+        [:a {:href "/events"} "Go to events!"]]]])
+
+(defn waiting-for-table
+  []
+  [:div
+    {:style {:display "flex" :flex-direction "column" :align-items "center"}}
+    [:div.topBottomSpace
+      [:i {:class "fa fa-refresh fa-spin fa-4x fa-fw"}]]
+    [:div.topBottomSpace
+      [:h1
+        "Hold on, loading data!"]]])
+
+(defn reset-page-atoms
+  []
+  (do
+    (reset! diaper-events)
+    (reset! page-state {:new false})
+    (reset! new-event event-template)))
+
+(defn main-page-container
+  [is-random]
+  (do (reset-page-atoms)
+      (get-events (if is-random
+                      "http://0.0.0.0:3449/api/1/random"
+                      "http://0.0.0.0:3449/api/1/data")
+                  diaper-events))
   (fn []
     [:div
       [render-page-header]
-      [:div#outerContainer
-        [render-sidebar page-state new-event event-template]
-        [render-events-table (assoc @page-state :is-test (.-isTestPage js/window)) new-event]]]))
+      [:div
+        (if (empty? @diaper-events)
+            [waiting-for-table]
+            [:div
+              [:div#outerContainer
+                [render-sidebar page-state new-event event-template]
+                [render-events-table diaper-events page-state new-event]]])]]))

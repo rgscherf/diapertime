@@ -2,25 +2,13 @@
   (:require [templates.header-row :refer [render-header-row]]
             [templates.input-row :refer [render-input-row]]
             [reagent.core :refer [atom]]
-            [ajax.core :refer [GET]]
             [cljs-time.format :as format :refer [formatters]]
             [cljs-time.local :as local]
-            [clj-diaper.utils :as utils :refer [small-font-size large-font-size]])
-  (:require-macros [cljs.core.async.macros :refer [go]]))
+            [clj-diaper.utils :as utils :refer [small-font-size large-font-size]]))
 
 ;;;;;;;;;;;;
 ;; STATE
-(defonce diaper-events
-  (atom []))
 ;;;;;;;;;;;;
-
-(defn get-diaper-events
-  [url responding-atom]
-  (GET url
-    {:handler #(reset! responding-atom (reverse (sort-by :attended %)))
-     :response-format :json
-     :keywords? true}))
-(get-diaper-events "http://0.0.0.0:3449/api/1/data" diaper-events)
 
 (defn format-date-from-db
   [date-string]
@@ -96,20 +84,14 @@
       (render-poop poop)
       (render-feed feed feed-percentile)
       (render-time "Slept" slept awake-for awake-percentile)]))
-      
+
 (defn render-events-table
-  [page-state new-event]
-  (fn [{:keys [new is-test]} page-state]
-    [:div#innerContainer
-      [:div
-        (if is-test
-          "TESTIMG"
-          "NOT TESTING")]
-      [:table#mainTable.table.table-hover
-        [render-header-row]
-        [:tbody
-          ;; input row
-          (if new
-            [render-input-row new-event])
-          ;; past events
-          (map render-row @diaper-events)]]]))
+  [diaper-events page-state new-event]
+  [:table#mainTable.table.table-hover
+    [render-header-row]
+    [:tbody
+      ;; input row
+      (if (:new @page-state)
+        [render-input-row new-event])
+      ;; past events
+      (map render-row @diaper-events)]])

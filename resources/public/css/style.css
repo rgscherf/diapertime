@@ -10,6 +10,10 @@
   flex-wrap: wrap;
 }
 
+.topBottomSpace {
+  margin-top: 20px;
+}
+
 .faded {
   opacity: 0.38;
 }

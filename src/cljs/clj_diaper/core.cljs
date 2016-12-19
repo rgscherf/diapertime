@@ -17,11 +17,14 @@
 ;   [:div [:h2 "About clj-diaper's About page"]
 ;    [:div [:a {:href "/"} "go to the home page"]]])
 
+(defn view-landing-page []
+  (content/landing-page))
+
 (defn view-diaper-events []
-  (content/main-page-container))
+  (content/main-page-container false))
 
 (defn view-random-events []
-  (content/main-page-container))
+  (content/main-page-container true))
 
 (defn current-page []
   [:div [(session/get :current-page)]])
@@ -33,6 +36,9 @@
 ;   (session/put! :current-page #'main-page))
 
 (secretary/defroute "/" []
+  (session/put! :current-page #'view-landing-page))
+
+(secretary/defroute "/events" []
   (session/put! :current-page #'view-diaper-events))
 
 (secretary/defroute "/random" []
