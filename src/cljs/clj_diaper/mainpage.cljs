@@ -27,14 +27,16 @@
      :keywords? true}))
 
 (defn waiting-for-table
-  []
+  [is-random]
   [:div
     {:style {:display "flex" :flex-direction "column" :align-items "center"}}
     [:div.topBottomSpace
       [:i {:class "fa fa-refresh fa-spin fa-4x fa-fw"}]]
     [:div.topBottomSpace
       [:h1
-        "Hold on, loading data!"]]])
+        (if is-random
+          "Hold on, generating data..."
+          "Hold on, loading data...")]]])
 
 (defn reset-page-atoms
   []
@@ -55,7 +57,7 @@
       [render-page-header]
       [:div
         (if (empty? @diaper-events)
-            [waiting-for-table]
+            [waiting-for-table is-random]
             [:div
               [:div#outerContainer
                 [render-sidebar page-state new-event event-template]

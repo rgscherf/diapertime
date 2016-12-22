@@ -4,7 +4,13 @@
   [state-atom new-event-atom event-template]
   (let [adding-new-event (:new @state-atom)]
     [:div#graphing
-      [:div#newEvent
+      ; [:div#newEvent
+        [:button.largeInput
+          [:div
+            [:a.landingLink {:href "/"
+                             :style {:color "black"
+                                     :cursor "default"}}
+              "Back"]]]
         [:button#addEvent.largeInput
           {:on-click
             #(do (swap! state-atom assoc :new (not adding-new-event))
@@ -13,9 +19,5 @@
             "Cancel"
             "New Event")]
         (if adding-new-event
-          [:div
-            [:button.largeInput
-              ; {:on-click
-              ;   (println @new-event-atom)}
-              "Ok, post!"]]
-          [:div])]]))
+          [:button.largeInput
+            "Ok, post!"])]))

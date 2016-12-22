@@ -10,6 +10,10 @@
   flex-wrap: wrap;
 }
 
+.landingLink {
+  text-decoration: none;
+}
+
 .topBottomSpace {
   margin-top: 20px;
 }
@@ -64,10 +68,12 @@ a:visited {
   flex-direction: row;
 }
 
-#graphing > div {
+#graphing > button {
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 #graphing {
   min-width: 180px;
@@ -156,7 +162,8 @@ body {
 table {
   border: 1px solid #ccc;
   width: 80%;
-  margin:0;
+  margin-left: auto;
+  margin-right: auto;
   padding:0;
   border-collapse: collapse;
   border-spacing: 0;
@@ -184,14 +191,11 @@ table th {
   }
   #graphing {
     flex-direction: row;
-    margin-left: 10px
+    margin-left: 10px;
+    flex-wrap: wrap;
   }
 
-  #graphing > div {
-    margin-bottom: 20px;
-    flex-direction: row;
-  }
-  #graphing > div > button {
+  #graphing > button {
     margin-right: 20px;
   }
 }

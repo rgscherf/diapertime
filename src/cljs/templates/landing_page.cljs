@@ -26,8 +26,11 @@
                :align-items "center"
                :margin-top "40px"
                :margin-bottom "20px"
-               :font-size "1.1em"}}
+               :font-size "1.1em"
+               :justify-content "center"}}
       [:div#headline.headfont
+        {:style {:font-size "6em"
+                 :text-align "center"}}
         "Diaper Time"]
       [:div
         {:style {:margin-top "40px"
@@ -40,18 +43,21 @@
                :align-items "center"
                :margin "20px 5%"}}
       [:div
-        (action-box-style 40)
-        "Try with test data"]
+        (modify-style
+          (action-box-style 40)
+          {:font-family "Vampiro One, cursive"})
+        [:a.landingLink {:href "/random"}
+          "Test drive"]]
+
       [:div.faded
         (modify-style
           (action-box-style 20)
           {:font-style "italic"})
         "or"]
+
       [:div
-        (action-box-style 40)
-        "Log in!"]]
-    [:div
-      [:div
-        [:a {:href "/random"} "Go to random!"]]
-      [:div
-        [:a {:href "/events"} "Go to events!"]]]])
+        (modify-style
+          (action-box-style 40)
+          {:font-family "Vampiro One, cursive"})
+        [:a.landingLink {:href "/events"}
+          "Log in"]]]])
