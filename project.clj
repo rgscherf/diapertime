@@ -23,8 +23,9 @@
                  [clj-time "0.12.2"]
                  [cheshire "5.1.1"]
                  [cljs-ajax "0.5.8"]
-                 [com.andrewmcveigh/cljs-time "0.4.0"]]
-
+                 [com.andrewmcveigh/cljs-time "0.4.0"]
+                 [digest "1.4.5"]]
+                 
   :plugins [[lein-environ "1.0.2"]
             [lein-cljsbuild "1.1.1"]
             [lein-asset-minifier "0.2.7"

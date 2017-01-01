@@ -8,7 +8,13 @@
             [clj-diaper.db :as db]
             [clj-diaper.models.random :as random]
             [clj-diaper.templates.base-page :as base-page]
-            [clj-diaper.metrics :as metrics]))
+            [clj-diaper.metrics :as metrics]
+
+            ; [ring.middleware.session :refer [wrap-session]]
+            ; [ring.middleware.params :refer [wrap-params]]
+            ; [ring.middleware.keyword-params :refer [wrap-keyword-params]]
+            [ring.middleware.reload :refer [wrap-reload]]
+            [ring.middleware.defaults :refer [wrap-defaults site-defaults]]))
 
 ;; PAGE RENDER
 
@@ -36,4 +42,7 @@
   (resources "/")
   (not-found "Not Found"))
 
-(def app (site #'routes))
+(def app
+  (-> (site #'routes)
+      wrap-reload
+      (wrap-defaults (assoc-in site-defaults [:security :anti-forgery] false))))
