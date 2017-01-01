@@ -5,19 +5,15 @@
             [hiccup.page :refer [include-js include-css html5]]
             [config.core :refer [env]]
             [cheshire.core :as cheshire]
+
             [clj-diaper.db :as db]
             [clj-diaper.models.random :as random]
             [clj-diaper.templates.base-page :as base-page]
             [clj-diaper.metrics :as metrics]
+            [clj-diaper.auth :as auth]
 
-            ; [ring.middleware.session :refer [wrap-session]]
-            ; [ring.middleware.params :refer [wrap-params]]
-            ; [ring.middleware.keyword-params :refer [wrap-keyword-params]]
             [ring.middleware.reload :refer [wrap-reload]]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]))
-
-;; PAGE RENDER
-
 
 ;; FROM DB
 
@@ -38,6 +34,11 @@
   (GET "/" [] (base-page/loading-page))
   (GET "/api/1/data" [] (baby-events))
   (GET "/api/1/random" [] (demo-events))
+
+  ;; auth related
+  (GET "/newuser" {params :params} (auth/register-new-user params))
+  (GET "/trypassword" {params :params} (auth/try-password params))
+  (GET "/tryauthtoken" {params :params} (auth/try-auth-token params))
 
   (resources "/")
   (not-found "Not Found"))
