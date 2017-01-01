@@ -59,5 +59,5 @@
         (modify-style
           (action-box-style 40)
           {:font-family "Vampiro One, cursive"})
-        [:a.landingLink {:href "/events"}
+        [:a.landingLink {:href "/login"}
           "Log in"]]]])

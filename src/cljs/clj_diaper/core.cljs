@@ -4,19 +4,12 @@
               [secretary.core :as secretary :include-macros true]
               [accountant.core :as accountant]
               [clj-diaper.mainpage :as content]
-              [templates.landing-page :refer [render-landing-page]]))
+              [templates.login :as login]
+              [templates.landing-page :refer [render-landing-page]]
+              [ajax.core :as ajax]
+              [reagent.cookies :as cookies]))
 
-;; -------------------------
-;; Views
-
-; (defn home-page []
-;   [:div [:h2 "Welcome to clj-diaper's LANDING page"]
-;    [:div [:a {:href "/about"} "go to about page"]]
-;    [:div [:a {:href "/main"} "find out more...?"]]])
-
-; (defn about-page []
-;   [:div [:h2 "About clj-diaper's About page"]
-;    [:div [:a {:href "/"} "go to the home page"]]])
+;; VIEW FUNCTIONS
 
 (defn view-landing-page []
   (render-landing-page))
@@ -27,14 +20,15 @@
 (defn view-random-events []
   (content/main-page-container true))
 
+(defn login-page []
+  (login/login-page))
+
 (defn current-page []
   [:div [(session/get :current-page)]])
 
 ;; -------------------------
 ;; Routes
 
-; (secretary/defroute "/main" []
-;   (session/put! :current-page #'main-page))
 
 (secretary/defroute "/" []
   (session/put! :current-page #'view-landing-page))
@@ -45,8 +39,11 @@
 (secretary/defroute "/random" []
   (session/put! :current-page #'view-random-events))
 
-; (secretary/defroute "/about" []
-;   (session/put! :current-page #'about-page))
+(secretary/defroute "/login" []
+  (session/put! :current-page #'login-page))
+
+; (secretary/defroute "/signup" []
+;   (session/put! :current-page #'signup-page))
 
 ;; -------------------------
 ;; Initialize app
