@@ -3,25 +3,28 @@
               [reagent.session :as session]
               [secretary.core :as secretary :include-macros true]
               [accountant.core :as accountant]
-              [clj-diaper.mainpage :as content]
+
+              [clj-diaper.mainpage :as mainpage]
               [templates.login :as login]
-              [templates.landing-page :refer [render-landing-page]]
-              [ajax.core :as ajax]
-              [reagent.cookies :as cookies]))
+              [templates.signup :as signup]
+              [templates.landing-page :as landing-page]))
 
 ;; VIEW FUNCTIONS
 
 (defn view-landing-page []
-  (render-landing-page))
+  (landing-page/render-landing-page))
 
 (defn view-diaper-events []
-  (content/main-page-container false))
+  (mainpage/main-page-container false))
 
 (defn view-random-events []
-  (content/main-page-container true))
+  (mainpage/main-page-container true))
 
 (defn login-page []
   (login/login-page))
+
+(defn signup-page []
+  (signup/signup-page))
 
 (defn current-page []
   [:div [(session/get :current-page)]])
@@ -42,8 +45,8 @@
 (secretary/defroute "/login" []
   (session/put! :current-page #'login-page))
 
-; (secretary/defroute "/signup" []
-;   (session/put! :current-page #'signup-page))
+(secretary/defroute "/signup" []
+  (session/put! :current-page #'signup-page))
 
 ;; -------------------------
 ;; Initialize app
