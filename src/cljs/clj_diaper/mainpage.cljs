@@ -3,7 +3,7 @@
             [templates.page-header :refer [render-page-header]]
             [templates.sidebar :refer [render-sidebar]]
             [templates.events-table :refer [render-events-table]]
-            [ajax.core :refer [GET]]))
+            [ajax.core :as ajax]))
 
 
 ;;;;;;;;;;;;;;;
@@ -21,7 +21,7 @@
 
 (defn get-events
   [url responding-atom]
-  (GET url
+  (ajax/GET url
     {:handler #(reset! responding-atom (reverse (sort-by :attended %)))
      :response-format :json
      :keywords? true}))
@@ -49,8 +49,8 @@
   [is-random]
   (do (reset-page-atoms)
       (get-events (if is-random
-                      "http://0.0.0.0:3449/api/1/random"
-                      "http://0.0.0.0:3449/api/1/data")
+                      "/api/1/random"
+                      "/api/1/data")
                   diaper-events))
   (fn []
     [:div

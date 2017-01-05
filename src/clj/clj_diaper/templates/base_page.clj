@@ -15,7 +15,7 @@
    [:meta {:name "viewport"
            :content "width=device-width, initial-scale=1"}]
    (include-css "/css/font-awesome.min.css")
-   (include-css "/css/style.css")])
+   (include-css "/css/style.min.css")])
 
 (defn loading-page
   []
