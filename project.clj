@@ -69,7 +69,7 @@
                         :source-map true
                         :optimizations :none
                         :pretty-print  true}}}}
-
+                        
   :figwheel {:http-server-root "public"
              :server-port 3449
              :nrepl-port 7002

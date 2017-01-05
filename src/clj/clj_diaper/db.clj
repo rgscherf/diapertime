@@ -6,9 +6,8 @@
             [monger.joda-time]))
 
 (defonce db-connect
-  (let [conn (mcore/connect)
-        db (mcore/get-db conn "diapertime")]
-    {:conn conn :db db}))
+  (let [mongo-uri (System/getenv "DIAPERTIME_MONGO_URI")]
+    (mcore/connect-via-uri mongo-uri)))
 
 (defn db-disconnect
   [connection]
