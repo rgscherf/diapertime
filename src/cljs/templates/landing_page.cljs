@@ -71,7 +71,7 @@
         [:p "Sound interesting? "
           [:a {:href "/random"} "Go for a test drive"]
           [:span " with some randomly generated data."]]]]))
-          
+
 (defn render-landing-page
   []
   [:div
