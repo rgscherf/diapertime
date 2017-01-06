@@ -37,7 +37,7 @@
   []
   [:div
     {:style {:display "flex"
-             :justify-content "center"
+             :justify-content "space-around"
              :align-items "center"
              :margin "60px 5%"}}
     [login-box]
