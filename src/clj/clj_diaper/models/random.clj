@@ -1,9 +1,6 @@
 (ns clj-diaper.models.random
   (:require [clj-time.local :as local]
             [clj-time.core :as time]
-            [clj-diaper.models.model-utils :refer [random-string]]
-            [monger.collection :as coll]
-            [clj-diaper.db :as db]
             [monger.joda-time]))
 
 ;; RANDOM EVENT HISTORY
@@ -41,22 +38,27 @@
     '()
     (range num-of-events)))
 
+(defn random-id
+  [maxlen]
+  (->>
+    (range maxlen)
+    (map (fn [x] (rand-nth (range 10))))
+    clojure.string/join))
+
 (defn random-events-history
   []
-  (map #(assoc % :_id (random-string 10))
+  (map #(assoc % :_id (random-id 10))
     (reduce-through-dates 50)))
 
-(coll/find-maps db/database db/baby-collection)
-; (reduce-through-dates 50)
-(coll/find-maps db/database db/user-collection)
-
-(coll/find-one-as-map db/database db/baby-collection {:name "hildaa"})
-(let [hi-id (:_id (coll/find-one-as-map
-                    db/database
-                    db/baby-collection
-                    {:name "hildaa"}))]
-  (coll/update-by-id db/database
-                     db/baby-collection
-                     hi-id
-                     {:name "hildaa"
-                      :events (into [] (reduce-through-dates 10))}))
+; (coll/find-maps db/database db/baby-collection)
+; (coll/find-maps db/database db/user-collection)
+; (coll/find-one-as-map db/database db/baby-collection {:name "hildaa"})
+; (let [hi-id (:_id (coll/find-one-as-map
+;                     db/database
+;                     db/baby-collection
+;                     {:name "hildaa"}))]
+;   (coll/update-by-id db/database
+;                      db/baby-collection
+;                      hi-id
+;                      {:name "hildaa"
+;                       :events (into [] (reduce-through-dates 10))}))

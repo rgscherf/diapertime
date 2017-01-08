@@ -6,7 +6,6 @@
             [config.core :refer [env]]
             [cheshire.core :as cheshire]
 
-            [clj-diaper.models.diaper-event :as events]
             [clj-diaper.models.user :as user]
             [clj-diaper.models.random :as random]
             [clj-diaper.templates.base-page :as base-page]
@@ -16,19 +15,15 @@
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]))
 
 ;; FROM DB
-
-;; shape of this data (and demo-events) is
-;; {:baby-name (string)
-;;  :events (vector event-map)
 (defn baby-events
   [request]
   (cheshire/generate-string
-    (let [token (get-in request [:cookies "auth-token"])
-          user (user/get-user-by-token token)
-          baby (events/baby-record-from-db (:baby-name user))]
-      {:baby-name (:name baby)
+    (if-let [user (user/get-user-by-token
+                    (get-in request [:cookies "auth-token"]))]
+      {:baby-name (:baby-name user)
        :events (apply vector
-                (metrics/add-metrics (:events baby)))})))
+                (metrics/add-metrics (:events user)))}
+      {:baby-name "Error, not found!"})))
 
 (defn demo-events
   []

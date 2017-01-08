@@ -11,18 +11,11 @@
     (take 25
       (repeatedly #(rand-nth "ABCDEFGHIJKLMNOPQRSTUVWXYZ")))))
 
-(defn insert-user-map!
-  [user]
-  (mcoll/insert db/database
-                db/user-collection
-                user))
-
 (defn insert-new-baby!
   [user]
   (mcoll/insert db/database
-                db/baby-collection
-                {:name (:baby-name user)
-                 :events []}))
+                db/babies
+                user))
 
 (defn register-new-user
   [{:keys [email name password]}]
@@ -30,9 +23,9 @@
         new-user {:email email
                   :baby-name name
                   :password-hash (digest/sha-256 password)
-                  :auth-token auth-token}]
+                  :auth-token auth-token
+                  :events []}]
     (do
-      (insert-user-map! new-user)
       (insert-new-baby! new-user)
       {:status 200
        :headers {"Content-Type" "text/html"}
@@ -44,9 +37,9 @@
 (defn get-user-by-token
   [token]
   (mcoll/find-one-as-map db/database
-                         db/user-collection
+                         db/babies
                          {:auth-token token}))
-                         
+
 (defn try-auth-token
   [{:keys [auth-token]}]
   {:status 200
@@ -64,7 +57,7 @@
 (defn- get-user-by-login
   [email password]
   (if-let [user (mcoll/find-one-as-map db/database
-                                       db/user-collection
+                                       db/babies
                                        {:email email})]
     (if (valid-password? user password)
       (dissoc user :password-hash))))
