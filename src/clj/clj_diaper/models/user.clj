@@ -1,16 +1,8 @@
-(ns clj-diaper.auth
-  (:require [digest]
+(ns clj-diaper.models.user
+  (:require [monger.collection :as mcoll]
+            [clj-diaper.db :as db]
+            [digest]
             [clojure.string :refer [join]]))
-
-;; TEMP USER DB
-(def user-store (atom [{:email "gsmith@gmail.com"
-                        :name "GrahmSmith"
-                        :password-hash (digest/sha-256 "password")
-                        :auth-token "QWURBEZBBKARIEXNKVBPTZYEC"}
-                       {:email "sarabara@baby.me"
-                        :name "sarabara"
-                        :password-hash (digest/sha-256 "sarabara")
-                        :auth-token "RJDUBWNNYRSQNCMJGPPVDHKBN"}]))
 
 ;; GENERATE AUTH TOKEN
 (defn- random-string
@@ -19,15 +11,29 @@
     (take 25
       (repeatedly #(rand-nth "ABCDEFGHIJKLMNOPQRSTUVWXYZ")))))
 
+(defn insert-user-map!
+  [user]
+  (mcoll/insert db/database
+                db/user-collection
+                user))
+
+(defn insert-new-baby!
+  [user]
+  (mcoll/insert db/database
+                db/baby-collection
+                {:name (:baby-name user)
+                 :events []}))
+
 (defn register-new-user
   [{:keys [email name password]}]
   (let [auth-token (random-string)
         new-user {:email email
-                  :name name
+                  :baby-name name
                   :password-hash (digest/sha-256 password)
                   :auth-token auth-token}]
     (do
-      (swap! user-store conj new-user)
+      (insert-user-map! new-user)
+      (insert-new-baby! new-user)
       {:status 200
        :headers {"Content-Type" "text/html"}
        :body "ok"
@@ -35,18 +41,17 @@
                                :max-age (* 60 60 24 120)}}})))
 
 ;; LOGIN -> AUTH
-(defn- get-user-by-token
-  [store token]
-  (let [user (first (filter #(= (:auth-token %)
-                                token)
-                            @store))]
-    (dissoc user :password-hash)))
-
+(defn get-user-by-token
+  [token]
+  (mcoll/find-one-as-map db/database
+                         db/user-collection
+                         {:auth-token token}))
+                         
 (defn try-auth-token
   [{:keys [auth-token]}]
   {:status 200
    :headers {"Content-Type" "text/html"}
-   :body (if (nil? (get-user-by-token user-store auth-token))
+   :body (if (nil? (get-user-by-token auth-token))
              "error"
              "ok")})
 
@@ -57,17 +62,17 @@
      (:password-hash user-map)))
 
 (defn- get-user-by-login
-  [store email password]
-  (let [user (first (filter #(= (:email %)
-                                email)
-                            @store))]
+  [email password]
+  (if-let [user (mcoll/find-one-as-map db/database
+                                       db/user-collection
+                                       {:email email})]
     (if (valid-password? user password)
       (dissoc user :password-hash))))
 
 (defn try-password
   [params]
   (let [{:keys [email password]} params
-        user (get-user-by-login user-store email password)]
+        user (get-user-by-login email password)]
     {:status 200
      :headers {"Content-Type" "text/html"}
      :body (if user

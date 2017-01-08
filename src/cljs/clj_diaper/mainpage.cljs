@@ -16,13 +16,13 @@
                      :sleep-delta 0})
 (defonce page-state (atom {:new false}))
 (defonce new-event  (atom event-template))
-(defonce diaper-events (atom []))
+(defonce diaper-events (atom nil))
 ;;;;;;;;;;;;;;;
 
 (defn get-events
   [url responding-atom]
   (ajax/GET url
-    {:handler #(reset! responding-atom (reverse (sort-by :attended %)))
+    {:handler #(reset! responding-atom %)
      :response-format :json
      :keywords? true}))
 
@@ -54,7 +54,7 @@
                   diaper-events))
   (fn []
     [:div
-      [render-page-header]
+      [render-page-header diaper-events]
       [:div
         (if (empty? @diaper-events)
             [waiting-for-table is-random]

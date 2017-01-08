@@ -94,4 +94,6 @@
                :awake (awake-minutes %) :awake-percentile) %))
       (map #(assoc-in % [:metrics :awake-for] (awake-minutes %)))
       reverse
-      (reduce (partial sleep-interval-fold observations) '()))))
+      (reduce (partial sleep-interval-fold observations) '())
+      (sort-by :attended)
+      reverse)))

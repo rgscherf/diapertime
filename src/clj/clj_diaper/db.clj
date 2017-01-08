@@ -19,17 +19,3 @@
 
 (def user-collection "user-collection")
 (def baby-collection "baby-collection")
-(def event-collection "event-collection")
-
-(defn all-events-from-db
-  []
-  (reverse
-    (sort-by
-      :attended
-      (mcoll/find-maps database event-collection))))
-
-(defn events-with-metrics
-  "this is where we add all post-db processing
-  and this will be called by handler"
-  []
-  (all-events-from-db))

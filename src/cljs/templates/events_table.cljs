@@ -88,10 +88,10 @@
 (defn render-events-table
   [diaper-events page-state new-event]
   [:table#mainTable.table.table-hover
-    [render-header-row]
+    [render-header-row] 
     [:tbody
       ;; input row
       (if (:new @page-state)
         [render-input-row new-event])
       ;; past events
-      (map render-row @diaper-events)]])
+      (map render-row (:events @diaper-events))]])
