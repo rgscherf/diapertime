@@ -39,6 +39,7 @@
   (mcoll/find-one-as-map db/database
                          db/babies
                          {:auth-token token}))
+; (get-user-by-token "FBECUTAFQOJFEVBIYZIQRSFZJ")
 
 (defn try-auth-token
   [{:keys [auth-token]}]

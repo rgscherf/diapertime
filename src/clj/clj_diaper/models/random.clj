@@ -1,7 +1,9 @@
 (ns clj-diaper.models.random
   (:require [clj-time.local :as local]
             [clj-time.core :as time]
-            [monger.joda-time]))
+            [monger.joda-time]
+            [monger.collection :as coll]
+            [clj-diaper.db :as db]))
 
 ;; RANDOM EVENT HISTORY
 
@@ -55,8 +57,8 @@
 ; (coll/find-one-as-map db/database db/baby-collection {:name "hildaa"})
 ; (let [hi-id (:_id (coll/find-one-as-map
 ;                     db/database
-;                     db/baby-collection
-;                     {:name "hildaa"}))]
+;                     db/babies
+;                     {:baby-name "hilda"}))]
 ;   (coll/update-by-id db/database
 ;                      db/baby-collection
 ;                      hi-id

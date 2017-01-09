@@ -16,14 +16,13 @@
 
 ;; FROM DB
 (defn baby-events
-  [request]
+  [{:keys [auth-token]}]
   (cheshire/generate-string
-    (if-let [user (user/get-user-by-token
-                    (get-in request [:cookies "auth-token"]))]
+    (if-let [user (user/get-user-by-token auth-token)]
       {:baby-name (:baby-name user)
        :events (apply vector
                 (metrics/add-metrics (:events user)))}
-      {:baby-name "Error, not found!"})))
+      {:baby-name auth-token})))
 
 (defn demo-events
   []
@@ -34,7 +33,7 @@
 ;; ROUTER
 (defroutes routes
   (GET "/" [] (base-page/loading-page))
-  (GET "/api/1/data" [request] (baby-events request))
+  (GET "/api/1/data" {params :params} (baby-events params))
   (GET "/api/1/random" [] (demo-events))
 
   ;; auth related

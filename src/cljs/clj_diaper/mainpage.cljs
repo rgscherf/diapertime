@@ -3,7 +3,8 @@
             [templates.page-header :refer [render-page-header]]
             [templates.sidebar :refer [render-sidebar]]
             [templates.events-table :refer [render-events-table]]
-            [ajax.core :as ajax]))
+            [ajax.core :as ajax]
+            [reagent.cookies :as cookies]))
 
 
 ;;;;;;;;;;;;;;;
@@ -21,10 +22,12 @@
 
 (defn get-events
   [url responding-atom]
-  (ajax/GET url
-    {:handler #(reset! responding-atom %)
-     :response-format :json
-     :keywords? true}))
+  (let [auth (cookies/get "auth-token")]
+    (ajax/GET url
+      {:handler #(reset! responding-atom %)
+       :params {:auth-token auth}
+       :response-format :json
+       :keywords? true})))
 
 (defn waiting-for-table
   [is-random]
