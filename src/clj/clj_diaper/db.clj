@@ -17,6 +17,4 @@
   (def connection conn)
   (def database db))
 
-; (def user-collection "user-collection")
-; (def baby-collection "baby-collection")
 (def babies "babies")

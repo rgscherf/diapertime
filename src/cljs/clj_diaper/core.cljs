@@ -1,6 +1,7 @@
 (ns clj-diaper.core
     (:require [reagent.core :as reagent :refer [atom]]
               [reagent.session :as session]
+              [reagent.cookies :as cookies]
               [secretary.core :as secretary :include-macros true]
               [accountant.core :as accountant]
 
@@ -26,6 +27,11 @@
 (defn signup-page []
   (signup/signup-page))
 
+(defn logout []
+  (let [_ (cookies/remove! "auth-token")
+        __ (secretary/dispatch! "/")]
+    [:div]))
+
 (defn current-page []
   [:div [(session/get :current-page)]])
 
@@ -47,6 +53,9 @@
 
 (secretary/defroute "/signup" []
   (session/put! :current-page #'signup-page))
+
+(secretary/defroute "/logout" []
+  (session/put! :current-page #'logout))
 
 ;; -------------------------
 ;; Initialize app

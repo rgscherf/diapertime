@@ -7,10 +7,13 @@
                      :display "flex"
                      :align-items "center"
                      :justify-content "center"}}
-    [:div {:style {:font-size "80px"
-                   :font-family "Vampiro One, cursive"}}
-      "Diaper Time"]])
-
+    [:nav#navbar
+      [:div#headline.headfont
+        {:style {:margin-left "20px"
+                 :margin-top "30px"
+                 :text-align "center"}}
+        "Diaper Time"]]])
+        
 
 (def page-head
   [:head

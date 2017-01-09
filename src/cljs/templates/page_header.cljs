@@ -4,7 +4,8 @@
   [diaper-events]
   [:nav#navbar
     [:div#headline.headfont
-      {:style {:margin-left "20px"}}
+      {:style {:margin-left "20px"
+               :margin-top "30px"}}
       "Diaper Time"]
     (if (nil? @diaper-events)
       [:div]
@@ -15,13 +16,19 @@
                  :align-content "center"
                  :margin-right "20px"
                  :margin-left "20px"
-                 :text-align "right"}}
+                 :text-align "center"
+                 :border "3px solid #FFA8DF"
+                 :padding "20px"
+                 :border-radius "100%"
+                 :margin-top "30px"}}
+
         [:div.headfont
-          {:style {:font-size "1.2em"}}
+          {:style {:font-size "1.6em"}}
           (:baby-name @diaper-events)]
         [:div.headfont
           {:style {:font-size "0.8em"}}
-          "logout"]])])
+          [:a {:href "/logout"}
+            "logout"]]])])
 
     ; [:div#socials.headfont
     ;   [:a
