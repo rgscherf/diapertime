@@ -15,7 +15,7 @@
             nil)
         name-error
           (if (not (< 1 (count (:name @user)) 20))
-            "Name must be (0 < X < 20) characters."
+            "Must be (0 < x < 20) characters."
             nil)
         password-error
         ;; these validation conditions are checked based on the
