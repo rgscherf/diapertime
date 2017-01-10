@@ -38,7 +38,6 @@
 ;; -------------------------
 ;; Routes
 
-
 (secretary/defroute "/" []
   (session/put! :current-page #'view-landing-page))
 

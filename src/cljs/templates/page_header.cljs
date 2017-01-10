@@ -1,5 +1,15 @@
 (ns templates.page-header)
 
+(defn base-header
+  []
+  [:nav#navbar
+    [:div#headline.headfont
+      {:style {:margin "30px auto"
+               :width "90%"
+               :text-align "center"}}
+      "Diaper Time"]
+    [:div]])
+
 (defn render-page-header
   [diaper-events]
   [:nav#navbar
@@ -17,9 +27,7 @@
                  :margin-right "20px"
                  :margin-left "20px"
                  :text-align "center"
-                 :border "3px solid #FFA8DF"
                  :padding "20px"
-                 :border-radius "100%"
                  :margin-top "30px"}}
 
         [:div.headfont
