@@ -4,7 +4,8 @@
             [ajax.core :as ajax]
             [secretary.core :as secretary :include-macros true]
             [templates.page-header :as header]
-            [templates.form-styles :as fs]))
+            [templates.form-styles :as fs]
+            [accountant.core :as accountant]))
 
 (defn- try-token-redirect
   [token]
@@ -14,10 +15,11 @@
        :format :json
        :handler (fn [body]
                   (if (= "ok" body)
-                    (secretary/dispatch! "/events")))})))
+                    (accountant/navigate! "/events")))})))
 
 
 (defn login-page []
+  (js/scroll 0 0)
   (let [login-atom (atom {:email ""
                           :password ""
                           :error false})
@@ -57,7 +59,7 @@
           [:div
             fs/form-submit-buttons-style
             [:button
-              (merge {:on-click #(secretary/dispatch! "/")}
+              (merge {:on-click #(accountant/navigate! "/")}
                      fs/form-button-style)
 
               "Back"]

@@ -14,7 +14,7 @@
 
 (defn view-landing-page []
   (landing-page/render-landing-page))
-
+  
 (defn view-diaper-events []
   (mainpage/main-page-container false))
 

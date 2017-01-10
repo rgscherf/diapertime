@@ -74,6 +74,8 @@
 
 (defn render-landing-page
   []
+  (do
+    (js/scroll 0 0))
   [:div
     {:style {:max-width "800px"
              :margin "0px auto"}}

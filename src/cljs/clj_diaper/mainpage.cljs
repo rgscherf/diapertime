@@ -54,7 +54,8 @@
       (get-events (if is-random
                       "/api/1/random"
                       "/api/1/data")
-                  diaper-events))
+                  diaper-events)
+      (js/scroll 0 0))
   (fn []
     [:div
       [render-page-header diaper-events]

@@ -3,7 +3,8 @@
             [ajax.core :as ajax]
             [secretary.core :as secretary]
             [templates.page-header :as header]
-            [templates.form-styles :as fs]))
+            [templates.form-styles :as fs]
+            [accountant.core :as accountant]))
 
 (defn- validate-assoc
   "Validate user atom input, then assoc new values into atom."
@@ -59,12 +60,13 @@
       fs/form-field-style
       [make-input data-source id-and-binding-name input-type data-field]
       [:div
-        {:style {:font-size "1.4em"}}
-        label]
-      (if desc
-        [:div
-          small-style
-          desc])
+        [:span
+          {:style {:font-size "1.4em"}}
+          label]
+        (if desc
+          [:span
+            small-style
+            (str " — " desc)])]
       (if-let [er (get-in @data-source [:errors error-field])]
         [:div
           small-style
@@ -72,6 +74,7 @@
 
 
 (defn signup-page []
+  (js/scroll 0 0)
   (let [user-atom (atom {:email ""
                          :name ""
                          :password ""
@@ -84,14 +87,14 @@
         [:div
           fs/form-container-flex-style
           [make-label-and-input "Email address"
-                                "Your login. We will never spam you."
+                                "You'll log in with this."
                                 user-atom
                                 "user-name"
                                 "text"
                                 :email
                                 :email-error]
           [make-label-and-input "Baby's name"
-                                "Nobody else will see this. Use a nickname!"
+                                "We keep this private."
                                 user-atom
                                 "baby-name"
                                 "text"
@@ -114,7 +117,7 @@
           [:div
             fs/form-submit-buttons-style
             [:button
-              (merge {:on-click #(secretary/dispatch! "/")}
+              (merge {:on-click #(accountant/navigate! "/")}
                      fs/form-button-style)
 
               "Back"]
@@ -130,7 +133,7 @@
                                     :password (:password @user-atom)}
                            :format :json
                            :handler (fn [body]
-                                      (secretary/dispatch! "/login"))})))
+                                      (accountant/navigate! "/login"))})))
                   :disabled (not (is-user-valid?))}
                 fs/form-button-style)
               "Go!"]]]])))
