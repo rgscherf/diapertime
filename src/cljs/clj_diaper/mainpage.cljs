@@ -61,8 +61,14 @@
       [render-page-header diaper-events]
       [:div
         (if (empty? @diaper-events)
-            [waiting-for-table is-random]
-            [:div
-              [:div#outerContainer
-                [render-sidebar page-state new-event event-template]
-                [render-events-table diaper-events page-state new-event]]])]]))
+          [waiting-for-table is-random]
+          [:div
+            {:style {:display "flex"
+                     :flex-direction "column"
+                     :justify-content "flex-start"
+                     :align-items "center"
+                     :width "90%"
+                     :margin "30px auto"
+                     :max-width "660px"}}
+            [render-sidebar page-state new-event event-template]
+            [render-events-table diaper-events page-state new-event]])]]))

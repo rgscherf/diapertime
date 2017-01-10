@@ -67,13 +67,13 @@
                (utils/percentile-suffix time-percentile)
                " percentile")]])])
 
-; keys for metrics:
-; feed-percentile
-; awake-percentile
-; awake-for
-; slept-for
-; slept-percentile
 (defn render-row
+  ; keys for metrics:
+  ; feed-percentile
+  ; awake-percentile
+  ; awake-for
+  ; slept-for
+  ; slept-percentile
   [row-map]
   (let [{:keys [_id attended pee poop feed slept metrics]} row-map
         {:keys [feed-percentile awake-percentile awake-for slept-for slept-percentile]} metrics]
@@ -87,8 +87,8 @@
 
 (defn render-events-table
   [diaper-events page-state new-event]
-  [:table#mainTable.table.table-hover
-    [render-header-row] 
+  [:table
+    [render-header-row]
     [:tbody
       ;; input row
       (if (:new @page-state)

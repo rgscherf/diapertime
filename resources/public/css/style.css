@@ -63,31 +63,11 @@ a:visited {
 
 #outerContainer {
   display:flex;
-  overflow-wrap: break-word;
-  flex-direction: row;
-}
-
-#graphing > button {
-  margin-bottom: 20px;
-  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-}
-#graphing {
-  min-width: 180px;
-  padding: 0px 10px;
-  flex: 0 0 auto;
-  display:flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-#innerContainer {
-  margin: 0px 20px;
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 auto;
+  overflow-wrap: break-word;
+  width: 90%;
 }
 
 .newEntryTd {
@@ -125,7 +105,6 @@ button {
   border: none;
   padding: 10px 20px;
   border-radius: 2px;
-  box-shadow: 1px 2px #FFA8DF;
 }
 
 .ghostButton {
@@ -145,7 +124,6 @@ button {
 
 .largeInput {
   width: 160px;
-  margin-bottom: 20px;
 }
 
 body {
@@ -157,13 +135,8 @@ body {
 
 
 /* Responsive tables */
-
 table {
   border: 1px solid #ccc;
-  width: 80%;
-  margin-left: auto;
-  margin-right: auto;
-  padding:0;
   border-collapse: collapse;
   border-spacing: 0;
   text-align: left;
@@ -184,22 +157,7 @@ table th {
   letter-spacing: 1px;
 }
 
-@media screen and (max-width: 900px) {
-  #outerContainer {
-    flex-direction: column;
-  }
-  #graphing {
-    flex-direction: row;
-    margin-left: 10px;
-    flex-wrap: wrap;
-  }
-
-  #graphing > button {
-    margin-right: 20px;
-  }
-}
-
-@media screen and (max-width: 690px) {
+@media screen and (max-width: 650px) {
 
   .tdFlexDiv {
     justify-content: flex-end;
@@ -215,6 +173,7 @@ table th {
 
   table {
     border: 0;
+    width: 100%;
   }
 
   table thead {

@@ -85,8 +85,9 @@
               "Go!"]]
           (if (:error @login-atom)
             [:div
-              {:style {:width "300px"
+              {:style {:width "349px"
                        :display "flex"
                        :justify-content "flex-end"
-                       :margin-top "20px"}}
+                       :margin-top "20px"
+                       :color "#FFA8DF"}}
               "Username/password not found!"])]])))

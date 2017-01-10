@@ -14,7 +14,7 @@
 
 (defn view-landing-page []
   (landing-page/render-landing-page))
-  
+
 (defn view-diaper-events []
   (mainpage/main-page-container false))
 
@@ -29,7 +29,7 @@
 
 (defn logout []
   (let [_ (cookies/remove! "auth-token")
-        __ (secretary/dispatch! "/")]
+        __ (accountant/navigate! "/")]
     [:div]))
 
 (defn current-page []
