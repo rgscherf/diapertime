@@ -2,7 +2,7 @@
 
 (defn base-header
   []
-  [:nav#navbar
+  [:nav 
     [:div#headline.headfont
       {:style {:margin "30px auto"
                :width "90%"

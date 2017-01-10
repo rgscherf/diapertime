@@ -27,7 +27,9 @@
       [:div
         [header/base-header]
         [:div
-          fs/form-container-flex-style
+          (assoc-in fs/form-container-flex-style
+                    [:style :margin-top]
+                    "60px")
           [:div
             fs/form-field-style
             [:input (merge {:id "email"
@@ -37,7 +39,9 @@
                             :on-change #(swap! login-atom assoc :email (-> % .-target .-value))}
                            fs/form-text-input-style)]
             [:div
-              [:label "Email address"]]]
+              [:label
+                {:style {:font-size "1.4em"}}
+                "Email address"]]]
           [:div
             fs/form-field-style
             [:input (merge {:id "password"
@@ -47,13 +51,11 @@
                             :on-change #(swap! login-atom assoc :password (-> % .-target .-value))}
                            fs/form-text-input-style)]
             [:div
-              [:label "Password"]]]
+              [:label
+                {:style {:font-size "1.4em"}}
+                "Password"]]]
           [:div
-            {:style {:width "300px"
-                     :display "flex"
-                     :justify-content "flex-end"
-                     :align-items "center"
-                     :margin-top "20px"}}
+            fs/form-submit-buttons-style
             [:button
               (merge {:on-click #(secretary/dispatch! "/")}
                      fs/form-button-style)

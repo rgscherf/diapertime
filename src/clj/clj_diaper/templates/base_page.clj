@@ -13,7 +13,6 @@
                  :margin-top "30px"
                  :text-align "center"}}
         "Diaper Time"]]])
-        
 
 (def page-head
   [:head
