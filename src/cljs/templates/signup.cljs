@@ -53,7 +53,8 @@
 (defn- make-label-and-input
   "Render a label, then call the input field and error field functions"
   [label desc data-source id-and-binding-name input-type data-field error-field]
-  (let [small-style {:style {:opacity "0.7"}}]
+  (let [small-style {:style {:opacity "0.7"
+                             :font-size "0.95em"}}]
     [:div
       fs/form-field-style
       [make-input data-source id-and-binding-name input-type data-field]
