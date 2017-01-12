@@ -3,8 +3,8 @@
   background-color: #321F47;
   margin-top: 20px;
   margin-bottom: 40px;
-  display:flex;
-  justify-content: space-between;
+  display: flex;
+  justify-content: center;
   align-content: center;
   align-items: center;
   flex-wrap: wrap;

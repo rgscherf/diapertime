@@ -1,62 +1,114 @@
 (ns templates.sidebar)
 
-(def summary {:time-slept ["Slept last 24h" 540]
-              :avg-slept ["Avg sleep last 24h" 90]
-              :time-awake ["Awake last 24h" 300]
-              :avg-awake ["Avg awake last 24h" 30]
-              :times-peed ["Peed last 24h" 8]
-              :times-pooped ["Pooped last 24h" 2]})
+(defn- render-control-buttons
+  [state-atom new-event-atom event-template adding-new-event]
+  [:div
+    {:style {:display "flex"
+             :flex-direction "column"
+             :justify-content "flex-end"
+             :flex "1"
+             :align-items "center"
+             :margin-left "40px"}}
+    (if adding-new-event
+      [:button.smallInput
+        {:style {:width "100px"
+                 :height "35px"
+                 :margin-bottom "5px"}
+         :on-click
+          #(do (swap! state-atom assoc :new (not adding-new-event))
+               (reset! new-event-atom event-template))}
+        "Cancel"])
+    (if adding-new-event
+      [:button.smallInput
+        {:style {:width "100px"
+                 :height "35px"}}
+        "Post!"])
+    (if (not adding-new-event)
+      [:button.smallInput
+        {:on-click
+          #(do (swap! state-atom assoc :new (not adding-new-event))
+               (reset! new-event-atom event-template))
+         :style {:width "100px"
+                 :height "77px"
+                 :font-size "1.2em"}}
+        "New event"])])
 
-(defn- render-summary-col
-  [[desc-a val-a] [desc-b val-b]]
-  (let [desc-style
-        {:style {:flex "1"
-                 :opacity "0.38"
-                 :display "flex"
-                 :justify-content "flex-end"
-                 :align-items "center"
-                 :text-align "right"
-                 :font-size "0.9em"}}
-        val-style
-        {:style {:flex "1"
-                 :display "flex"
-                 :justify-content "flex-start"
-                 :align-items "center"
-                 :font-size "2em"
-                 :padding "0 10px"}}]
-    [:div
-      {:style {:flex "1"
-               :display "flex"
-               :flex-direction "column"}}
-      [:div
-        {:style {:display "flex"
-                 :flex "1"}}
-        [:div
-          desc-style
-          desc-a]
-        [:div
-          val-style
-          [:div val-a]]]
-      [:div
-        {:style {:display "flex"
-                 :flex "1"}}
-        [:div
-          desc-style
-          desc-b]
-        [:div
-          val-style
-          [:div val-b]]]]))
+(defn- summary-box-value
+  [value]
+  [:div
+    {:style {:flex "1"
+             :font-size "1.1em"}}
+    value])
 
-(defn- render-summary
-  "summary info baby's last 24 hours."
+(defn- summary-box-description
+  [desc]
+  [:div
+    {:style {:flex "1"
+             :font-size "0.9em"}}
+    desc])
+
+(defn- summary-box
+  [value desc]
+  [:div
+    {:style {:flex "1"
+             :display "flex"
+             :flex-direction "column"}}
+    [summary-box-value value]
+    [summary-box-description desc]])
+
+(defn- summary-box-container
   []
   [:div
-    {:style {:width "75%"
-             :height "120px"
-             :display "flex"}}
-    [render-summary-col (:time-slept summary) (:avg-slept summary)]
-    [render-summary-col (:time-awake summary) (:avg-awake summary)]
-    [render-summary-col (:times-peed summary) (:times-pooped summary)]])
+    {:style {:display "flex"
+             :font-size "0.9em"
+             :padding "5px"
+             :text-align "center"}}
+    [summary-box "15:30" "slept"]
+    [summary-box "1:23" "avg slept"]
+    [summary-box "8x" "peed"]
+    [summary-box "3x" "pooped"]
+    [summary-box "800ml" "ate"]])
+
+(defn- summary-label
+  []
+  [:div
+    {:style {:font-size "0.9em"
+             :background-color "#FFA8DF"
+             :color "#321F47"
+             :font-family "'Vampiro One', cursive"
+             :padding "2px"
+             :padding-left "5px"}}
+    "Last 24 hours"])
+
+(defn- render-omnibox
+  "pink color: #FFA8DF
+  background color: #321F47
+  white color: #ccc
+  "
+  []
+  [:div
+    {:style {:display "flex"
+             :flex-direction "column"
+             :justify-content "flex-start"
+             :align-items "flex-start"
+             :width "100%"}}
+    ;; baby name and logout
+    [:div
+      {:style {:margin-bottom "5px"}}
+      [:span
+        {:style {:font-size "2em"}}
+        "Hildabeast "]
+      [:a {:href "/logout"
+           :style {:font-size "0.9em"}}
+        "logout"]]
+    [:div
+      {:style {:border "2px solid #FFA8DF"
+               :width "100%"}}
+      ;; summary label
+      [summary-label]
+      [summary-box-container]]])
+
+
 
 (defn render-sidebar
   [state-atom new-event-atom event-template]
@@ -64,45 +116,14 @@
     [:div
       {:style {:display "flex"
                :justify-content "space-between"
-               :align-items "center"
                :width "100%"
-               :margin-bottom "20px"}}
+               :margin-bottom "40px"
+               :padding-top "10px"}}
       ;; events summary
-      [render-summary]
+      [render-omnibox]
+      ; [render-summary]
       ;; interation buttons
-      [:div
-        {:style {:display "flex"
-                 :flex-direction "column"
-                 :justify-content "space-around"
-                 :height "100%"
-                 :min-height "120px"
-                 :align-items "center"
-                 :margin-left "20px"}}
-        (if adding-new-event
-          [:button.larginInput
-            {:style {:width "150px"
-                     :height "50px"}
-             :on-click
-              #(do (swap! state-atom assoc :new (not adding-new-event))
-                   (reset! new-event-atom event-template))}
-            "Cancel"])
-        (if adding-new-event
-          [:button.larginInput
-            {:style {:width "150px"
-                     :height "50px"}}
-            "Post!"])
-        (if (not adding-new-event)
-          [:button.largeInput
-            {:on-click
-              #(do (swap! state-atom assoc :new (not adding-new-event))
-                   (reset! new-event-atom event-template))
-             :style {:width "150px"
-                     :height "120px"}}
-            "New event"])]]))
-          ;
-          ; (if adding-new-event
-          ;   "Cancel"
-          ;   "New Event"))
-        ; (if adding-new-event
-        ;   [:button.largeInput
-        ;     "Ok, post!"])]]))
+      [render-control-buttons state-atom
+                              new-event-atom
+                              event-template
+                              adding-new-event]]))

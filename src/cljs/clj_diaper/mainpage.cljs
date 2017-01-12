@@ -1,6 +1,6 @@
 (ns clj-diaper.mainpage
   (:require [reagent.core :refer [atom]]
-            [templates.page-header :refer [render-page-header]]
+            [templates.page-header :as header :refer [render-page-header]]
             [templates.sidebar :refer [render-sidebar]]
             [templates.events-table :refer [render-events-table]]
             [ajax.core :as ajax]
@@ -32,7 +32,10 @@
 (defn waiting-for-table
   [is-random]
   [:div
-    {:style {:display "flex" :flex-direction "column" :align-items "center"}}
+    {:style {:display "flex"
+             :flex-direction "column"
+             :align-items "center"
+             :margin-top "90px"}}
     [:div.topBottomSpace
       [:i {:class "fa fa-refresh fa-spin fa-4x fa-fw"}]]
     [:div.topBottomSpace
@@ -58,7 +61,8 @@
       (js/scroll 0 0))
   (fn []
     [:div
-      [render-page-header diaper-events]
+      [header/base-header]
+      ; [render-page-header diaper-events]
       [:div
         (if (empty? @diaper-events)
           [waiting-for-table is-random]
