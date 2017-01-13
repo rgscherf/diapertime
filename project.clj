@@ -24,7 +24,8 @@
                  [cheshire "5.1.1"]
                  [cljs-ajax "0.5.8"]
                  [com.andrewmcveigh/cljs-time "0.4.0"]
-                 [digest "1.4.5"]]
+                 [digest "1.4.5"]
+                 [ring/ring-json "0.4.0"]]
 
   :plugins [[lein-environ "1.0.2"]
             [lein-cljsbuild "1.1.1"]
@@ -69,7 +70,7 @@
                         :source-map true
                         :optimizations :none
                         :pretty-print  true}}}}
-                        
+
   :figwheel {:http-server-root "public"
              :server-port 3449
              :nrepl-port 7002

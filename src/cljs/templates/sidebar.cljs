@@ -1,12 +1,13 @@
-(ns templates.sidebar)
+(ns templates.sidebar
+  (:require [ajax.core :as ajax]
+            [reagent.cookies :as cookies]))
 
 (defn- render-control-buttons
-  [state-atom new-event-atom event-template adding-new-event]
+  [state-atom new-event-atom event-template adding-new-event diaper-events]
   [:div
     {:style {:display "flex"
              :flex-direction "column"
              :justify-content "flex-end"
-             :flex "1"
              :align-items "center"
              :margin-left "40px"}}
     (if adding-new-event
@@ -21,15 +22,35 @@
     (if adding-new-event
       [:button.smallInput
         {:style {:width "100px"
-                 :height "35px"}}
+                 :height "35px"}
+         :on-click
+           #(let [post-url (if (:demo @state-atom)
+                               "/echo"
+                               "/newevent")
+                  post-params {:auth-token (cookies/get "auth-token")
+                               :events (:events @diaper-events)
+                               :new-event @new-event-atom}]
+              (do
+                (println post-params)
+                (ajax/POST post-url
+                  {:format :json
+                   :response-format :json
+                   :keywords? true
+                   :params post-params
+                   :handler (fn new-events-from-server
+                               [body]
+                               (swap! diaper-events assoc :events body))})
+                (swap! state-atom assoc :new (not adding-new-event))
+                (reset! new-event-atom event-template)))}
         "Post!"])
     (if (not adding-new-event)
       [:button.smallInput
         {:on-click
-          #(do (swap! state-atom assoc :new (not adding-new-event))
-               (reset! new-event-atom event-template))
+          #(do
+            (swap! state-atom assoc :new (not adding-new-event))
+            (reset! new-event-atom event-template))
          :style {:width "100px"
-                 :height "77px"
+                 :height "100%"
                  :font-size "1.2em"}}
         "New event"])])
 
@@ -80,19 +101,31 @@
              :padding-left "5px"}}
     "Last 24 hours"])
 
+(defn- summary-and-action-buttons
+  [state-atom new-event-atom event-template adding-new-event diaper-events]
+  [:div
+    {:style {:width "100%"
+             :display "flex"
+             :justify-content "space-between"}}
+    [:div
+      {:style {:border "2px solid #FFA8DF"
+               :width "100%"}}
+      [summary-label]
+      [summary-box-container]]
+    [render-control-buttons state-atom
+                            new-event-atom
+                            event-template
+                            adding-new-event
+                            diaper-events]])
+
 (defn- render-omnibox
-  "pink color: #FFA8DF
-  background color: #321F47
-  white color: #ccc
-  "
-  []
+  [state-atom new-event-atom event-template adding-new-event diaper-events]
   [:div
     {:style {:display "flex"
              :flex-direction "column"
              :justify-content "flex-start"
              :align-items "flex-start"
              :width "100%"}}
-    ;; baby name and logout
     [:div
       {:style {:margin-bottom "5px"}}
       [:span
@@ -101,17 +134,15 @@
       [:a {:href "/logout"
            :style {:font-size "0.9em"}}
         "logout"]]
-    [:div
-      {:style {:border "2px solid #FFA8DF"
-               :width "100%"}}
-      ;; summary label
-      [summary-label]
-      [summary-box-container]]])
-
+    [summary-and-action-buttons state-atom
+                                new-event-atom
+                                event-template
+                                adding-new-event
+                                diaper-events]])
 
 
 (defn render-sidebar
-  [state-atom new-event-atom event-template]
+  [state-atom new-event-atom event-template diaper-events]
   (let [adding-new-event (:new @state-atom)]
     [:div
       {:style {:display "flex"
@@ -119,11 +150,8 @@
                :width "100%"
                :margin-bottom "40px"
                :padding-top "10px"}}
-      ;; events summary
-      [render-omnibox]
-      ; [render-summary]
-      ;; interation buttons
-      [render-control-buttons state-atom
-                              new-event-atom
-                              event-template
-                              adding-new-event]]))
+      [render-omnibox state-atom
+                      new-event-atom
+                      event-template
+                      adding-new-event
+                      diaper-events]]))

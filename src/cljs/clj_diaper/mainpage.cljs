@@ -45,16 +45,17 @@
           "Hold on, loading data...")]]])
 
 (defn reset-page-atoms
-  []
+  [is-demo-page?]
   (do
     (reset! diaper-events)
-    (reset! page-state {:new false})
+    (reset! page-state {:new false
+                        :demo is-demo-page?})
     (reset! new-event event-template)))
 
 (defn main-page-container
-  [is-random]
-  (do (reset-page-atoms)
-      (get-events (if is-random
+  [is-demo-page?]
+  (do (reset-page-atoms is-demo-page?)
+      (get-events (if is-demo-page?
                       "/api/1/random"
                       "/api/1/data")
                   diaper-events)
@@ -62,10 +63,9 @@
   (fn []
     [:div
       [header/base-header]
-      ; [render-page-header diaper-events]
       [:div
         (if (empty? @diaper-events)
-          [waiting-for-table is-random]
+          [waiting-for-table is-demo-page?]
           [:div
             {:style {:display "flex"
                      :flex-direction "column"
@@ -74,5 +74,5 @@
                      :width "90%"
                      :margin "30px auto"
                      :max-width "660px"}}
-            [render-sidebar page-state new-event event-template]
+            [render-sidebar page-state new-event event-template diaper-events]
             [render-events-table diaper-events page-state new-event]])]]))

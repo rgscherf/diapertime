@@ -10,6 +10,10 @@
               [templates.signup :as signup]
               [templates.landing-page :as landing-page]))
 
+;; BROWSER CONSOLE PRINTING
+
+(enable-console-print!)
+
 ;; VIEW FUNCTIONS
 
 (defn view-landing-page []
