@@ -51,12 +51,3 @@
   []
   (map #(assoc % :_id (random-id 10))
     (reduce-through-dates 50)))
-
-; (let [hild (coll/find-one-as-map
-;               db/database
-;               db/babies
-;               {:baby-name "hilda"})]
-;   (coll/update-by-id db/database
-;                      db/babies
-;                      (:_id hild)
-;                      (assoc hild :events (into [] (reduce-through-dates 10)))))
