@@ -30,15 +30,17 @@
   ;; and sum the rest of the slept times.
   (let [events-since (filter #(time/after? (:attended %) target-time)
                              events)]
+    ;; todo
+    ;; sum sleep
     {:amt-slept nil
      :amt-poops (sum-seq-with-fn #(if (= 0 (:poop %))
                                       0
                                       1)
                                  events-since)
-     :amt-peed (sum-seq-with-fn #(if (:pee %) 1 0)
-                                events-since)
-     :amt-ate (sum-seq-with-fn :feed
-                               events-since)}))
+     :amt-peed  (sum-seq-with-fn #(if (:pee %) 1 0)
+                                 events-since)
+     :amt-ate   (sum-seq-with-fn :feed
+                                 events-since)}))
 
 (comment
   (def evs (random/random-events-history))
@@ -56,3 +58,6 @@
   [events]
   (summarize-from-time (get-yesterday)
                        events))
+  ;; todo: return map of
+  ;; {:yesterday {summary}
+  ;;  :midnight {summary}

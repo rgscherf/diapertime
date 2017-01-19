@@ -4,6 +4,7 @@
             [reagent.core :refer [atom]]
             [cljs-time.format :as format :refer [formatters]]
             [cljs-time.local :as local]
+            [cljs-time.core :as time]
             [clj-diaper.utils :as utils :refer [small-font-size large-font-size]]))
 
 ;;;;;;;;;;;;
@@ -12,7 +13,9 @@
 
 (defn format-date-from-db
   [date-string]
-  (let [ parsed-dt (local/from-local-string date-string)
+  (let [ parsed (local/from-local-string date-string)
+         parsed-dt (time/minus parsed
+                               (time/minutes (.getTimezoneOffset (js/Date.))))
          formatted-date (format/unparse (format/formatter "MM/dd") parsed-dt)
          formatted-time (format/unparse (format/formatter "h:mm a") parsed-dt)]
     [:div
