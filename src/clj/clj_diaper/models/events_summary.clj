@@ -22,7 +22,7 @@
   - # poops
   - # pees
   - amt ate"
-  [events target-time]
+  [target-time events]
   ; TODO:
   ;; remember when adding total slept time,
   ;; for FIRST event, only add (interval target-time (:attended first))
@@ -35,12 +35,18 @@
                                       0
                                       1)
                                  events-since)
-     :amt-peed (sum-seq-with-fn #(if (:pee %) 1 0) events-since)
-     :amt-ate (sum-seq-with-fn :feed events-since)}))
+     :amt-peed (sum-seq-with-fn #(if (:pee %) 1 0)
+                                events-since)
+     :amt-ate (sum-seq-with-fn :feed
+                               events-since)}))
 
 (comment
   (def evs (random/random-events-history))
   (def tar (get-yesterday))
+  (def clean-events (random/random-events-history))
+  (summarize clean-events)
+  (count clean-events)
+  (count (summarize clean-events))
   (sum-seq-with-fn :feed evs))
 
 (defn summarize
@@ -48,13 +54,5 @@
   1. now, minus 24 hours
   2. from midnight to now."
   [events]
-  (summarize-from-time events
-                       (get-yesterday)))
-
-(comment
-  (def clean-events (random/random-events-history))
-  (summarize clean-events)
-  (count clean-events)
-  (count (summarize clean-events))
-  (summarize nil)
-  (time/now))
+  (summarize-from-time (get-yesterday)
+                       events))
