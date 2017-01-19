@@ -31,15 +31,14 @@
                                :events (:events @diaper-events)
                                :new-event @new-event-atom}]
               (do
-                (println post-params)
                 (ajax/POST post-url
                   {:format :json
                    :response-format :json
                    :keywords? true
                    :params post-params
                    :handler (fn new-events-from-server
-                               [body]
-                               (swap! diaper-events assoc :events body))})
+                               [{:keys [events summary]}]
+                               (swap! diaper-events assoc :events events :summary summary))})
                 (swap! state-atom assoc :new (not adding-new-event))
                 (reset! new-event-atom event-template)))}
         "Post!"])
