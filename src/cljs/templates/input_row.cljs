@@ -59,16 +59,21 @@
       (local/local-now)
       (time/minutes delta))))
 
+(defn target-date-after-update-field?
+  [date-to-test field]
+  (time/after? date-to-test (time/minus (local/local-now)
+                                        (time/minutes field))))
 (defn render-input-row
-  [new-event]
-  (let [btn (partial input-button "smallInput" new-event)]
+  [new-event firstev]
+  (let [btn (partial input-button "smallInput" new-event)
+        first-slept (format/parse (format/formatters :date-time) (:slept firstev))]
     [:tr
       ;; attended
       (input-td
         (btn
           #(swap! new-event assoc :attend-delta
             (+ 15 (:attend-delta @new-event)))
-          noop-handler
+          #(target-date-after-update-field? first-slept (+ 15 (:attend-delta %)))
           "+ 15 min")
         [:div
           (new-entry-span
@@ -82,7 +87,8 @@
             (- (:attend-delta @new-event) 15))
           #(or
             (<= (:attend-delta %) (:sleep-delta %))
-            (= 0 (:attend-delta %)))
+            (= 0 (:attend-delta %))
+            (target-date-after-update-field? first-slept (- 15 (:sleep-delta %))))
           "- 15 min"))
 
       (input-td
@@ -130,8 +136,9 @@
         (btn
           #(swap! new-event assoc :sleep-delta
             (+ 15 (:sleep-delta @new-event)))
-          #(<= (:attend-delta %)
-               (:sleep-delta %))
+          #(or (<= (:attend-delta %)
+                   (:sleep-delta %))
+               (target-date-after-update-field? first-slept (+ 15 (:sleep-delta %))))
           "+ 15 min")
         [:div
           (new-entry-span
@@ -143,5 +150,6 @@
         (btn
           #(swap! new-event assoc :sleep-delta
             (- (:sleep-delta @new-event) 15))
-          #(= 0 (:sleep-delta %))
+          #(or (= 0 (:sleep-delta %))
+               (target-date-after-update-field? first-slept (- 15 (:sleep-delta %))))
           "- 15 min"))]))

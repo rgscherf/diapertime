@@ -14,7 +14,8 @@
                      :poop 0
                      :feed 0
                      :feed-unit :ml
-                     :sleep-delta 0})
+                     :sleep-delta 0
+                     :_id "abracadabra"})
 (defonce page-state (atom {:new false}))
 (defonce new-event  (atom event-template))
 (defonce diaper-events (atom nil))

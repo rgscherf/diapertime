@@ -1,6 +1,27 @@
 (ns templates.sidebar
   (:require [ajax.core :as ajax]
-            [reagent.cookies :as cookies]))
+            [reagent.cookies :as cookies]
+            [cljs-time.core :as time]
+            [cljs-time.local :as local]
+            [cljs-time.format :as format]))
+
+(defn- time-string-from-delta
+  [delta]
+  (let [now (time/minus (local/local-now)
+                        (time/minutes delta))]
+    (format/unparse (format/formatters :date-time)
+                    now)))
+
+(defn- temp-new-event
+  "From deltas atom (given by input row), return single event map to be consed onto event list.
+  Purely for optimistic rendering while we wait for the full updated events list from server."
+  [{:keys [attend-delta sleep-delta pee poop feed]}]
+  {:feed feed
+   :poop poop
+   :pee pee
+   :attended (time-string-from-delta attend-delta)
+   :slept (time-string-from-delta sleep-delta)
+   :_id "abracadabraz"})
 
 (defn- render-control-buttons
   [state-atom new-event-atom event-template adding-new-event diaper-events]
@@ -39,6 +60,8 @@
                    :handler (fn new-events-from-server
                                [{:keys [events summary]}]
                                (swap! diaper-events assoc :events events :summary summary))})
+                (swap! diaper-events assoc :events (cons (temp-new-event @new-event-atom)
+                                                         (:events @diaper-events)))
                 (swap! state-atom assoc :new (not adding-new-event))
                 (reset! new-event-atom event-template)))}
         "Post!"])

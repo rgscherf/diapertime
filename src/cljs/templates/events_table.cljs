@@ -96,7 +96,7 @@
       [:tbody
         ;; input row
         (if (:new @page-state)
-          [render-input-row new-event])
+          [render-input-row new-event (first (:events @diaper-events))])
         ;; past events
         (map render-row (:events @diaper-events))]]
     [:div
