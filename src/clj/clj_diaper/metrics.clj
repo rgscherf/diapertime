@@ -54,6 +54,14 @@
   [acc new]
   (conj acc (interval-calc acc new)))
 
+(defn total-sleep-in-range
+  [events]
+  (->> events
+       (sort-by :attended)
+       (reduce gather-sleep-interval [])
+       (map :slept-for)
+       (reduce + 0)))
+
 (defn- sleep-interval-fold
   "reducer to calculate sleep percentiles
   we need to see this-event and prev-event

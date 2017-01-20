@@ -1,6 +1,7 @@
 (ns clj-diaper.models.events-summary
   (:require [clj-time.core :as time]
-            [clj-diaper.models.random :as random]))
+            [clj-diaper.models.random :as random]
+            [clj-diaper.metrics :as metrics]))
 
 (def test-data
   {:auth-token nil
@@ -30,9 +31,7 @@
   ;; and sum the rest of the slept times.
   (let [events-since (filter #(time/after? (:attended %) target-time)
                              events)]
-    ;; todo
-    ;; sum sleep
-    {:amt-slept nil
+    {:amt-slept (metrics/total-sleep-in-range events-since)
      :amt-poops (sum-seq-with-fn #(if (= 0 (:poop %))
                                       0
                                       1)
@@ -57,6 +56,8 @@
   2. from midnight to now."
   [events]
   (summarize-from-time (get-yesterday)
+                       events)
+  (summarize-from-time (time/today-at-midnight)
                        events))
   ;; todo: return map of
   ;; {:yesterday {summary}

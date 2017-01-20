@@ -53,13 +53,14 @@
      :pee pee
      :poop poop
      :feed feed
-     :slept slept-time}))
+     :slept slept-time
+     :_id (random/random-id 10)}))
 
 (defn- persist-event
   "Save event to DB if user is real, or nil"
   [user new-event is-real-user?]
   nil)
-
+  
 (defn- parse-date
   [d]
   (format/parse (format/formatters :date-time) d))
