@@ -14,7 +14,6 @@ I built Diaper Time because nothing else provided a quick, elegant way to track 
 - Save new user events to db
 - Button to toggle percentile info
 - Offer summary choice of last-24-hours or since-midnight
-- Login/registration text fields max width 90%, for phones
 - New event feed defaults to avg of last X feeds
 
 ## Features - Not Quick
@@ -25,4 +24,7 @@ I built Diaper Time because nothing else provided a quick, elegant way to track 
 ## Bugs
 
 - Fix display of "0th percentile"
+
+# DONE!
+- Login/registration text fields max width 90%, for phones
 - Occasional misrender of minutes/seconds (ex 2:90)
