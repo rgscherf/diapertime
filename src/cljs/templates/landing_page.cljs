@@ -18,11 +18,17 @@
   (let [is-login (= type :login)
         glyph (str "fa fa-" (if is-login "sign-in" "user-plus"))]
     [:div
-      (action-box-style 40)
-      [:a.landingLink {:href (if is-login "/login" "/signup")}
+      (action-box-style 50)
+      [:a.landingLink {:href (if is-login "/login" "/signup")
+                       :style {:display "flex"
+                               :justify-content "center"
+                               :align-items "center"
+                               :flex-wrap "wrap"}}
         [:i {:class glyph :aria-hidden "true"
              :style {:margin-right "10px" :color "#FFA8DF"}}]
         [:span
+            {:style {:width "120px"
+                     :text-align "center"}}
             (if is-login "Log in" "Sign up")]]]))
 
 (defn- signup-box

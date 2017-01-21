@@ -29,9 +29,9 @@
 (defn render-feed
   [feed-amount feed-percentile]
   [:td
-    {:style {:text-align "right"}}
+    {:style {:text-align "right"}
+     :data-label "Fed"}
     [:div
-      {:data-label "Fed"}
       (str (utils/round-to-ten-mls feed-amount) " mL")]
     [:div
       {:class "faded" :style small-font-size}

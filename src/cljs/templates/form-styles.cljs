@@ -2,6 +2,7 @@
 
 (def form-container-flex-style
   {:style {:width "351px"
+           :max-width "90%"
            :padding "30px"
            :margin "0px auto"
            :display "flex"
@@ -15,6 +16,7 @@
            :justify-content "center"
            :align-items "flex-start"
            :width "350px"
+           :max-width "90%"
            :margin-bottom "30px"
            :color "#FFA8DF"}})
 
@@ -39,6 +41,7 @@
 
 (def form-submit-buttons-style
   {:style {:width "349px"
+           :max-width "90%"
            :display "flex"
            :justify-content "flex-end"
            :align-items "center"

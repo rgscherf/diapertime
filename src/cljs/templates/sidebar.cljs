@@ -73,7 +73,8 @@
             (reset! new-event-atom event-template))
          :style {:width "100px"
                  :height "100%"
-                 :font-size "1.2em"}}
+                 :font-size "1.2em"
+                 :min-height "80px"}}
         "New event"])])
 
 (defn- summary-box-value
