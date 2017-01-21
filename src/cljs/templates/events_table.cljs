@@ -90,14 +90,11 @@
 
 (defn render-events-table
   [diaper-events page-state new-event]
-  [:div
-    [:table
-      [render-header-row]
-      [:tbody
-        ;; input row
-        (if (:new @page-state)
-          [render-input-row new-event (first (:events @diaper-events))])
-        ;; past events
-        (map render-row (:events @diaper-events))]]
-    [:div
-      (str (:debug-event-response @page-state))]])
+  [:table
+    [render-header-row]
+    [:tbody
+      ;; input row
+      (if (:new @page-state)
+        [render-input-row new-event (first (:events @diaper-events))])
+      ;; past events
+      (map render-row (:events @diaper-events))]])

@@ -173,6 +173,7 @@ table th {
 
   table {
     border: 0;
+    min-width: 320px;
     width: 100%;
   }
 

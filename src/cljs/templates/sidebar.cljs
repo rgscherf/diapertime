@@ -108,7 +108,6 @@
              :padding "5px"
              :text-align "center"}}
     [summary-box "15:30" "slept"]
-    [summary-box "1:23" "avg slept"]
     [summary-box "8x" "peed"]
     [summary-box "3x" "pooped"]
     [summary-box "800ml" "ate"]])
