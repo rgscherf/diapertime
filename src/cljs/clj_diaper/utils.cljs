@@ -16,7 +16,7 @@
   (let [ min-hr (minutes-to-hours n)
          minute-string (let [minutes (second min-hr)]
                           (if (< minutes 10)
-                              (str minutes "0")
+                              (str "0" minutes)
                               minutes))]
     (str (first min-hr) ":" minute-string)))
 
