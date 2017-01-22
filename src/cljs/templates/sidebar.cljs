@@ -3,7 +3,8 @@
             [reagent.cookies :as cookies]
             [cljs-time.core :as time]
             [cljs-time.local :as local]
-            [cljs-time.format :as format]))
+            [cljs-time.format :as format]
+            [clj-diaper.utils :as utils]))
 
 (defn- time-string-from-delta
   [delta]
@@ -21,7 +22,34 @@
    :pee pee
    :attended (time-string-from-delta attend-delta)
    :slept (time-string-from-delta sleep-delta)
-   :_id "abracadabraz"})
+   :_id (utils/random-string)})
+
+(defn- submit-button
+  [state-atom new-event-atom event-template adding-new-event diaper-events]
+  [:button.smallInput
+    {:style {:width "100px"
+             :height "35px"}
+     :on-click
+       #(let [post-url (if (:demo @state-atom)
+                           "/echo"
+                           "/newevent")
+              post-params {:auth-token (cookies/get "auth-token")
+                           :events (:events @diaper-events)
+                           :new-event @new-event-atom}]
+          (do
+            (ajax/POST post-url
+              {:format :json
+               :response-format :json
+               :keywords? true
+               :params post-params
+               :handler (fn new-events-from-server
+                           [{:keys [events summary]}]
+                           (swap! diaper-events assoc :events events :summary summary))})
+            (swap! diaper-events assoc :events (cons (temp-new-event @new-event-atom)
+                                                     (:events @diaper-events)))
+            (swap! state-atom assoc :new (not adding-new-event))
+            (reset! new-event-atom event-template)))}
+    "Post!"])
 
 (defn- render-control-buttons
   [state-atom new-event-atom event-template adding-new-event diaper-events]
@@ -41,30 +69,7 @@
                (reset! new-event-atom event-template))}
         "Cancel"])
     (if adding-new-event
-      [:button.smallInput
-        {:style {:width "100px"
-                 :height "35px"}
-         :on-click
-           #(let [post-url (if (:demo @state-atom)
-                               "/echo"
-                               "/newevent")
-                  post-params {:auth-token (cookies/get "auth-token")
-                               :events (:events @diaper-events)
-                               :new-event @new-event-atom}]
-              (do
-                (ajax/POST post-url
-                  {:format :json
-                   :response-format :json
-                   :keywords? true
-                   :params post-params
-                   :handler (fn new-events-from-server
-                               [{:keys [events summary]}]
-                               (swap! diaper-events assoc :events events :summary summary))})
-                (swap! diaper-events assoc :events (cons (temp-new-event @new-event-atom)
-                                                         (:events @diaper-events)))
-                (swap! state-atom assoc :new (not adding-new-event))
-                (reset! new-event-atom event-template)))}
-        "Post!"])
+      [submit-button state-atom new-event-atom event-template adding-new-event diaper-events])
     (if (not adding-new-event)
       [:button.smallInput
         {:on-click

@@ -1,8 +1,17 @@
 (ns clj-diaper.utils
-  (:require [cljs.core.match :refer-macros [match]]))
+  (:require [cljs.core.match :refer-macros [match]]
+            [clojure.string :as string]))
 
 (def small-font-size {:font-size "0.7em"})
 (def large-font-size {:font-size "1.4em"})
+
+;;;;;;;;;;;;;;;;
+;; RANDOM STRING
+(defn random-string
+  []
+  (string/join
+    (take 25
+      (repeatedly #(rand-nth "ABCDEFGHIJKLMNOPQRSTUVWXYZ")))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; NUMBERS, TIME AND PERCENTILES
