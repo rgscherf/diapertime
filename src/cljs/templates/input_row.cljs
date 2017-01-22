@@ -62,7 +62,7 @@
 (defn target-date-after-update-field?
   [date-to-test field]
   (time/after? date-to-test (time/minus (local/local-now)
-                                        (time/minutes field))))
+                                        (max 1 (time/minutes field)))))
 (defn render-input-row
   [new-event firstev]
   (let [btn (partial input-button "smallInput" new-event)
