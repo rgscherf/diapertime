@@ -22,13 +22,3 @@ I built Diaper Time because nothing else provided a quick, elegant way to track 
 - Stretch: feed unit? (ml | oz | minutes)
 
 ## Bugs
-
-- Fix display of "0th percentile"
-- new event placeholder in CLJS must have random :id field
-- ERROR 400 upon adding more than 1 new event per page visit?
-  - This happens when submitting an event with :attended before the most recent :slept.
-  - Just need to add an :on-error handler to the submit POST.
-
-# DONE!
-- Login/registration text fields max width 90%, for phones
-- Occasional misrender of minutes/seconds (ex 2:90)
