@@ -10,10 +10,8 @@ I built Diaper Time because nothing else provided a quick, elegant way to track 
 
 ## Features - Quick
 
-- Render summary information
 - Save new user events to db
 - Button to toggle percentile info
-- Offer summary choice of last-24-hours or since-midnight
 - New event feed defaults to avg of last X feeds
 
 ## Features - Not Quick
@@ -22,3 +20,5 @@ I built Diaper Time because nothing else provided a quick, elegant way to track 
 - Stretch: feed unit? (ml | oz | minutes)
 
 ## Bugs
+- Is summary info calculating start/end bounds correctly?
+  - May not be taking time zone into account
