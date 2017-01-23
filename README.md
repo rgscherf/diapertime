@@ -13,10 +13,12 @@ I built Diaper Time because nothing else provided a quick, elegant way to track 
 - Save new user events to db
 - Button to toggle percentile info
 - New event feed defaults to avg of last X feeds
+- Add landing page copy with my twitter and github
 
 ## Features - Not Quick
 
 - Random baby name for /random
+  - Use https://randomuser.me/api
 - Stretch: feed unit? (ml | oz | minutes)
 
 ## Bugs
