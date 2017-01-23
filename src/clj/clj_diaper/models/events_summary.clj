@@ -41,24 +41,12 @@
      :amt-ate   (sum-seq-with-fn :feed
                                  events-since)}))
 
-(comment
-  (def evs (random/random-events-history))
-  (def tar (get-yesterday))
-  (def clean-events (random/random-events-history))
-  (summarize clean-events)
-  (count clean-events)
-  (count (summarize clean-events))
-  (sum-seq-with-fn :feed evs))
-
 (defn summarize
   "given list of events, provide summary-from-time lists for:
   1. now, minus 24 hours
   2. from midnight to now."
   [events]
-  (summarize-from-time (get-yesterday)
+  {:last-twenty-four (summarize-from-time (get-yesterday)
                        events)
-  (summarize-from-time (time/today-at-midnight)
-                       events))
-  ;; todo: return map of
-  ;; {:yesterday {summary}
-  ;;  :midnight {summary}
+   :since-midnight (summarize-from-time (time/today-at-midnight)
+                       events)})

@@ -4,7 +4,7 @@
             [clj-diaper.db :as db]
             [clj-diaper.metrics :as metrics]
             [clj-diaper.models.events-summary :as summary]
-
+            
             [cheshire.core :as cheshire]
             [ring.util.response :as response]
 
@@ -22,15 +22,18 @@
     (if-let [user (user/get-user-by-token auth-token)]
       {:baby-name (:baby-name user)
        :events (apply vector
-                (metrics/add-metrics (:events user)))}
+                (metrics/add-metrics (:events user)))
+       :summary (summary/summarize (:events user))}
       {:baby-name auth-token})))
 
 (defn demo-events
   "randomly generate events for the demo page"
   []
-  (cheshire/generate-string
-    {:baby-name "Test Baby"
-     :events (metrics/add-metrics (random/random-events-history))}))
+  (let [events (random/random-events-history)]
+    (cheshire/generate-string
+      {:baby-name "Test Baby"
+       :events (metrics/add-metrics events)
+       :summary (summary/summarize events)})))
 
 ;;;;;;;;;;;;;
 ;; NEW EVENTS
@@ -60,7 +63,7 @@
   "Save event to DB if user is real, or nil"
   [user new-event is-real-user?]
   nil)
-  
+
 (defn- parse-date
   [d]
   (format/parse (format/formatters :date-time) d))

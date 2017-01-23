@@ -4,7 +4,8 @@
             [cljs-time.core :as time]
             [cljs-time.local :as local]
             [cljs-time.format :as format]
-            [clj-diaper.utils :as utils]))
+            [clj-diaper.utils :as utils]
+            [templates.summary :as summary]))
 
 (defn- time-string-from-delta
   [delta]
@@ -82,63 +83,13 @@
                  :min-height "80px"}}
         "New event"])])
 
-(defn- summary-box-value
-  [value]
-  [:div
-    {:style {:flex "1"
-             :font-size "1.1em"}}
-    value])
-
-(defn- summary-box-description
-  [desc]
-  [:div
-    {:style {:flex "1"
-             :font-size "0.9em"}}
-    desc])
-
-(defn- summary-box
-  [value desc]
-  [:div
-    {:style {:flex "1"
-             :display "flex"
-             :flex-direction "column"}}
-    [summary-box-value value]
-    [summary-box-description desc]])
-
-(defn- summary-box-container
-  []
-  [:div
-    {:style {:display "flex"
-             :font-size "0.9em"
-             :padding "5px"
-             :text-align "center"}}
-    [summary-box "15:30" "slept"]
-    [summary-box "8x" "peed"]
-    [summary-box "3x" "pooped"]
-    [summary-box "800ml" "ate"]])
-
-(defn- summary-label
-  []
-  [:div
-    {:style {:font-size "0.9em"
-             :background-color "#FFA8DF"
-             :color "#321F47"
-             :font-family "'Vampiro One', cursive"
-             :padding "2px"
-             :padding-left "5px"}}
-    "Last 24 hours"])
-
 (defn- summary-and-action-buttons
   [state-atom new-event-atom event-template adding-new-event diaper-events]
   [:div
     {:style {:width "100%"
              :display "flex"
              :justify-content "space-between"}}
-    [:div
-      {:style {:border "2px solid #FFA8DF"
-               :width "100%"}}
-      [summary-label]
-      [summary-box-container]]
+    [summary/render-summary diaper-events]
     [render-control-buttons state-atom
                             new-event-atom
                             event-template
