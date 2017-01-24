@@ -2,7 +2,8 @@
   (:require [monger.collection :as mcoll]
             [clj-diaper.db :as db]
             [digest]
-            [clojure.string :refer [join]]))
+            [clojure.string :refer [join]]
+            [ring.util.response :as response]))
 
 ;; GENERATE AUTH TOKEN
 (defn- random-string
@@ -40,12 +41,6 @@
                          db/babies
                          {:auth-token token}))
 
-(comment
-  (mcoll/find-maps db/database db/babies)
-  (digest/sha-256 "hildabeast")
-  (= "efe4fe3dd9e18ca625202ca600df3d0950958dd0c87261b9876db9af2a9424dc"
-     (digest/sha-256 "hildabeast")))
-
 (defn try-auth-token
   [{:keys [auth-token]}]
   {:status 200
@@ -69,11 +64,24 @@
       (dissoc user :password-hash))))
 
 (defn try-password
-  [params]
-  (let [{:keys [email password]} params
-        user (get-user-by-login email password)]
-    {:status 200
-     :headers {"Content-Type" "text/html"}
-     :body (if user
-               (:auth-token user)
-               "error")}))
+  [{:keys [email password]}]
+  (let [user (get-user-by-login email password)]
+    (response/response
+      (if user
+          (:auth-token user)
+          "error"))))
+
+(comment
+  ; "new user --
+  ; email rgscherf@gmail.com
+  ; password hildabeast"
+  (try-password {:email "hello@world.net"
+                 :password "heraldofwoe"})
+  (get-user-by-login "hello@world.net" "heraldofwoe")
+  (mcoll/find-maps db/database db/babies)
+  (digest/sha-256 "hildabeast")
+  (= "d5fd9abf23962e5f0c45d24b388de56f73c00fa5d52b1400f2411dc21377357a"
+     (digest/sha-256 "heraldofwoe"))
+ (mcoll/find-one-as-map db/database
+                       db/babies
+                       {:email "hello@world.net"}))

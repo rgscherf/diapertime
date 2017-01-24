@@ -1,9 +1,8 @@
 (ns clj-diaper.metrics
   (:require [clj-time.core :as time]
             [clj-time.coerce :as coerce]
-            [clojure.repl :as r]
-            [proto-repl.saved-values]))
-
+            [clojure.repl :as r]))
+            
 (defn- calc-percentile
   [observations this-value]
   (Math/floor

@@ -10,6 +10,9 @@ I built Diaper Time because nothing else provided a quick, elegant way to track 
 
 ## Features - Quick
 
+- !IMPORTANT! signup validation for duplicate email addresses
+  - should not be allowed
+  - should display useful error message to user
 - New event feed defaults to avg of last X feeds
 - Add landing page copy with my twitter and github
 
