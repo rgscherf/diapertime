@@ -39,7 +39,12 @@
   (mcoll/find-one-as-map db/database
                          db/babies
                          {:auth-token token}))
-; (get-user-by-token "FBECUTAFQOJFEVBIYZIQRSFZJ")
+
+(comment
+  (mcoll/find-maps db/database db/babies)
+  (digest/sha-256 "hildabeast")
+  (= "efe4fe3dd9e18ca625202ca600df3d0950958dd0c87261b9876db9af2a9424dc"
+     (digest/sha-256 "hildabeast")))
 
 (defn try-auth-token
   [{:keys [auth-token]}]
@@ -72,5 +77,3 @@
      :body (if user
                (:auth-token user)
                "error")}))
-
-               

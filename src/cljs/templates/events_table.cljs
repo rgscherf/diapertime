@@ -35,10 +35,10 @@
       (str (utils/round-to-ten-mls feed-amount) " mL")]
     [:div
       {:class "faded" :style small-font-size}
-      [:div
-        (str feed-percentile
-             (utils/percentile-suffix feed-percentile)
-             " percentile")]]])
+      #_([:div
+          (str feed-percentile
+               (utils/percentile-suffix feed-percentile)
+               " percentile")])]])
 
 (defn render-pee
   [peed?]
@@ -65,10 +65,10 @@
           (if (= label "Attended")
             (str "Slept for " (utils/str-min-hours time-for))
             (str "Awake for " (utils/str-min-hours time-for)))]
-        [:div
-          (str time-percentile
-               (utils/percentile-suffix time-percentile)
-               " percentile")]])])
+        #_([:div
+            (str time-percentile
+                 (utils/percentile-suffix time-percentile)
+                 " percentile")])])])
 
 (defn render-row
   ; keys for metrics:

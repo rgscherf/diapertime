@@ -43,11 +43,3 @@
       (wrap-json-body {:keywords? true})
       (wrap-json-response)
       (wrap-defaults (assoc-in site-defaults [:security :anti-forgery] false))))
-
-
-; (app {:headers ["Content-Type" "application/json"]
-;       :body (string-input-stream
-;               (cheshire/generate-string {:auth-token "KSDHKDHG"
-;                                          :test-val "hello world"}))
-;       :uri "/echo"
-;       :method :post})

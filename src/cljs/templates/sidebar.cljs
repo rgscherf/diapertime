@@ -44,8 +44,8 @@
                :keywords? true
                :params post-params
                :handler (fn new-events-from-server
-                           [{:keys [events summary]}]
-                           (swap! diaper-events assoc :events events :summary summary))})
+                           [payload]
+                           (reset! diaper-events payload))})
             (swap! diaper-events assoc :events (cons (temp-new-event @new-event-atom)
                                                      (:events @diaper-events)))
             (swap! state-atom assoc :new (not adding-new-event))
@@ -108,7 +108,7 @@
       {:style {:margin-bottom "5px"}}
       [:span
         {:style {:font-size "2em"}}
-        "Hildabeast "]
+        (str (:baby-name @diaper-events) " ")]
       [:a {:href "/logout"
            :style {:font-size "0.9em"}}
         "logout"]]

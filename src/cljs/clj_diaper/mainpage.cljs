@@ -47,7 +47,7 @@
 (defn reset-page-atoms
   [is-demo-page?]
   (do
-    (reset! diaper-events)
+    (reset! diaper-events nil)
     (reset! page-state {:new false
                         :demo is-demo-page?})
     (reset! new-event event-template)))
@@ -75,4 +75,6 @@
                      :margin "30px auto"
                      :max-width "660px"}}
             [render-sidebar page-state new-event event-template diaper-events]
-            [render-events-table diaper-events page-state new-event]])]]))
+            [render-events-table diaper-events page-state new-event]
+            
+            [:div (str @diaper-events)]])]]))

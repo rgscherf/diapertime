@@ -1,7 +1,8 @@
 (ns clj-diaper.metrics
   (:require [clj-time.core :as time]
             [clj-time.coerce :as coerce]
-            [clojure.repl :as r]))
+            [clojure.repl :as r]
+            [proto-repl.saved-values]))
 
 (defn- calc-percentile
   [observations this-value]
@@ -27,7 +28,9 @@
 (defn- minutes-interval
   [earlier later]
   (let [t (time/in-minutes
-            (time/interval earlier later))]
+            (if (time/before? earlier later)
+                (time/interval earlier later)
+                (time/interval later earlier)))]
     t))
 
 (defn- awake-minutes
