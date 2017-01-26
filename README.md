@@ -7,8 +7,6 @@ I built Diaper Time because nothing else provided a quick, elegant way to track 
 [http://diaperti.me](http://diaperti.me)
 
 # Bugs
-- User append event does not save to db
-  - Seems to work in repl. What is different about adding from client?
 - Signup validation for duplicate email addresses
   - should not be allowed
   - should display useful error message to user
@@ -22,6 +20,8 @@ I built Diaper Time because nothing else provided a quick, elegant way to track 
 
 ## Features - Quick
 
+- events/persist-event! should not return user map
+  - move to separate function.
 - New event feed defaults to avg of last X feeds
 - Add landing page copy with my twitter and github
 - 404 page

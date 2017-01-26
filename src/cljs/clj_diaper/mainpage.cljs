@@ -75,6 +75,4 @@
                      :margin "30px auto"
                      :max-width "660px"}}
             [render-sidebar page-state new-event event-template diaper-events]
-            [render-events-table diaper-events page-state new-event]
-            
-            [:div (str @diaper-events)]])]]))
+            [render-events-table diaper-events page-state new-event]])]]))

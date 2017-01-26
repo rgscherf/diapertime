@@ -90,5 +90,5 @@
                        :justify-content "flex-end"
                        :margin-top "20px"
                        :color "#FFA8DF"}}
-              "Username/password not found!"])
-          [:div (str @login-atom)]]])))
+              "Username/password not found!"])]])))
+              
