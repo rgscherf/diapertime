@@ -3,7 +3,8 @@
             [clj-diaper.db :as db]
             [digest]
             [clojure.string :refer [join]]
-            [ring.util.response :as response]))
+            [ring.util.response :as response])
+  (:import org.bson.types.ObjectId))
 
 ;; GENERATE AUTH TOKEN
 (defn- random-string
@@ -14,9 +15,10 @@
 
 (defn insert-new-baby!
   [user]
-  (mcoll/insert db/database
-                db/babies
-                user))
+  (let [oid (ObjectId.)]
+    (mcoll/insert db/database
+                  db/babies
+                  (merge user {:_id oid}))))
 
 (defn register-new-user
   [{:keys [email name password]}]
@@ -75,10 +77,11 @@
   ; "new user --
   ; email rgscherf@gmail.com
   ; password hildabeast"
-  (try-password {:email "hello@world.net"
-                 :password "heraldofwoe"})
+  (get-user-by-token
+    (:body
+      (try-password {:email "rgscherf@gmail.com"
+                     :password "hildabeast"})))
   (get-user-by-login "hello@world.net" "heraldofwoe")
-  (mcoll/find-maps db/database db/babies)
   (digest/sha-256 "hildabeast")
   (= "d5fd9abf23962e5f0c45d24b388de56f73c00fa5d52b1400f2411dc21377357a"
      (digest/sha-256 "heraldofwoe"))

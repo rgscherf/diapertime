@@ -66,7 +66,11 @@
 (defn render-input-row
   [new-event firstev]
   (let [btn (partial input-button "smallInput" new-event)
-        first-slept (format/parse (format/formatters :date-time) (:slept firstev))]
+        first-slept (format/parse (format/formatters :date-time) (or (:slept firstev)
+                                                                     (format/unparse (format/formatters :date-time)
+                                                                                     (time/minus
+                                                                                        (time/now)
+                                                                                        (time/days 100)))))]
     [:tr
       ;; attended
       (input-td
