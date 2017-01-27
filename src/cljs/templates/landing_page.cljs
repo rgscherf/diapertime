@@ -76,7 +76,10 @@
         [:p "I built Diaper Time because nothing else provided a quick, elegant way to track my baby's I/O."]
         [:p "Sound interesting? "
           [:a {:href "/random"} "Go for a test drive"]
-          [:span " with some randomly generated data."]]]]))
+          [:span " with some randomly generated data."]]
+        [:p
+          [:a {:href "http://twitter.com/rgscherf"} "Get in touch"]
+          [:span " with feature suggestions!"]]]]))
 
 (defn render-landing-page
   []

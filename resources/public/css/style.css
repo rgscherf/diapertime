@@ -10,6 +10,21 @@
   flex-wrap: wrap;
 }
 
+.landingDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.landingSpinner {
+  margin-top: 50px;
+}
+.landingHeader {
+  font-size: 6.5em;
+  margin-top: 40px;
+  text-align: center;
+}
+
 .landingLink {
   text-decoration: none;
 }
@@ -136,6 +151,7 @@ body {
 
 /* Responsive tables */
 table {
+  width: 100%;
   border: 1px solid #ccc;
   border-collapse: collapse;
   border-spacing: 0;

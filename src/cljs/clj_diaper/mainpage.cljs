@@ -63,16 +63,15 @@
   (fn []
     [:div
       [header/base-header]
-      [:div
-        (if (empty? @diaper-events)
-          [waiting-for-table is-demo-page?]
-          [:div
-            {:style {:display "flex"
-                     :flex-direction "column"
-                     :justify-content "flex-start"
-                     :align-items "center"
-                     :width "90%"
-                     :margin "30px auto"
-                     :max-width "660px"}}
-            [render-sidebar page-state new-event event-template diaper-events]
-            [render-events-table diaper-events page-state new-event]])]]))
+      (if (empty? @diaper-events)
+        [waiting-for-table is-demo-page?]
+        [:div
+          {:style {:display "flex"
+                   :flex-direction "column"
+                   :justify-content "flex-start"
+                   :align-items "center"
+                  ;  :width "90%"
+                   :margin "30px auto"
+                   :max-width "660px"}}
+          [render-sidebar page-state new-event event-template diaper-events]
+          [render-events-table diaper-events page-state new-event]])]))

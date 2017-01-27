@@ -3,16 +3,13 @@
     [hiccup.page :refer [include-js include-css html5]]))
 
 (def mount-target
-  [:div#app {:style {:height "100%"
-                     :display "flex"
-                     :align-items "center"
-                     :justify-content "center"}}
-    [:nav#navbar
-      [:div#headline.headfont
-        {:style {:margin-left "20px"
-                 :margin-top "30px"
-                 :text-align "center"}}
-        "Diaper Time"]]])
+  [:div.landingDiv
+    {:id "app"}
+    [:div#headline.headfont.landingHeader
+      "Diaper Time"]
+    [:div
+      [:i {:class "fa fa-refresh fa-spin fa-4x fa-fw landingSpinner"}]]])
+
 
 (def page-head
   [:head

@@ -10,9 +10,6 @@ I built Diaper Time because nothing else provided a quick, elegant way to track 
 - Signup validation for duplicate email addresses
   - should not be allowed
   - should display useful error message to user
-- Cannot display new event input on empty events list
-  - "Error rendering component (in clj_diaper.core.current_page > view-diaper-events > templates.events_table.render_events_table > templates.input_row.render_input_row)"
-  - "Uncaught Error: Assert failed: (seq s)"
 - Is summary info calculating start/end bounds correctly?
   - May not be taking time zone into account
 
@@ -23,9 +20,9 @@ I built Diaper Time because nothing else provided a quick, elegant way to track 
 - events/persist-event! should not return user map
   - move to separate function.
 - New event feed defaults to avg of last X feeds
-- Add landing page copy with my twitter and github
 - 404 page
 - Loading screen needs spinner (and banner same size as landing page)
+- Orientation information displayed when user table is empty
 
 ## Features - Not Quick
 
