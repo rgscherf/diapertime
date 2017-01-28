@@ -57,8 +57,10 @@
   (let [inits (take 5 events)]
     (if (empty? inits)
       0
-      (quot (reduce + (map :feed inits))
-            (count inits)))))
+      (->
+        (reduce + (map :feed inits))
+        (quot (count inits))
+        (utils/round-to-ten-mls)))))
 
 (defn- render-control-buttons
   [state-atom new-event-atom event-template adding-new-event diaper-events]

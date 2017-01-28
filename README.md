@@ -6,20 +6,23 @@ I built Diaper Time because nothing else provided a quick, elegant way to track 
 
 [http://diaperti.me](http://diaperti.me)
 
-# Bugs
+# TODO
+
+## Bugs
+- New one-line loading banners do not line break on mobile
 - Signup validation for duplicate email addresses
   - should not be allowed
   - should display useful error message to user
 - Is summary info calculating start/end bounds correctly?
   - May not be taking time zone into account
 
-# TODO
+## New Features
 
-## Features - Quick
+### Features - Quick
 
 - Orientation information displayed when user table is empty
 
-## Features - Not Quick
+### Features - Not Quick
 
 - Random baby name for /random
   - Use https://randomuser.me/api

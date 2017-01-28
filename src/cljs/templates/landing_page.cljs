@@ -1,5 +1,6 @@
-
-(ns templates.landing-page)
+(ns templates.landing-page
+  (:require [accountant.core :as accountant]
+            [templates.page-header :as header]))
 
 (defn- action-box-style
   [width]
@@ -75,7 +76,10 @@
               and instantly see how it compares to historical data."]
         [:p "I built Diaper Time because nothing else provided a quick, elegant way to track my baby's I/O."]
         [:p "Sound interesting? "
-          [:a {:href "/random"} "Go for a test drive"]
+          [:a
+            {:href "/random"
+             :on-click #(do (.preventDefault %) (accountant/navigate! "/random"))}
+            "Go for a test drive"]
           [:span " with some randomly generated data."]]
         [:p
           [:a {:href "http://twitter.com/rgscherf"} "Get in touch"]
@@ -88,10 +92,6 @@
   [:div
     {:style {:max-width "800px"
              :margin "0px auto"}}
-    [:div#headline.headfont
-      {:style {:font-size "6.5em"
-               :margin-top "40px"
-               :text-align "center"}}
-      "Diaper Time"]
+    [header/base-header]
     [description]
     [auth-boxes]])
