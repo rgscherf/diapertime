@@ -10,11 +10,13 @@
             [clj-diaper.models.random :as random]
             [clj-diaper.models.events :as events]
             [clj-diaper.templates.base-page :as base-page]
+            [clj-diaper.templates.not-found :as not-found]
 
             [ring.util.io :refer [string-input-stream]]
             [ring.middleware.json :refer [wrap-json-body wrap-json-response]]
             [ring.middleware.reload :refer [wrap-reload]]
-            [ring.middleware.defaults :refer [wrap-defaults site-defaults]]))
+            [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
+            [ring.util.response :refer [redirect]]))
 ;; ROUTER
 (defroutes routes
   ;; home page
@@ -35,7 +37,7 @@
 
   ;; resources
   (resources "/")
-  (not-found "Not Found"))
+  (not-found (not-found/not-found)))
 
 (def app
   (-> (site routes)

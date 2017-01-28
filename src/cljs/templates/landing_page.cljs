@@ -79,7 +79,7 @@
           [:span " with some randomly generated data."]]
         [:p
           [:a {:href "http://twitter.com/rgscherf"} "Get in touch"]
-          [:span " with feature suggestions!"]]]]))
+          [:span " to make feature suggestions!"]]]]))
 
 (defn render-landing-page
   []

@@ -7,6 +7,7 @@ I built Diaper Time because nothing else provided a quick, elegant way to track 
 [http://diaperti.me](http://diaperti.me)
 
 # Bugs
+- loading banners break to 2 lines!
 - Signup validation for duplicate email addresses
   - should not be allowed
   - should display useful error message to user
@@ -17,11 +18,7 @@ I built Diaper Time because nothing else provided a quick, elegant way to track 
 
 ## Features - Quick
 
-- events/persist-event! should not return user map
-  - move to separate function.
-- New event feed defaults to avg of last X feeds
 - 404 page
-- Loading screen needs spinner (and banner same size as landing page)
 - Orientation information displayed when user table is empty
 
 ## Features - Not Quick

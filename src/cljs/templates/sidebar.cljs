@@ -52,6 +52,14 @@
             (reset! new-event-atom event-template)))}
     "Post!"])
 
+(defn- init-avg-feed
+  [events]
+  (let [inits (take 5 events)]
+    (if (empty? inits)
+      0
+      (quot (reduce + (map :feed inits))
+            (count inits)))))
+
 (defn- render-control-buttons
   [state-atom new-event-atom event-template adding-new-event diaper-events]
   [:div
@@ -76,7 +84,9 @@
         {:on-click
           #(do
             (swap! state-atom assoc :new (not adding-new-event))
-            (reset! new-event-atom event-template))
+            (reset! new-event-atom (assoc event-template
+                                          :feed
+                                          (init-avg-feed (:events @diaper-events)))))
          :style {:width "100px"
                  :height "100%"
                  :font-size "1.2em"
@@ -117,7 +127,6 @@
                                 event-template
                                 adding-new-event
                                 diaper-events]])
-
 
 (defn render-sidebar
   [state-atom new-event-atom event-template diaper-events]

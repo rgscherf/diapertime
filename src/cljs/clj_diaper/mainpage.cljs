@@ -35,7 +35,8 @@
     {:style {:display "flex"
              :flex-direction "column"
              :align-items "center"
-             :margin-top "90px"}}
+             :margin-top "90px"
+             :width "700px"}}
     [:div.topBottomSpace
       [:i {:class "fa fa-refresh fa-spin fa-4x fa-fw"}]]
     [:div.topBottomSpace
@@ -70,7 +71,6 @@
                    :flex-direction "column"
                    :justify-content "flex-start"
                    :align-items "center"
-                  ;  :width "90%"
                    :margin "30px auto"
                    :max-width "660px"}}
           [render-sidebar page-state new-event event-template diaper-events]
