@@ -50,17 +50,22 @@
                           "#FFA8DF")
                :font-family "'Vampiro One', cursive"
                :padding "2px"
-               :padding-left "10px"
                :flex "1"
-               :border-bottom "1px solid #FFA8DF"}
+               :border-bottom "1px solid #FFA8DF"
+               :display "flex"
+               :flex-direction "column"
+               :justify-content "center"
+               :align-items "flex-start"}
        :on-click #(reset! visible (if (= @visible this-one)
                                       this-one
                                       (if (= @visible :last-twenty-four)
                                           :since-midnight
                                           :last-twenty-four)))}
-      (if (= this-one :last-twenty-four)
+      [:span
+        {:style {:padding-left "10px"}}
+        (if (= this-one :last-twenty-four)
           "Last 24 hours"
-          "Since midnight")]))
+          "Since midnight")]]))
 
 (defn- summary-label-div
   [visible]

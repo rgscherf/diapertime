@@ -9,7 +9,6 @@ I built Diaper Time because nothing else provided a quick, elegant way to track 
 # TODO
 
 ## Bugs
-- New one-line loading banners do not line break on mobile
 - Signup validation for duplicate email addresses
   - should not be allowed
   - should display useful error message to user

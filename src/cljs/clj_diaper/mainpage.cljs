@@ -35,8 +35,8 @@
     {:style {:display "flex"
              :flex-direction "column"
              :align-items "center"
-             :margin-top "90px"
-             :width "600px"}}
+             :margin-top "90px"}}
+            ;  :width "500px"}}
     [:div.topBottomSpace
       [:i {:class "fa fa-refresh fa-spin fa-4x fa-fw"}]]
     [:div.topBottomSpace
