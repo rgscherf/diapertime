@@ -25,7 +25,8 @@
                  [cljs-ajax "0.5.8"]
                  [com.andrewmcveigh/cljs-time "0.4.0"]
                  [digest "1.4.5"]
-                 [ring/ring-json "0.4.0"]]
+                 [ring/ring-json "0.4.0"]
+                 [clj-http "2.3.0"]]
 
   :plugins [[lein-environ "1.0.2"]
             [lein-cljsbuild "1.1.1"]
