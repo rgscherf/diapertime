@@ -87,12 +87,13 @@
            (map #(dissoc % :metrics))))))
 
 (defn- new-events-and-summary
-  [{:keys [auth-token events new-event]} & {:keys [real-user]}]
+  [{:keys [auth-token events new-event baby-name]} & {:keys [real-user]}]
   (let [realized-new-event (new-event-from-deltas new-event)
         user (if real-user (user/get-user-by-token auth-token))
         updated-events (new-events user events realized-new-event)]
     {:events updated-events
-     :summary (summary/summarize updated-events)}))
+     :summary (summary/summarize updated-events)
+     :baby-name baby-name}))
 
 (defn new-event
   "add a new event from a user
@@ -132,7 +133,7 @@
   (->
     (http/get "http://namey.muffinlabs.com/name.json"
       {:accept :json
-       :query-params {"type" "rare"
+       :query-params {"frequency" "rare"
                       "with_surname" "true"}})
     :body
     (cheshire/parse-string)

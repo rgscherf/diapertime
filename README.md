@@ -8,7 +8,7 @@ I built Diaper Time because nothing else provided a quick, elegant way to track 
 
 # TODO
 
-## Bugs
+## Fixes
 - Signup validation for duplicate email addresses
   - should not be allowed
   - should display useful error message to user
@@ -17,13 +17,6 @@ I built Diaper Time because nothing else provided a quick, elegant way to track 
 
 ## New Features
 
-### Features - Quick
-
 - Orientation information displayed when user table is empty
-
-### Features - Not Quick
-
-- Random baby name for /random
-  - Use https://randomuser.me/api
+- UI toggle for percentile info
 - Stretch: feed unit? (ml | oz | minutes)
-- Button to toggle percentile info

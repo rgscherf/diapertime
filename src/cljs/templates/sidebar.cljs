@@ -26,6 +26,18 @@
    :_id (utils/random-string)})
 
 (defn- submit-button
+  "Note that the onclick handler calls reset! on
+  diaper events atom. because no data for /random
+  is stored on the server, we have to pass it all in
+  on :params of every new event call.
+
+  Not the fastest, but it works. Just remember to handle
+  new keys in the event map here and in events.clj
+
+  FIXME: replace on-click callback with
+  (swap! diaper-events merge new-payload) so that
+  constant keys like baby-name don't have to make the round trip
+  on every new event."
   [state-atom new-event-atom event-template adding-new-event diaper-events]
   [:button.smallInput
     {:style {:width "100px"
@@ -36,7 +48,8 @@
                            "/newevent")
               post-params {:auth-token (cookies/get "auth-token")
                            :events (:events @diaper-events)
-                           :new-event @new-event-atom}]
+                           :new-event @new-event-atom
+                           :baby-name (:baby-name @diaper-events)}]
           (do
             (ajax/POST post-url
               {:format :json
