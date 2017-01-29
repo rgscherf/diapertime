@@ -35,6 +35,9 @@
   (POST "/newevent" {req :body} (events/new-event req))
   (POST "/echo" {req :body} (events/echo-events req))
 
+  (GET "/.well-known/acme-challenge/LDWMwYcq_-p_ugarj725xcqvuMWyTlDOBuwZ-folGE4"
+       "LDWMwYcq_-p_ugarj725xcqvuMWyTlDOBuwZ-folGE4.cMApjfr0I5YoCSJBXY2hrMHwIX6WnRnZZBxL9nDSODQ")
+
   ;; resources
   (resources "/")
   (not-found (not-found/not-found)))
