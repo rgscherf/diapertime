@@ -16,6 +16,7 @@
             [ring.middleware.json :refer [wrap-json-body wrap-json-response]]
             [ring.middleware.reload :refer [wrap-reload]]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
+            [ring.middleware.ssl :as ssl]
             [ring.util.response :refer [redirect]]))
 ;; ROUTER
 (defroutes routes
@@ -43,9 +44,19 @@
   (resources "/")
   (not-found (not-found/not-found)))
 
+(defn- enforce-ssl
+  [handler]
+  (if (or (env :dev)
+          (env :test))
+      handler
+      (-> handler
+          ssl/wrap-hsts
+          ssl/wrap-ssl-redirect
+          ssl/wrap-forwarded-scheme)))
 (def app
   (-> (site routes)
       wrap-reload
+      enforce-ssl
       (wrap-json-body {:keywords? true})
       (wrap-json-response)
       (wrap-defaults (assoc-in site-defaults [:security :anti-forgery] false))))
