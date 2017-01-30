@@ -56,7 +56,7 @@
 (def app
   (-> (site routes)
       wrap-reload
-      enforce-ssl
+      ; enforce-ssl
       (wrap-json-body {:keywords? true})
       (wrap-json-response)
       (wrap-defaults (assoc-in site-defaults [:security :anti-forgery] false))))
