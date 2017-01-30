@@ -1,27 +1,27 @@
 (defproject clj-diaper "0.1.0-SNAPSHOT"
-  :description "FIXME: write description"
-  :url "http://github.com/rgscherf/diapertime"
+  :description "Simple tracking for your baby's I/O"
+  :url "https://diaperti.me"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
 
   :dependencies [[org.clojure/clojure "1.8.0"]
+                 [org.clojure/core.match "0.3.0-alpha4"]
+
+                 [hiccup "1.0.5"]
                  [reagent "0.6.0"]
                  [reagent-utils "0.2.0"]
                  [compojure "1.5.1"]
-                 [hiccup "1.0.5"]
                  [yogthos/config "0.8"]
                  [org.clojure/clojurescript "1.9.229"
                   :scope "provided"]
                  [secretary "1.2.3"]
                  [venantius/accountant "0.1.7"
                   :exclusions [org.clojure/tools.reader]]
-                 [org.clojure/core.match "0.3.0-alpha4"]
+
                  [clj-time "0.12.2"]
                  [com.andrewmcveigh/cljs-time "0.4.0"]
-
                  [cljs-ajax "0.5.8"]
                  [clj-http "2.3.0"]
-
                  [com.novemberain/monger "3.1.0"]
                  [cheshire "5.1.1"]
                  [digest "1.4.5"]
